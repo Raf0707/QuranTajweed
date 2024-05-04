@@ -11,7 +11,7 @@
         android:layoutDirection="rtl"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.QuranTajweed"
+        android:theme="@style/Base.Theme.QuranTajweed"
         tools:targetApi="31">
         <activity
             android:name=".details.BookmarkActivity"

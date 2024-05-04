@@ -1,9 +1,126 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.QuranTajweed" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.QuranTajweed" parent="Theme.Material3.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_light_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_light_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_light_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_light_error</item>
+        <item name="colorErrorContainer">@color/md_theme_light_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_light_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_light_background</item>
+        <item name="colorOnBackground">@color/md_theme_light_onBackground</item>
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_light_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+
     </style>
 
-    <style name="Theme.QuranTajweed" parent="Base.Theme.QuranTajweed" />
+    <style name="Theme.AppCompat.RedTheme" parent="Theme.Material3.DynamicColors.Light">
+        <item name="colorPrimary">@color/red_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/red_theme_light_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/red_theme_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/red_theme_light_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/red_theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/red_theme_light_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/red_theme_light_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/red_theme_light_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/red_theme_light_tertiary</item>
+        <item name="colorOnTertiary">@color/red_theme_light_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/red_theme_light_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/red_theme_light_onTertiaryContainer</item>
+        <item name="colorError">@color/red_theme_light_error</item>
+        <item name="colorErrorContainer">@color/red_theme_light_errorContainer</item>
+        <item name="colorOnError">@color/red_theme_light_onError</item>
+        <item name="colorOnErrorContainer">@color/red_theme_light_onErrorContainer</item>
+        <item name="android:colorBackground">@color/red_theme_light_background</item>
+        <item name="colorOnBackground">@color/red_theme_light_onBackground</item>
+        <item name="colorSurface">@color/red_theme_light_surface</item>
+        <item name="colorOnSurface">@color/red_theme_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/red_theme_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/red_theme_light_onSurfaceVariant</item>
+        <item name="colorOutline">@color/red_theme_light_outline</item>
+        <item name="colorOnSurfaceInverse">@color/red_theme_light_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/red_theme_light_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/red_theme_light_inversePrimary</item>
+
+        <item name="android:statusBarColor">#424941</item>
+        <item name="android:navigationBarColor">#212B22</item>
+    </style>
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/md_theme_dark_primary</item>
+        <item name="itemTextColor">@color/purple_300</item>
+        <item name="itemIconTint">@color/purple_300</item>
+    </style>
+
+    <style name="TextStyleBNV">
+        <item name="android:textSize">@dimen/design_bottom_navigation_active_text_size</item>
+        <item name="android:padding">0dp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="TextStyleLarge">
+        <item name="android:textSize">35dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Button.White" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/purple_45</item>
+    </style>
+
+    <style name="AlertDialogTheme">
+        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Alert.Button.Neutral</item>
+    </style>
+
+    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="backgroundTint">@color/purple_300</item>
+        <item name="rippleColor">@color/purple_300</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Alert.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="rippleColor">@color/purple_49</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ColorGreenIce" parent="Base.Theme.QuranTajweed" >
+        <item name="android:textColor">@color/purple_300</item>
+    </style>
+
+    <style name="colorGreenIce" parent="Base.Theme.QuranTajweed">
+        <item name="android:textAppearance">@style/ColorGreenIce</item>
+    </style>
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@color/white</item>
+        <item name="itemTextColor">@color/purple_300</item>
+        <item name="itemIconTint">@color/purple_300</item>
+    </style>
+
 </resources>

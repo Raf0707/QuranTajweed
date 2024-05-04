@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 import raf.tabiin.qurantajweed.R;
+import raf.tabiin.qurantajweed.databinding.ImageItemBinding;
 import raf.tabiin.qurantajweed.model.Bookmark;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
@@ -46,14 +50,16 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         }
 
         // Пример добавления закладки по нажатию на изображение
-        holder.imageView.setOnClickListener(v -> {
+        holder.setBookmarkPage.setOnClickListener(v -> {
             Bookmark bookmark = new Bookmark(position);
             bookmarkAdapter.addBookmark(bookmark);
+            //holder.setBookmarkPage.setIcon(R.drawable.bookmark_full);
         });
 
         // Пример удаления закладки по долгому нажатию на изображение
-        holder.imageView.setOnLongClickListener(v -> {
+        holder.setBookmarkPage.setOnLongClickListener(v -> {
             bookmarkAdapter.removeBookmark(position);
+            //holder.setBookmarkPage.setIcon(R.drawable.bookmark_empty);
             return true;
         });
     }
@@ -65,10 +71,16 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        MaterialButton setBookmarkPage;
+        ImageItemBinding binding;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
+
+            binding = ImageItemBinding.bind(itemView);
+
+            imageView = binding.imageView;
+            setBookmarkPage = binding.setBookmarkPage;
         }
     }
 }

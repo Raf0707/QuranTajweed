@@ -8,11 +8,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import java.util.List;
 
 import raf.tabiin.qurantajweed.adapters.BookmarkAdapter;
 import raf.tabiin.qurantajweed.adapters.ImageAdapter;
+import raf.tabiin.qurantajweed.databinding.ActivityMainBinding;
 import raf.tabiin.qurantajweed.details.BookmarkActivity;
 import raf.tabiin.qurantajweed.model.Bookmark;
 
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;
     private BookmarkAdapter bookmarkAdapter;
+    ActivityMainBinding b;
 
     private Integer[] numPageSures = new Integer[]{4, 5, 53, 80, 109, 131, 154, 180, 190, 211, 224, 328, 252, 258, 265, 270, 285, 296, 308, 315, 325, 335,
             345, 353, 362, 370, 380, 388, 399, 407, 414, 418, 421, 431, 437, 443, 449, 456, 461, 470, 480, 486, 492, 499, 502, 505, 510, 514, 518, 521, 523, 526,
@@ -30,9 +33,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        b = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
 
-        viewPager = findViewById(R.id.viewPager);
+        setSupportActionBar(b.toolbar);
+
+
+        viewPager = b.viewPager;
         bookmarkAdapter = new BookmarkAdapter(this);
         viewPager.setLayoutDirection(ViewPager2.LAYOUT_DIRECTION_RTL);
         viewPager.setAdapter(new ImageAdapter(this, 605));

@@ -18,6 +18,14 @@
             style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
             android:fitsSystemWindows="true">
 
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:title="@string/app_name"
+                app:menu="@menu/main_menu"/>
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
