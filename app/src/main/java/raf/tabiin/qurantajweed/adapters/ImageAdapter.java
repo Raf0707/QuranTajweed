@@ -23,6 +23,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     private Context context;
     private int count;
     private BookmarkAdapter bookmarkAdapter;
+    private int clickedPosition = -1;
 
     public ImageAdapter(Context context, int count) {
         this.context = context;
@@ -49,24 +50,30 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             e.printStackTrace();
         }
 
-        // Пример добавления закладки по нажатию на изображение
-        holder.setBookmarkPage.setOnClickListener(v -> {
-            Bookmark bookmark = new Bookmark(position);
-            bookmarkAdapter.addBookmark(bookmark);
-            //holder.setBookmarkPage.setIcon(R.drawable.bookmark_full);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickedPosition = position;
+                notifyDataSetChanged();
+            }
         });
 
-        // Пример удаления закладки по долгому нажатию на изображение
-        holder.setBookmarkPage.setOnLongClickListener(v -> {
-            bookmarkAdapter.removeBookmark(position);
-            //holder.setBookmarkPage.setIcon(R.drawable.bookmark_empty);
-            return true;
-        });
+        /*// Отмечаем элемент, если он был выбран
+        if (clickedPosition == position) {
+            // Меняем цвет или добавляем другие визуальные изменения
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.selected_item_color));
+        } else {
+            holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+        }*/
     }
 
     @Override
     public int getItemCount() {
         return count;
+    }
+
+    public int getPosition() {
+        return clickedPosition;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -78,9 +85,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             super(itemView);
 
             binding = ImageItemBinding.bind(itemView);
-
             imageView = binding.imageView;
-            setBookmarkPage = binding.setBookmarkPage;
         }
     }
 }

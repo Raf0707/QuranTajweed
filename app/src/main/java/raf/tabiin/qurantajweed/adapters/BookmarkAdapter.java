@@ -86,4 +86,18 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             // Инициализируйте элементы интерфейса здесь
         }
     }
+
+    public boolean isBookmarked(int position) {
+        // Пройдите по списку закладок
+        for (Bookmark bookmark : bookmarks) {
+            // Проверьте, совпадает ли позиция закладки с заданной
+            if (bookmark.getPosition() == position) {
+                // Если закладка найдена на данной позиции, верните true
+                return true;
+            }
+        }
+        // Если закладка на данной позиции не найдена, верните false
+        return false;
+    }
+
 }

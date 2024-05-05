@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.Window;
 
 import java.util.List;
+import java.util.Objects;
 
 import raf.tabiin.qurantajweed.adapters.BookmarkAdapter;
 import raf.tabiin.qurantajweed.adapters.ImageAdapter;
@@ -38,6 +39,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(b.getRoot());
 
         setSupportActionBar(b.toolbar);
+
+        b.toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_add_bookmark:
+                    boolean isBookmarked = bookmarkAdapter.isBookmarked(bookmarkAdapter.getBookmarks().get(0).getPosition());
+
+                    if (isBookmarked) {
+                        // Если страница уже в закладках, удалите закладку
+                        bookmarkAdapter.removeBookmark(bookmarkAdapter.getBookmarks().get(0).getPosition());
+                        // Установите иконку bookmark_empty
+                        item.setIcon(R.drawable.bookmark_empty);
+                    } else {
+                        // Если страница не в закладках, добавьте закладку
+                        Bookmark bookmark = new Bookmark(bookmarkAdapter.getBookmarks().get(0).getPosition());
+                        bookmarkAdapter.addBookmark(bookmark);
+                        // Установите иконку bookmark_full
+                        item.setIcon(R.drawable.bookmark_full);
+                    }
+
+                    // Возвращаем true, чтобы указать, что обработали нажатие
+                    return true;
+
+                case R.id.action_view_bookmarks:
+                    // показать книгу закладок
+                    return true;
+
+                default:
+                    return false;
+            }
+        });
 
 
         viewPager = b.viewPager;
