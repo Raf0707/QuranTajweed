@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/list_content"
+        android:title=""
+        android:icon="@drawable/list_content"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/action_add_bookmark"
         android:title=""
         android:icon="@drawable/bookmark_empty"

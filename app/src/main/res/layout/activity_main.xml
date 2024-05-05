@@ -46,11 +46,11 @@
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/navQuran"
+        android:id="@+id/quranBM"
         android:layout_gravity="end" >
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="24dp"
-            android:id="@+id/nameInfo"
+            android:id="@+id/bookmarksQuran"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
@@ -65,7 +65,7 @@
         android:layout_gravity="start" >
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="24dp"
-            android:id="@+id/nameDrawerInfo"
+            android:id="@+id/quranDrawerContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">

@@ -1,6 +1,7 @@
 package raf.tabiin.qurantajweed;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
@@ -10,14 +11,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import raf.tabiin.qurantajweed.adapters.BookmarkAdapter;
+import raf.tabiin.qurantajweed.adapters.DrawerQuranContentAdapter;
 import raf.tabiin.qurantajweed.adapters.ImageAdapter;
 import raf.tabiin.qurantajweed.databinding.ActivityMainBinding;
 import raf.tabiin.qurantajweed.details.BookmarkActivity;
 import raf.tabiin.qurantajweed.model.Bookmark;
+import raf.tabiin.qurantajweed.model.QuranItemContent;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,12 +29,9 @@ public class MainActivity extends AppCompatActivity {
     private BookmarkAdapter bookmarkAdapter;
     ActivityMainBinding b;
 
-    private Integer[] numPageSures = new Integer[]{4, 5, 53, 80, 109, 131, 154, 180, 190, 211, 224, 328, 252, 258, 265, 270, 285, 296, 308, 315, 325, 335,
-            345, 353, 362, 370, 380, 388, 399, 407, 414, 418, 421, 431, 437, 443, 449, 456, 461, 470, 480, 486, 492, 499, 502, 505, 510, 514, 518, 521, 523, 526,
-            529, 531, 534, 537, 540, 545, 548, 552, 554, 556, 557, 559, 661, 563, 565, 567, 569, 571, 573, 575, 577, 578, 580, 581, 583, 585, 586, 588, 589, 590,
-            590, 592, 593, 594, 594, 595, 596, 597, 598, 598, 599, 599, 600, 600, 601, 601, 602, 602, 603, 603, 604, 604, 604, 605, 605, 605, 606, 606, 606, 607,
-            607, 607, 608};
-
+    private Integer[] numPageSures = new Integer[]{1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 325, 249, 255, 262, 267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467, 477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549, 551, 553, 554, 556, 658, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585, 586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604, 605};
+    private String[] sures = new String[115];
+    private ArrayList<QuranItemContent> suresName = new ArrayList<QuranItemContent>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(b.getRoot());
 
         setSupportActionBar(b.toolbar);
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
 
         b.toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
@@ -65,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
                     // показать книгу закладок
                     return true;
 
+                case R.id.list_content:
+                    // показать содержание Корана
+                    return true;
+
                 default:
                     return false;
             }
@@ -83,9 +90,17 @@ public class MainActivity extends AppCompatActivity {
         if (bookmarks != null && !bookmarks.isEmpty()) {
             viewPager.post(() -> viewPager.setCurrentItem(bookmarks.get(0).getPosition(), false));
         }
+
+        initContent();
+        initMap();
+
+        DrawerQuranContentAdapter drawerQuranContentAdapter = new DrawerQuranContentAdapter(getApplicationContext(), suresName);
+        RecyclerView quranContent = b.quranDrawerContent;
+        quranContent.setAdapter(drawerQuranContentAdapter);
+        quranContent.setHasFixedSize(false);
     }
 
-    /*private void initContent() {
+    private void initContent() {
         // Инициализация массива
         sures[0] = "1. «Аль-Фатиха» \n («Открывающая Книгу»)";
         sures[1] = "2. «Аль-Бакара» \n («Корова»)";
@@ -207,11 +222,11 @@ public class MainActivity extends AppCompatActivity {
     private void initMap() {
         // Инициализация HashMap
         for(int n = 0; n < sures.length; ++n) {
-            suresName.add(new KoranItemContent(sures[n], numPageSures[n] - 1));
+            suresName.add(new QuranItemContent(sures[n], numPageSures[n] - 1));
         }
 
 
-    }*/
+    }
 
     @Override
     protected void onStop() {

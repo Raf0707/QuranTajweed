@@ -58,13 +58,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             }
         });
 
-        /*// Отмечаем элемент, если он был выбран
-        if (clickedPosition == position) {
-            // Меняем цвет или добавляем другие визуальные изменения
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.selected_item_color));
-        } else {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
-        }*/
     }
 
     @Override
