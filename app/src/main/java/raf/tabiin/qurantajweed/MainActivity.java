@@ -7,6 +7,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -66,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.action_view_bookmarks:
                     // показать книгу закладок
+                    b.drawerQuranLayout.openDrawer(Gravity.RIGHT);
                     return true;
 
                 case R.id.list_content:
                     // показать содержание Корана
+                    b.drawerQuranLayout.openDrawer(Gravity.LEFT);
                     return true;
 
                 default:
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         initContent();
         initMap();
 
-        DrawerQuranContentAdapter drawerQuranContentAdapter = new DrawerQuranContentAdapter(getApplicationContext(), suresName);
+        DrawerQuranContentAdapter drawerQuranContentAdapter = new DrawerQuranContentAdapter(this, suresName);
         RecyclerView quranContent = b.quranDrawerContent;
         quranContent.setAdapter(drawerQuranContentAdapter);
         quranContent.setHasFixedSize(false);

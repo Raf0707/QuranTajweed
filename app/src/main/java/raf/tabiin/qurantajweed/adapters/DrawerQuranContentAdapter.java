@@ -34,9 +34,9 @@ public class DrawerQuranContentAdapter extends RecyclerView.Adapter<DrawerQuranC
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        QuranItemContent newName = quranDrawer.get(position);
+        QuranItemContent newTitleSure = quranDrawer.get(position);
 
-        holder.sure.setText(format("%s", newName.getTitle()));
+        holder.sure.setText(format("%s", newTitleSure.getTitle()));
 
         holder.sure.setOnClickListener(v -> {
         });
