@@ -44,6 +44,19 @@ public class MainActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
 
+        viewPager = b.viewPager;
+        bookmarkAdapter = new BookmarkAdapter(this);
+        viewPager.setLayoutDirection(ViewPager2.LAYOUT_DIRECTION_RTL);
+        viewPager.setAdapter(new ImageAdapter(this, 605));
+
+        bookmarkAdapter.loadBookmarks();
+
+        // Установка текущей позиции из закладок, если они есть
+        List<Bookmark> bookmarks = bookmarkAdapter.getBookmarks();
+        if (bookmarks != null && !bookmarks.isEmpty()) {
+            viewPager.post(() -> viewPager.setCurrentItem(bookmarks.get(0).getPosition(), false));
+        }
+
         b.toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_add_bookmark:
@@ -75,24 +88,10 @@ public class MainActivity extends AppCompatActivity {
                     b.drawerQuranLayout.openDrawer(Gravity.LEFT);
                     return true;
 
-                default:
-                    return false;
             }
+
+            return false;
         });
-
-
-        viewPager = b.viewPager;
-        bookmarkAdapter = new BookmarkAdapter(this);
-        viewPager.setLayoutDirection(ViewPager2.LAYOUT_DIRECTION_RTL);
-        viewPager.setAdapter(new ImageAdapter(this, 605));
-
-        bookmarkAdapter.loadBookmarks();
-
-        // Установка текущей позиции из закладок, если они есть
-        List<Bookmark> bookmarks = bookmarkAdapter.getBookmarks();
-        if (bookmarks != null && !bookmarks.isEmpty()) {
-            viewPager.post(() -> viewPager.setCurrentItem(bookmarks.get(0).getPosition(), false));
-        }
 
         initContent();
         initMap();
