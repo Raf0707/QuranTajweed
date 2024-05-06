@@ -18,6 +18,10 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +31,7 @@ import raf.tabiin.qurantajweed.model.Bookmark;
 
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
 
-    private static final String PREFS_NAME = "BookmarkPrefs";
-    private static final String KEY_BOOKMARKS = "bookmarks";
+    private static final String BOOKMARKS_FILE_NAME = "bookmarks.json";
 
     private int[] numPageSures = new int[]{
             0, 1, 49, 76, 105, 127, 150, 176, 186, 207, 220, 324, 248, 254, 261, 266, 281, 292, 304, 311, 321, 331, 341, 349, 358, 366, 376, 384, 395, 403, 410, 414, 417, 427, 433, 439, 445, 452, 457, 466, 476, 482, 488, 495, 498, 501, 506, 510, 514, 517, 519, 522, 525, 527, 530, 533, 536, 541, 544, 548, 550, 552, 553, 555, 657, 559, 561, 563, 565, 567, 569, 571, 573, 574, 576, 577, 579, 581, 582, 584, 585, 586, 586, 588, 589, 590, 590, 591, 592, 593, 594, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604
@@ -161,28 +164,35 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     public BookmarkAdapter(Context context, ViewPager2 quranPager) {
         this.context = context;
-        this.preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         this.gson = new Gson();
         this.bookmarks = loadBookmarks();
         this.quranPager = quranPager;
     }
 
     public List<Bookmark> loadBookmarks() {
-        String json = preferences.getString(KEY_BOOKMARKS, null);
-        Type type = new TypeToken<List<Bookmark>>() {}.getType();
-        List<Bookmark> loadedBookmarks = gson.fromJson(json, type);
-        if (loadedBookmarks == null) {
-            // Если загруженный список закладок равен null, создайте новый пустой список
-            loadedBookmarks = new ArrayList<>();
+        File bookmarksFile = new File(context.getFilesDir(), BOOKMARKS_FILE_NAME);
+        if (!bookmarksFile.exists()) {
+            return new ArrayList<>();
         }
-        return loadedBookmarks;
+        try (FileReader reader = new FileReader(bookmarksFile)) {
+            Type type = new TypeToken<List<Bookmark>>() {}.getType();
+            List<Bookmark> loadedBookmarks = gson.fromJson(reader, type);
+            return loadedBookmarks != null ? loadedBookmarks : new ArrayList<>();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
-    public void saveBookmarks() {
-        SharedPreferences.Editor editor = preferences.edit();
-        String json = gson.toJson(bookmarks);
-        editor.putString(KEY_BOOKMARKS, json);
-        editor.apply();
+    // Метод для сохранения закладок в JSON-файл
+    private void saveBookmarks() {
+        File bookmarksFile = new File(context.getFilesDir(), BOOKMARKS_FILE_NAME);
+        try (FileWriter writer = new FileWriter(bookmarksFile)) {
+            String json = gson.toJson(bookmarks);
+            writer.write(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Bookmark> getBookmarks() {
@@ -192,6 +202,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     public int getCurrentPosition() {
         return currentPosition;
     }
+
+    // Методы для управления закладками
 
     public void addBookmark(Bookmark bookmark) {
         if (!isBookmarked(currentPosition)) {
@@ -206,6 +218,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         saveBookmarks();
         notifyDataSetChanged();
     }
+
 
     public void setCurrentPosition(int position) {
         this.currentPosition = position;
