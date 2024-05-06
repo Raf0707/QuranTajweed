@@ -30,7 +30,7 @@ public class BookmarkActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //bookmarkAdapter = new BookmarkAdapter(this, );
-        //recyclerView.setAdapter(bookmarkAdapter);
+        recyclerView.setAdapter(bookmarkAdapter);
 
         // Здесь также можно добавить обработку кликов на элементы списка, если нужно
     }

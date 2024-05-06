@@ -26,6 +26,7 @@ import raf.tabiin.qurantajweed.databinding.ActivityMainBinding;
 import raf.tabiin.qurantajweed.details.BookmarkActivity;
 import raf.tabiin.qurantajweed.model.Bookmark;
 import raf.tabiin.qurantajweed.model.QuranItemContent;
+import raf.tabiin.qurantajweed.utils.BookmarksPref;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private BookmarkAdapter bookmarkAdapter;
     private int currentPosition = 0;
 
+    private BookmarksPref bookmarksPref;
     ActivityMainBinding b;
 
     private Integer[] numPageSures = new Integer[]{1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 325, 249, 255, 262, 267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467, 477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549, 551, 553, 554, 556, 658, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585, 586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604, 605};
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
         b.drawerQuranLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+
+        bookmarksPref = new BookmarksPref(this);
 
         viewPager = b.viewPager;
         bookmarkAdapter = new BookmarkAdapter(this, viewPager);
@@ -83,8 +87,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Set current position from bookmarks if available
         List<Bookmark> bookmarks = bookmarkAdapter.getBookmarks();
-        if (bookmarks != null && !bookmarks.isEmpty()) {
+        /*if (bookmarks != null && !bookmarks.isEmpty()) {
             viewPager.post(() -> viewPager.setCurrentItem(bookmarks.get(0).getPosition(), false));
+        }*/
+
+        if (bookmarks != null && !bookmarks.isEmpty()) {
+            int initialPage = bookmarks.iterator().next().getPosition();
+            viewPager.setCurrentItem(initialPage, false);
         }
 
         initContent();
@@ -98,8 +107,15 @@ public class MainActivity extends AppCompatActivity {
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                // Обновите значок закладки в Toolbar для текущей страницы
-                updateBookmarkIcon(position, addBookmarkItem);
+                try {
+                    // Обновление иконки закладки для текущей страницы
+                    Menu menu = b.toolbar.getMenu();
+                    MenuItem addBookmarkItem = menu.findItem(R.id.action_add_bookmark);
+                    updateBookmarkIcon(position, addBookmarkItem);
+                } catch (Exception e) {
+                    // Вывод исключения в лог для отладки
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -231,12 +247,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateBookmarkIcon(int page, MenuItem menuItem) {
-        if (bookmarkAdapter.isBookmarked(page)) {
-            // Если на текущей странице есть закладка, установите значок bookmark_full
-            menuItem.setIcon(R.drawable.bookmark_full);
-        } else {
-            // Если закладки нет, установите значок bookmark_empty
-            menuItem.setIcon(R.drawable.bookmark_empty);
+        try {
+            // Проверка наличия закладки на текущей странице
+            boolean isBookmarked = bookmarkAdapter.isBookmarked(page);
+
+            if (isBookmarked) {
+                // Если на текущей странице есть закладка, установите значок bookmark_full
+                menuItem.setIcon(R.drawable.bookmark_full);
+            } else {
+                // Если закладки нет, установите значок bookmark_empty
+                menuItem.setIcon(R.drawable.bookmark_empty);
+            }
+        } catch (Exception e) {
+            // Вывод исключения в лог для отладки
+            e.printStackTrace();
         }
     }
 
