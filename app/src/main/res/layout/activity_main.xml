@@ -37,6 +37,7 @@
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
+            android:layout_marginTop="47dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -51,7 +52,7 @@
         android:layout_gravity="end" >
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="24dp"
-            android:id="@+id/bookmarksQuran"
+            android:id="@+id/bookmarksQuranRecycle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
