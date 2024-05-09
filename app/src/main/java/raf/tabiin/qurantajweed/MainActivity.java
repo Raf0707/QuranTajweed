@@ -3,6 +3,7 @@ package raf.tabiin.qurantajweed;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,6 +18,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         b = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
+
+        copyJSONFromAssets();
+
+        /*File jsonFile = new File(getFilesDir(), "bookmarks.json");
+        if (jsonFile.exists()) {
+            // Парсинг JSON-файла
+            // Например, с использованием библиотеки Gson или другой
+            // parseJSONFile(jsonFile);
+        }*/
 
         setSupportActionBar(b.toolbar);
 
@@ -298,6 +313,26 @@ public class MainActivity extends AppCompatActivity {
     private int loadLastPage() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getInt(LAST_PAGE_KEY, 0); // По умолчанию начнем с 0 страницы
+    }
+
+    private void copyJSONFromAssets() {
+        AssetManager assetManager = getAssets();
+        try {
+            InputStream in = assetManager.open("bookmarks.json");
+            File outFile = new File(getFilesDir(), "bookmarks.json");
+            OutputStream out = new FileOutputStream(outFile);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+
+            in.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
