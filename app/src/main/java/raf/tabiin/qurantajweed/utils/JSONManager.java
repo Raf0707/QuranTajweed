@@ -19,7 +19,7 @@ import raf.tabiin.qurantajweed.model.PageData;
 public class JSONManager {
 
     private static final String TAG = "JSONManager";
-    private static final String FILENAME = "data.json";
+    private static final String FILENAME = "bookmark.json";
 
     private Context context;
 

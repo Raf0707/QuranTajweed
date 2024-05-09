@@ -129,10 +129,13 @@ public class MainActivity extends AppCompatActivity {
                     Menu menu = b.toolbar.getMenu();
                     MenuItem addBookmarkItem = menu.findItem(R.id.action_add_bookmark);
                     updateBookmarkIcon(position, addBookmarkItem);
+                    currentPosition = position;
+                    bookmarkAdapter.setCurrentPosition(position);
                 } catch (Exception e) {
                     // Вывод исключения в лог для отладки
                     e.printStackTrace();
                 }
+                bookmarkAdapter.notifyDataSetChanged();
             }
         });
 
@@ -358,6 +361,7 @@ public class MainActivity extends AppCompatActivity {
 
                 bookmarkAdapter.notifyDataSetChanged();
 
+                Log.d("currentPosition", ""+currentPosition);
 
                 return true;
             case R.id.action_view_bookmarks:
