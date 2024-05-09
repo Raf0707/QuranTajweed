@@ -222,6 +222,32 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    /*public void addBookmark(Bookmark bookmark) {
+        if (!isBookmarked(currentPosition)) {
+            bookmarks.add(bookmark);
+            saveBookmarks();
+
+            // Если вы добавили закладку в конец списка
+            int newBookmarkIndex = bookmarks.size() - 1;
+            notifyItemInserted(newBookmarkIndex);
+        }
+    }
+
+    public void removeBookmark(int position) {
+        // Поиск закладки в списке и удаление
+        for (int i = 0; i < bookmarks.size(); i++) {
+            if (bookmarks.get(i).getPosition() == position) {
+                bookmarks.remove(i);
+                saveBookmarks();
+
+                // Уведомление адаптера об удалении
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+    }*/
+
+
 
     public void setCurrentPosition(int position) {
         this.currentPosition = position;

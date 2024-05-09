@@ -39,7 +39,7 @@ import raf.tabiin.qurantajweed.utils.BookmarksPref;
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;
-    //private BookmarkAdapter bookmarkAdapter;
+    private BookmarkAdapter bookmarkAdapter;
     private int currentPosition = 0;
 
     private static final String PREFS_NAME = "LastPagePrefs";
@@ -60,13 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         copyJSONFromAssets();
 
-        /*File jsonFile = new File(getFilesDir(), "bookmarks.json");
-        if (jsonFile.exists()) {
-            // Парсинг JSON-файла
-            // Например, с использованием библиотеки Gson или другой
-            // parseJSONFile(jsonFile);
-        }*/
-
         setSupportActionBar(b.toolbar);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
@@ -75,15 +68,15 @@ public class MainActivity extends AppCompatActivity {
         bookmarksPref = new BookmarksPref(this);
 
         viewPager = b.viewPager;
-        //bookmarkAdapter = new BookmarkAdapter(this, viewPager);
+        bookmarkAdapter = new BookmarkAdapter(this, viewPager);
         viewPager.setLayoutDirection(ViewPager2.LAYOUT_DIRECTION_RTL);
 
         // Use ImageAdapter for ViewPager2
         ImageAdapter imageAdapter = new ImageAdapter(this, 604, viewPager);
         viewPager.setAdapter(imageAdapter);
 
-        /*Menu menu = b.toolbar.getMenu();
-        MenuItem addBookmarkItem = menu.findItem(R.id.action_add_bookmark);*/
+        Menu menu = b.toolbar.getMenu();
+        MenuItem addBookmarkItem = menu.findItem(R.id.action_add_bookmark);
         int lastPage = loadLastPage();
         viewPager.setCurrentItem(lastPage, false);
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -108,17 +101,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*RecyclerView bookMarksRecycle = b.bookmarksQuranRecycle;
+        RecyclerView bookMarksRecycle = b.bookmarksQuranRecycle;
         bookMarksRecycle.setAdapter(bookmarkAdapter);
-        bookMarksRecycle.setHasFixedSize(false);*/
+        bookMarksRecycle.setHasFixedSize(false);
 
-        //bookmarkAdapter.loadBookmarks();
+        bookmarkAdapter.loadBookmarks();
 
         // Set current position from bookmarks if available
-        /*List<Bookmark> bookmarks = bookmarkAdapter.getBookmarks();
-        if (bookmarks != null && !bookmarks.isEmpty()) {
-            viewPager.post(() -> viewPager.setCurrentItem(bookmarks.get(0).getPosition(), false));
-        }*/
+        List<Bookmark> bookmarks = bookmarkAdapter.getBookmarks();
+        if (bookmarks != null && !bookmarks.isEmpty()) {//bookmarks.get(0).getPosition()
+            viewPager.post(() -> viewPager.setCurrentItem(bookmarkAdapter.getCurrentPosition(), false));
+        }
 
         initContent();
         initMap();
@@ -128,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         quranContent.setAdapter(drawerQuranContentAdapter);
         quranContent.setHasFixedSize(true);
 
-        /*viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 try {
@@ -141,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        });*/
+        });
 
     }
 
@@ -271,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*public void updateBookmarkIcon(int page, MenuItem menuItem) {
+    public void updateBookmarkIcon(int page, MenuItem menuItem) {
         try {
             // Проверка наличия закладки на текущей странице
             boolean isBookmarked = bookmarkAdapter.isBookmarked(page);
@@ -287,9 +280,9 @@ public class MainActivity extends AppCompatActivity {
             // Вывод исключения в лог для отладки
             e.printStackTrace();
         }
-    }*/
+    }
 
-    /*public void toggleBookmark(int page) {
+    public void toggleBookmark(int page) {
         if (bookmarkAdapter.isBookmarked(page)) {
             bookmarkAdapter.removeBookmark(page);
         } else {
@@ -299,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
         Menu menu = b.toolbar.getMenu();
         MenuItem addBookmarkItem = menu.findItem(R.id.action_add_bookmark);
         updateBookmarkIcon(page, addBookmarkItem);
-    }*/
+    }
 
     // Метод для сохранения последней страницы в SharedPreferences
     private void saveLastPage(int lastPage) {
@@ -347,10 +340,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_add_bookmark:
-                //int currentPosition = bookmarkAdapter.getCurrentPosition();
-                //boolean isBookmarked = bookmarkAdapter.isBookmarked(currentPosition);
+                int currentPosition = bookmarkAdapter.getCurrentPosition();
+                boolean isBookmarked = bookmarkAdapter.isBookmarked(currentPosition);
 
-                /*if (isBookmarked) {
+                if (isBookmarked) {
                     // Если страница уже в закладках, удалите закладку
                     bookmarkAdapter.removeBookmark(currentPosition);
                     // Установите иконку bookmark_empty
@@ -361,7 +354,11 @@ public class MainActivity extends AppCompatActivity {
                     bookmarkAdapter.addBookmark(bookmark);
                     // Установите иконку bookmark_full
                     item.setIcon(R.drawable.bookmark_full);
-                }*/
+                }
+
+                bookmarkAdapter.notifyDataSetChanged();
+
+
                 return true;
             case R.id.action_view_bookmarks:
                 b.drawerQuranLayout.closeDrawer(Gravity.LEFT);
