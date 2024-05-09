@@ -313,21 +313,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void copyJSONFromAssets() {
         AssetManager assetManager = getAssets();
-        try {
-            InputStream in = assetManager.open("bookmarks.json");
-            File outFile = new File(getFilesDir(), "bookmarks.json");
-            OutputStream out = new FileOutputStream(outFile);
+        File outFile = new File(getFilesDir(), "bookmarks.json");
 
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = in.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
+        // Проверяем, существует ли файл уже во внутреннем хранилище
+        if (!outFile.exists()) {
+            try {
+                InputStream in = assetManager.open("bookmarks.json");
+                OutputStream out = new FileOutputStream(outFile);
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+
+                in.close();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            in.close();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
