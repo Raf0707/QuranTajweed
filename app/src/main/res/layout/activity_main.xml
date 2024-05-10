@@ -48,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/translateQuran"
                 app:iconSize="30dp"
@@ -68,6 +69,15 @@
 
             </com.google.android.material.button.MaterialButton>
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/translateBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+        </FrameLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -133,6 +143,5 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
         </androidx.recyclerview.widget.RecyclerView>
     </com.google.android.material.navigation.NavigationView>
-
 
 </androidx.drawerlayout.widget.DrawerLayout>
