@@ -29,6 +29,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/quranDrawerInfo"
             android:layout_width="match_parent"
@@ -42,6 +43,31 @@
             android:layout_height="match_parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/translateQuran"
+                app:iconSize="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/language_svg">
+
+            </com.google.android.material.button.MaterialButton>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/goToPage"
+                app:iconSize="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/go_to_page_svg">
+
+            </com.google.android.material.button.MaterialButton>
+        </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
