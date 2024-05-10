@@ -50,11 +50,28 @@
         android:layout_height="match_parent"
         android:id="@+id/quranBM"
         android:layout_gravity="end" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Закладки"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+        </TextView>
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="44dp"
             android:id="@+id/bookmarksQuranRecycle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:fastScrollEnabled="true"
+            app:fastScrollHorizontalThumbDrawable="@drawable/thumb_b"
+            app:fastScrollHorizontalTrackDrawable="@drawable/line_x"
+            app:fastScrollVerticalThumbDrawable="@drawable/thumb_b"
+            app:fastScrollVerticalTrackDrawable="@drawable/line_x"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
         </androidx.recyclerview.widget.RecyclerView>
     </com.google.android.material.navigation.NavigationView>
@@ -65,11 +82,28 @@
         android:layout_height="match_parent"
         android:id="@+id/navMenuDrawer"
         android:layout_gravity="start" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Содержание"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+        </TextView>
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="44dp"
             android:id="@+id/quranDrawerContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:fastScrollEnabled="true"
+            app:fastScrollHorizontalThumbDrawable="@drawable/thumb_b"
+            app:fastScrollHorizontalTrackDrawable="@drawable/line_x"
+            app:fastScrollVerticalThumbDrawable="@drawable/thumb_b"
+            app:fastScrollVerticalTrackDrawable="@drawable/line_x"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
         </androidx.recyclerview.widget.RecyclerView>
     </com.google.android.material.navigation.NavigationView>

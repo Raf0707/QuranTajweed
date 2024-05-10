@@ -1,7 +1,6 @@
 package raf.tabiin.qurantajweed;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -9,12 +8,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -24,14 +20,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import raf.tabiin.qurantajweed.adapters.BookmarkAdapter;
 import raf.tabiin.qurantajweed.adapters.DrawerQuranContentAdapter;
 import raf.tabiin.qurantajweed.adapters.ImageAdapter;
 import raf.tabiin.qurantajweed.databinding.ActivityMainBinding;
-import raf.tabiin.qurantajweed.details.BookmarkActivity;
 import raf.tabiin.qurantajweed.model.Bookmark;
 import raf.tabiin.qurantajweed.model.QuranItemContent;
 import raf.tabiin.qurantajweed.utils.BookmarksPref;
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private BookmarksPref bookmarksPref;
     ActivityMainBinding b;
 
-    private Integer[] numPageSures = new Integer[]{1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 325, 249, 255, 262, 267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467, 477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549, 551, 553, 554, 556, 658, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585, 586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604, 605};
+    private Integer[] numPageSures = new Integer[]{1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262, 267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467, 477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549, 551, 553, 554, 556, 658, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585, 586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604, 605};
     private String[] sures = new String[115];
     private ArrayList<QuranItemContent> suresName = new ArrayList<QuranItemContent>();
     @Override
@@ -63,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(b.toolbar);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
-        //b.drawerQuranLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
-
-        bookmarksPref = new BookmarksPref(this);
 
         viewPager = b.viewPager;
         bookmarkAdapter = new BookmarkAdapter(this, viewPager);
@@ -74,18 +68,6 @@ public class MainActivity extends AppCompatActivity {
         // Use ImageAdapter for ViewPager2
         ImageAdapter imageAdapter = new ImageAdapter(this, 604, viewPager);
         viewPager.setAdapter(imageAdapter);
-
-        Menu menu = b.toolbar.getMenu();
-        MenuItem addBookmarkItem = menu.findItem(R.id.action_add_bookmark);
-        int lastPage = loadLastPage();
-        viewPager.setCurrentItem(lastPage, false);
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                // Сохраните текущий номер страницы при изменении страницы
-                saveLastPage(position);
-            }
-        });
 
         imageAdapter.setOnPageChangedListener(new OnPageChangedListener() {
             @Override
@@ -124,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                saveLastPage(position);
                 try {
                     // Обновление иконки закладки для текущей страницы
                     Menu menu = b.toolbar.getMenu();
@@ -138,6 +121,14 @@ public class MainActivity extends AppCompatActivity {
                 bookmarkAdapter.notifyDataSetChanged();
             }
         });
+
+        int lastPage = loadLastPage();
+        viewPager.setCurrentItem(lastPage, false);
+        if (bookmarkAdapter.isBookmarked(lastPage)) {
+            Menu menu = b.toolbar.getMenu();
+            MenuItem menuItem = menu.findItem(R.id.action_add_bookmark);
+            menuItem.setIcon(R.drawable.bookmark_full);
+        }
 
     }
 
@@ -205,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 "Сура 60. Аль-Мумтахина\nИспытуемая",
                 "Сура 61. Ас-Сафф\nРяд",
                 "Сура 62. Аль-Джуму'а\nПятница",
-                "Сура 63. Аль-Мунафиюн\nЛицемеры",
+                "Сура 63. Аль-Мунафикун\nЛицемеры",
                 "Сура 64. Ат-Тагабун\nРаскрытие самообмана",
                 "Сура 65. Ат-Талак\nРазвод",
                 "Сура 66. Ат-Тахрим\nЗапрещение",
@@ -341,6 +332,19 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public static Map<String, Integer> createSuraMap(String[] sures, Integer[] numPageSures) {
+        // Создаем словарь, где ключи - названия сур, значения - начальные страницы сур
+        Map<String, Integer> suraMap = new HashMap<>();
+
+        // Предполагаем, что sures и numPageSures имеют одинаковую длину
+        for (int i = 0; i < sures.length; i++) {
+            // Добавляем каждую суру и ее начальную страницу в словарь
+            suraMap.put(sures[i], numPageSures[i]);
+        }
+
+        return suraMap;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -364,8 +368,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 bookmarkAdapter.notifyDataSetChanged();
-
-                Log.d("currentPosition", ""+currentPosition);
 
                 return true;
             case R.id.action_view_bookmarks:
