@@ -21,9 +21,10 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
+
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:layout_scrollFlags="enterAlways|snap"
                 app:title=""
                 app:menu="@menu/main_menu"/>
 
@@ -47,12 +48,14 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp">
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/translateQuran"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 app:iconSize="30dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/language_svg">
@@ -60,14 +63,30 @@
             </com.google.android.material.button.MaterialButton>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/playQuran"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
+                app:iconSize="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/play">
+
+            </com.google.android.material.button.MaterialButton>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/goToPage"
                 app:iconSize="30dp"
-                android:layout_marginTop="8dp"
+                app:iconTint="@color/white"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/go_to_page_svg">
 
             </com.google.android.material.button.MaterialButton>
+
+
         </LinearLayout>
 
         <FrameLayout
@@ -102,6 +121,7 @@
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:paddingTop="30dp"
         android:id="@+id/quranBM"
         android:layout_gravity="end" >
         <TextView
@@ -135,6 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/navMenuDrawer"
+        android:paddingTop="30dp"
         android:layout_gravity="start" >
         <TextView
             android:layout_width="match_parent"
