@@ -74,7 +74,25 @@
             android:id="@+id/translateBottomSheet"
             android:layout_width="match_parent"
             android:layout_height="500dp"
+            android:background="@drawable/rounded"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/remove_svg"
+                android:layout_gravity="center|top"
+                android:scaleType="centerCrop">
+            </ImageView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Тут будет Тафсир (перевод) Корана"
+                android:gravity="center"
+                android:textSize="25sp">
+                
+            </TextView>
 
 
         </FrameLayout>
