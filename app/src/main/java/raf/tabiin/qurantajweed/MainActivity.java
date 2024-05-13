@@ -15,8 +15,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -25,10 +27,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
                     // Вывод исключения в лог для отладки
                     e.printStackTrace();
                 }
+                b.tafsirText.setText(loadTextFromFile(position+1 + ".txt"));
+                b.scrollTafsir.scrollTo(0, 0);
                 bookmarkAdapter.notifyDataSetChanged();
             }
         });
@@ -157,10 +163,49 @@ public class MainActivity extends AppCompatActivity {
             if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                 // Если BottomSheet свернут, то развернуть его
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                b.imOpenCloseTafsir.setImageResource(R.drawable.close_svg);
             } else {
                 // Если BottomSheet развернут или находится в состоянии перетаскивания, то свернуть его
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                b.imOpenCloseTafsir.setImageResource(R.drawable.open_svg);
             }
+        });
+
+        b.imOpenCloseTafsir.setOnClickListener(v -> {
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                // Если BottomSheet свернут, то развернуть его
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                b.imOpenCloseTafsir.setImageResource(R.drawable.close_svg);
+            } else {
+                // Если BottomSheet развернут или находится в состоянии перетаскивания, то свернуть его
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                b.imOpenCloseTafsir.setImageResource(R.drawable.open_svg);
+            }
+        });
+
+        // Настройка слушателя событий для bottomSheet
+        bottomSheetBehavior.setDraggable(false);
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    // Если bottomSheet находится в состоянии перетаскивания, блокируем его сворачивание свайпом вниз
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // Ничего не делаем при изменении состояния сворачивания/разворачивания
+                //TODO
+            }
+        });
+
+        // Настройка слушателя событий для ScrollView
+        b.scrollTafsir.setOnTouchListener((v, event) -> {
+            // Обработка касания на прокрутку ScrollView
+            // Возвращаем true, чтобы указать, что событие было обработано и не передавать его дальше
+            return false;
         });
 
     }
@@ -452,6 +497,36 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private String loadTextFromFile(String fileName) {
+        StringBuilder text = new StringBuilder();
+        try {
+            InputStream is = getAssets().open("tafsir_al_muntahab/" + fileName);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text.toString();
+    }
+
+    private boolean checkIfStartedFromImageView(View bottomSheet) {
+        // Получаем координаты ImageView
+        int[] imageViewLocation = new int[2];
+        ImageView imageView = bottomSheet.findViewById(R.id.imOpenCloseTafsir);
+        if (imageView != null) {
+            imageView.getLocationOnScreen(imageViewLocation);
+            int imageViewTop = imageViewLocation[1];
+            // Проверяем, начинается ли перетаскивание от ImageView
+            return b.translateBottomSheet.getTranslationY() < imageViewTop;
+        }
+        return false;
     }
 
     public interface OnPageChangedListener {

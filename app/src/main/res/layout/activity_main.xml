@@ -92,26 +92,39 @@
         <FrameLayout
             android:id="@+id/translateBottomSheet"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="800dp"
             android:background="@drawable/rounded"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <ImageView
-                android:layout_width="80dp"
+                android:id="@+id/imOpenCloseTafsir"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/remove_svg"
+                android:padding="20dp"
+                android:src="@drawable/open_svg"
                 android:layout_gravity="center|top"
                 android:scaleType="centerCrop">
             </ImageView>
 
-            <TextView
+            <ScrollView
+                android:id="@+id/scrollTafsir"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Тут будет Тафсир (перевод) Корана"
-                android:gravity="center"
-                android:textSize="25sp">
-                
-            </TextView>
+                android:layout_marginTop="80dp">
+
+                <TextView
+                    android:id="@+id/tafsirText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Тут будет Тафсир (перевод) Корана"
+                    android:gravity="left"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="21sp">
+
+                </TextView>
+
+            </ScrollView>
 
 
         </FrameLayout>
