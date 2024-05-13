@@ -5,6 +5,7 @@ import static java.security.AccessController.getContext;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,7 +16,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -58,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String LAST_PAGE_KEY = "last_page_key";
     ActivityMainBinding b;
 
+    private ImageButton btnStartPause;
+    private MediaPlayer mediaPlayer;
+    private boolean isPlaying = false;
+    private String audioUrl = "https://archive.org/details/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
+
     private Integer[] numPageSures = new Integer[]{1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262, 267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467, 477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549, 551, 553, 554, 556, 568, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585, 586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604, 605};
     private String[] sures = new String[115];
     private ArrayList<QuranItemContent> suresName = new ArrayList<QuranItemContent>();
@@ -87,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
         // Use ImageAdapter for ViewPager2
         ImageAdapter imageAdapter = new ImageAdapter(this, 604, viewPager);
         viewPager.setAdapter(imageAdapter);
+
+        btnStartPause = b.btnStartPause;
+        final SeekBar seekBar = b.seekBar;
+        b.playerLayout.setVisibility(View.INVISIBLE);
 
         imageAdapter.setOnPageChangedListener(new OnPageChangedListener() {
             @Override
@@ -208,6 +220,49 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
+        b.playQuran.setOnClickListener(v -> {
+            if (b.playerLayout.getVisibility() == View.VISIBLE) {
+                b.playerLayout.setVisibility(View.INVISIBLE);
+            } else {
+                b.playerLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnStartPause.setOnClickListener(v -> {
+            if (!isPlaying) {
+                // Проверка на наличие интернет-подключения
+                if (!isInternetConnected()) {
+                    Snackbar.make(v, "Нет подключения к интернету", Snackbar.LENGTH_SHORT).show();
+                } else {
+
+                    // Начать проигрывание
+                    try {
+                        mediaPlayer = new MediaPlayer();
+                        mediaPlayer.setDataSource(getAudioUrlForCurrentPage());
+                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                mp.start();
+                                isPlaying = true;
+                                btnStartPause.setImageResource(R.drawable.pause);
+                            }
+                        });
+                        mediaPlayer.prepareAsync();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                // Поставить на паузу
+                mediaPlayer.pause();
+                isPlaying = false;
+                btnStartPause.setImageResource(R.drawable.play);
+            }
+            //Snackbar.make(v, String.format("%03d", currentPosition) + ".mp3", Snackbar.LENGTH_SHORT).show();
+
+        });
+
+
     }
 
     private void goToPageAlert() {
@@ -246,6 +301,18 @@ public class MainActivity extends AppCompatActivity {
         alert.setView(dialogView);
         alert.show();
 
+    }
+
+    // Проверка на наличие интернет-подключения
+    private boolean isInternetConnected() {
+        // Реализуйте вашу логику проверки подключения к интернету здесь
+        return true; // Верните true, если есть подключение, и false в противном случае
+    }
+
+    // Получение URL аудиофайла для текущей страницы
+    private String getAudioUrlForCurrentPage() {
+        int currentPage = 1; // Здесь должен быть код для получения текущей страницы ViewPager
+        return audioUrl + String.format("%03d", currentPage) + ".mp3";
     }
 
     private void initContent() {
@@ -392,18 +459,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void toggleBookmark(int page) {
-        if (bookmarkAdapter.isBookmarked(page)) {
-            bookmarkAdapter.removeBookmark(page);
-        } else {
-            bookmarkAdapter.addBookmark(new Bookmark(page));
-        }
-        // Обновите значок закладки
-        Menu menu = b.toolbar.getMenu();
-        MenuItem addBookmarkItem = menu.findItem(R.id.action_add_bookmark);
-        updateBookmarkIcon(page, addBookmarkItem);
-    }
-
     // Метод для сохранения последней страницы в SharedPreferences
     private void saveLastPage(int lastPage) {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -448,17 +503,42 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public static Map<String, Integer> createSuraMap(String[] sures, Integer[] numPageSures) {
-        // Создаем словарь, где ключи - названия сур, значения - начальные страницы сур
-        Map<String, Integer> suraMap = new HashMap<>();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startSeekBarUpdateThread();
+    }
 
-        // Предполагаем, что sures и numPageSures имеют одинаковую длину
-        for (int i = 0; i < sures.length; i++) {
-            // Добавляем каждую суру и ее начальную страницу в словарь
-            suraMap.put(sures[i], numPageSures[i]);
-        }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopSeekBarUpdateThread();
+    }
 
-        return suraMap;
+    // Метод для запуска потока обновления SeekBar
+    private void startSeekBarUpdateThread() {
+        final SeekBar seekBar = findViewById(R.id.seekBar);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                    try {
+                        final int currentPosition = mediaPlayer.getCurrentPosition();
+                        final int totalDuration = mediaPlayer.getDuration();
+                        seekBar.setProgress(currentPosition);
+                        seekBar.setMax(totalDuration);
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    // Метод для остановки потока обновления SeekBar
+    private void stopSeekBarUpdateThread() {
+        // Здесь можно добавить логику остановки потока, если это необходимо
     }
 
 
@@ -514,19 +594,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return text.toString();
-    }
-
-    private boolean checkIfStartedFromImageView(View bottomSheet) {
-        // Получаем координаты ImageView
-        int[] imageViewLocation = new int[2];
-        ImageView imageView = bottomSheet.findViewById(R.id.imOpenCloseTafsir);
-        if (imageView != null) {
-            imageView.getLocationOnScreen(imageViewLocation);
-            int imageViewTop = imageViewLocation[1];
-            // Проверяем, начинается ли перетаскивание от ImageView
-            return b.translateBottomSheet.getTranslationY() < imageViewTop;
-        }
-        return false;
     }
 
     public interface OnPageChangedListener {

@@ -28,8 +28,48 @@
                 app:title=""
                 app:menu="@menu/main_menu"/>
 
+
         </com.google.android.material.appbar.AppBarLayout>
 
+        <LinearLayout
+            android:id="@+id/playerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="70dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnStartPause"
+                android:layout_width="wrap_content"
+                android:paddingRight="13dp"
+                android:paddingLeft="13dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/play"
+                android:background="?android:selectableItemBackground" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:max="100"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:thumb="@drawable/thumb_player" />
+
+            <ImageButton
+                android:id="@+id/btnLoopMode"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/loop_play_all"
+                android:paddingRight="13dp"
+                android:paddingLeft="13dp"
+                android:background="?android:selectableItemBackground" />
+
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/quranDrawerInfo"
@@ -39,7 +79,8 @@
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
-            android:layout_marginTop="47dp"
+            android:layout_marginTop="105dp"
+            android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
