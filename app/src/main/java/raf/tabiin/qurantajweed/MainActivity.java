@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -233,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         btnStartPause.setOnClickListener(v -> {
             if (!isPlaying) {
                 // Проверка на наличие интернет-подключения
-                if (!isInternetConnected()) {
+                if (!isInternetConnected(getApplicationContext())) {
                     Snackbar.make(v, "Нет подключения к интернету", Snackbar.LENGTH_SHORT).show();
                 } else {
 
@@ -309,14 +310,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Проверка на наличие интернет-подключения
-    private boolean isInternetConnected() {
-        // Реализуйте вашу логику проверки подключения к интернету здесь
-        return true; // Верните true, если есть подключение, и false в противном случае
+    private boolean isInternetConnected(Context context) {
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        return Objects.requireNonNull(wifi).isConnected() || Objects.requireNonNull(mobile).isConnected();
     }
 
     // Получение URL аудиофайла для текущей страницы
     private String getAudioUrlForCurrentPage() {
-        int currentPage = 1; // Здесь должен быть код для получения текущей страницы ViewPager
+        int currentPage = bookmarkAdapter.getCurrentPosition(); // Здесь должен быть код для получения текущей страницы ViewPager
         return audioUrl + String.format("%03d", currentPage) + ".mp3";
     }
 
