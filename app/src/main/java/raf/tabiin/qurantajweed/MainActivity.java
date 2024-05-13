@@ -223,8 +223,10 @@ public class MainActivity extends AppCompatActivity {
         b.playQuran.setOnClickListener(v -> {
             if (b.playerLayout.getVisibility() == View.VISIBLE) {
                 b.playerLayout.setVisibility(View.INVISIBLE);
+                savePlayerVisibilityState(false); // Сохранить состояние - скрыт
             } else {
                 b.playerLayout.setVisibility(View.VISIBLE);
+                savePlayerVisibilityState(true); // Сохранить состояние - видим
             }
         });
 
@@ -245,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
                                 mp.start();
                                 isPlaying = true;
                                 btnStartPause.setImageResource(R.drawable.pause);
+                                startSeekBarUpdateThread(); // Запускаем поток обновления SeekBar
                             }
                         });
                         mediaPlayer.prepareAsync();
@@ -257,7 +260,9 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.pause();
                 isPlaying = false;
                 btnStartPause.setImageResource(R.drawable.play);
+                stopSeekBarUpdateThread(); // Останавливаем поток обновления SeekBar
             }
+
             //Snackbar.make(v, String.format("%03d", currentPosition) + ".mp3", Snackbar.LENGTH_SHORT).show();
 
         });
@@ -503,16 +508,34 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void savePlayerVisibilityState(boolean isVisible) {
+        SharedPreferences preferences = getSharedPreferences("PlayerPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("player_visible", isVisible);
+        editor.apply();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         startSeekBarUpdateThread();
+        SharedPreferences preferences = getSharedPreferences("PlayerPrefs", Context.MODE_PRIVATE);
+        boolean isPlayerVisible = preferences.getBoolean("player_visible", false);
+        if (isPlayerVisible) {
+            b.playerLayout.setVisibility(View.VISIBLE);
+        } else {
+            b.playerLayout.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         stopSeekBarUpdateThread();
+        SharedPreferences preferences = getSharedPreferences("PlayerPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("player_visible", b.playerLayout.getVisibility() == View.VISIBLE);
+        editor.apply();
     }
 
     // Метод для запуска потока обновления SeekBar
