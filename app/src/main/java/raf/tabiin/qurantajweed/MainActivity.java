@@ -51,6 +51,8 @@ import raf.tabiin.qurantajweed.databinding.ActivityMainBinding;
 import raf.tabiin.qurantajweed.model.Bookmark;
 import raf.tabiin.qurantajweed.model.QuranItemContent;
 import raf.tabiin.qurantajweed.utils.BookmarksPref;
+import raf.tabiin.qurantajweed.utils.MusicPlayer;
+import raf.tabiin.qurantajweed.utils.StandartMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnStartPause;
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
-    private String audioUrl = "https://archive.org/details/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
+    private String audioUrl = "https://ia801605.us.archive.org/3/items/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
 
     private Integer[] numPageSures = new Integer[]{1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262, 267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467, 477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549, 551, 553, 554, 556, 568, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585, 586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604, 605};
     private String[] sures = new String[115];
@@ -210,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 // Ничего не делаем при изменении состояния сворачивания/разворачивания
-                //TODO
             }
         });
 
@@ -231,42 +232,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        MusicPlayer musicPlayer = new MusicPlayer(getApplicationContext(), b.seekBar);
+        //TODO
         btnStartPause.setOnClickListener(v -> {
             if (!isPlaying) {
                 // Проверка на наличие интернет-подключения
                 if (!isInternetConnected(getApplicationContext())) {
                     Snackbar.make(v, "Нет подключения к интернету", Snackbar.LENGTH_SHORT).show();
                 } else {
-
                     // Начать проигрывание
-                    try {
-                        mediaPlayer = new MediaPlayer();
-                        mediaPlayer.setDataSource(getAudioUrlForCurrentPage());
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                mp.start();
-                                isPlaying = true;
-                                btnStartPause.setImageResource(R.drawable.pause);
-                                startSeekBarUpdateThread(); // Запускаем поток обновления SeekBar
-                            }
-                        });
-                        mediaPlayer.prepareAsync();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    musicPlayer.play(getAudioUrlForCurrentPage());
+                    isPlaying = true;
+                    btnStartPause.setImageResource(R.drawable.pause);
+                    startSeekBarUpdateThread(); // Запускаем поток обновления SeekBar
                 }
+                Snackbar.make(v, "play", Snackbar.LENGTH_SHORT).show();
+                Log.d("link", getAudioUrlForCurrentPage());
             } else {
                 // Поставить на паузу
-                mediaPlayer.pause();
+                musicPlayer.pause(); // Используем standartMediaPlayer для паузы
                 isPlaying = false;
                 btnStartPause.setImageResource(R.drawable.play);
                 stopSeekBarUpdateThread(); // Останавливаем поток обновления SeekBar
+                Snackbar.make(v, "Not play", Snackbar.LENGTH_SHORT).show();
             }
-
-            //Snackbar.make(v, String.format("%03d", currentPosition) + ".mp3", Snackbar.LENGTH_SHORT).show();
-
         });
+        //TODO
 
 
     }
@@ -319,10 +310,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Получение URL аудиофайла для текущей страницы
+    //TODO
     private String getAudioUrlForCurrentPage() {
-        int currentPage = bookmarkAdapter.getCurrentPosition(); // Здесь должен быть код для получения текущей страницы ViewPager
+        int currentPage = bookmarkAdapter.getCurrentPosition() + 1; // Здесь должен быть код для получения текущей страницы ViewPager
         return audioUrl + String.format("%03d", currentPage) + ".mp3";
     }
+    //TODO
 
     private void initContent() {
         sures = new String[] {
