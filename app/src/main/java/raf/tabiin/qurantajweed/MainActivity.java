@@ -1,8 +1,10 @@
 package raf.tabiin.qurantajweed;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static java.security.AccessController.getContext;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
@@ -19,10 +21,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -41,6 +45,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -50,11 +55,14 @@ import raf.tabiin.qurantajweed.adapters.ImageAdapter;
 import raf.tabiin.qurantajweed.databinding.ActivityMainBinding;
 import raf.tabiin.qurantajweed.model.Bookmark;
 import raf.tabiin.qurantajweed.model.QuranItemContent;
+import raf.tabiin.qurantajweed.utils.AsyncHttpClient;
 import raf.tabiin.qurantajweed.utils.BookmarksPref;
+import raf.tabiin.qurantajweed.utils.ErrorLogger;
 import raf.tabiin.qurantajweed.utils.MusicPlayer;
+import raf.tabiin.qurantajweed.utils.QuranAudioDownloader;
 import raf.tabiin.qurantajweed.utils.StandartMediaPlayer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AsyncHttpClient.DownloadListener {
 
     private ViewPager2 viewPager;
     private BookmarkAdapter bookmarkAdapter;
@@ -67,13 +75,14 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnStartPause;
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
-    private String audioUrl = "https://ia801605.us.archive.org/3/items/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
-
     private Integer[] numPageSures = new Integer[]{1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262, 267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467, 477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549, 551, 553, 554, 556, 568, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585, 586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604, 605};
     private String[] sures = new String[115];
     private ArrayList<QuranItemContent> suresName = new ArrayList<QuranItemContent>();
     // Создайте экземпляр BottomSheetBehavior для управления BottomSheet
 
+    private AsyncHttpClient asyncHttpClient;
+
+    private QuranAudioDownloader quranAudioDownloader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(b.toolbar);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
+
+        asyncHttpClient = new AsyncHttpClient();
 
 
         BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(b.translateBottomSheet);
@@ -236,27 +247,27 @@ public class MainActivity extends AppCompatActivity {
         //TODO
         btnStartPause.setOnClickListener(v -> {
             if (!isPlaying) {
-                // Проверка на наличие интернет-подключения
-                if (!isInternetConnected(getApplicationContext())) {
-                    Snackbar.make(v, "Нет подключения к интернету", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    // Начать проигрывание
+                // Проверяем, скачаны ли файлы с облака
+                if (areQuranAudioFilesDownloaded()) {
+                    // Начинаем проигрывание
                     musicPlayer.play(getAudioUrlForCurrentPage());
                     isPlaying = true;
                     btnStartPause.setImageResource(R.drawable.pause);
                     startSeekBarUpdateThread(); // Запускаем поток обновления SeekBar
+                } else {
+                    // Файлы еще не скачаны, отображаем диалоговое окно с предложением скачать
+                    showDownloadQuranAudioAlert();
                 }
-                Snackbar.make(v, "play", Snackbar.LENGTH_SHORT).show();
-                Log.d("link", getAudioUrlForCurrentPage());
             } else {
                 // Поставить на паузу
-                musicPlayer.pause(); // Используем standartMediaPlayer для паузы
+                musicPlayer.pause(); // Используем musicPlayer для паузы
                 isPlaying = false;
                 btnStartPause.setImageResource(R.drawable.play);
                 stopSeekBarUpdateThread(); // Останавливаем поток обновления SeekBar
                 Snackbar.make(v, "Not play", Snackbar.LENGTH_SHORT).show();
             }
         });
+
         //TODO
 
 
@@ -297,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
 
         alert.setView(dialogView);
         alert.show();
-
+    
     }
 
     // Проверка на наличие интернет-подключения
@@ -311,10 +322,18 @@ public class MainActivity extends AppCompatActivity {
 
     // Получение URL аудиофайла для текущей страницы
     //TODO
-    private String getAudioUrlForCurrentPage() {
+    /*private String getAudioUrlForCurrentPage() {
+        String audioUrl = "https://ia801605.us.archive.org/3/items/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
         int currentPage = bookmarkAdapter.getCurrentPosition() + 1; // Здесь должен быть код для получения текущей страницы ViewPager
         return audioUrl + String.format("%03d", currentPage) + ".mp3";
+    }*/
+
+    private String getAudioUrlForCurrentPage() {
+        int currentPage = bookmarkAdapter.getCurrentPosition() + 1; // Получаем текущую страницу ViewPager
+        String fileName = String.format(Locale.getDefault(), "%03d.mp3", currentPage);
+        return getFilesDir() + File.separator + "QuranPagesAudio" + File.separator + fileName;
     }
+
     //TODO
 
     private void initContent() {
@@ -616,6 +635,196 @@ public class MainActivity extends AppCompatActivity {
         return text.toString();
     }
 
+    @Override
+    public void onSuccess(File file) {
+
+    }
+
+    @Override
+    public void onFailure(Exception e) {
+
+    }
+
+    @Override
+    public void onProgress(int progress) {
+
+    }
+
+    private void checkAndDownloadFiles() {
+        String destinationDir = getFilesDir() + File.separator + "QuranPagesAudio";
+        File dir = new File(destinationDir);
+        if (!dir.exists()) {
+            // Если папка не существует, скачиваем все файлы
+            downloadAllFilesFromMailRu();
+        } else {
+            // Если папка существует, проверяем наличие всех файлов
+            File[] files = dir.listFiles();
+            if (files != null && files.length == 604) {
+                // Если все файлы присутствуют, ничего не делаем
+                Log.d(TAG, "All files are present");
+            } else {
+                // Если некоторых файлов нет, скачиваем недостающие
+                downloadMissingFiles(files);
+            }
+        }
+    }
+
+    private void downloadAllFilesFromMailRu() {
+        String urlPrefix = "https://cloud.mail.ru/public/ojSg/Wv4cLhWVc/";
+        String destinationDir = getFilesDir() + File.separator + "QuranPagesAudio";
+        for (int i = 1; i <= 604; i++) {
+            String url = urlPrefix + i + ".mp3";
+            String destinationPath = destinationDir + File.separator + i + ".mp3";
+            asyncHttpClient.downloadFile(url, destinationPath, this);
+        }
+    }
+
+
+    private void downloadMissingFiles(File[] files) {
+        String urlPrefix = "https://cloud.mail.ru/public/ojSg/Wv4cLhWVc/";
+        String destinationDir = getFilesDir() + File.separator + "QuranPagesAudio";
+        List<Integer> missingFiles = findMissingFiles(files);
+        for (int i : missingFiles) {
+            String url = urlPrefix + i + ".mp3";
+            String destinationPath = destinationDir + File.separator + i + ".mp3";
+            asyncHttpClient.downloadFile(url, destinationPath, this);
+        }
+    }
+
+    private List<Integer> findMissingFiles(File[] files) {
+        List<Integer> presentFiles = new ArrayList<>();
+        for (File file : files) {
+            String fileName = file.getName();
+            int fileNumber = Integer.parseInt(fileName.substring(0, fileName.lastIndexOf(".")));
+            presentFiles.add(fileNumber);
+        }
+
+        List<Integer> missingFiles = new ArrayList<>();
+        for (int i = 1; i <= 604; i++) {
+            if (!presentFiles.contains(i)) {
+                missingFiles.add(i);
+            }
+        }
+        return missingFiles;
+    }
+
+    private boolean areQuranAudioFilesDownloaded() {
+        File directory = new File(getFilesDir() + File.separator + "QuranPagesAudio");
+        if (!directory.exists()) {
+            return false; // Папка не существует, значит файлы не скачаны
+        }
+
+        // Проверяем наличие каждого файла
+        for (int i = 1; i <= 604; i++) {
+            String fileName = String.format(Locale.getDefault(), "%03d.mp3", i);
+            File file = new File(directory, fileName);
+            if (!file.exists()) {
+                return false; // Если хотя бы один файл отсутствует, возвращаем false
+            }
+        }
+
+        return true; // Все файлы найдены, возвращаем true
+    }
+
+    private void showDownloadQuranAudioAlert() {
+        // Создаем прогрессбар
+        final ProgressBar progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+        progressBar.setIndeterminate(true);
+
+        // Создаем диалоговое окно
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
+                .setTitle("Download Quran Audio")
+                .setMessage("Some audio files are missing. Do you want to download them?")
+                .setView(progressBar)
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setPositiveButton("Download", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Запускаем процесс загрузки всех файлов или недостающих файлов
+                        quranAudioDownloader = new QuranAudioDownloader();
+
+                        // Указываем путь назначения для загрузки файлов
+                        String destinationPath = getFilesDir() + File.separator + "QuranPagesAudio";
+
+                        // Запускаем загрузку файлов
+                        quranAudioDownloader.downloadFiles(destinationPath);
+                    }
+                });
+
+        // Создаем и отображаем диалоговое окно
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Отображаем количество скачанных файлов над прогрессбаром
+        final TextView progressText = new TextView(this);
+        progressText.setText("0/604");
+        builder.setView(progressText);
+
+        // Поток для обновления прогрессбара и текста
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Получаем количество скачанных файлов
+                int downloadedFiles = getDownloadedFilesCount();
+                // Обновляем текст и прогрессбар
+                updateProgress(downloadedFiles, progressBar, progressText);
+                // Проверяем, завершено ли скачивание
+                if (downloadedFiles == 604) {
+                    // Если все файлы скачаны, выводим сообщение "готово"
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.setMessage("Download complete!");
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    // Метод для обновления прогрессбара и текста
+    private void updateProgress(final int downloadedFiles, final ProgressBar progressBar, final TextView progressText) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Устанавливаем прогресс в прогрессбаре
+                progressBar.setIndeterminate(false);
+                progressBar.setMax(604);
+                progressBar.setProgress(downloadedFiles);
+
+                // Обновляем текст с количеством скачанных файлов
+                progressText.setText(downloadedFiles + "/604");
+            }
+        });
+    }
+
+    // Метод для получения количества скачанных файлов
+    private int getDownloadedFilesCount() {
+        File directory = new File(getFilesDir() + File.separator + "QuranPagesAudio");
+        if (!directory.exists()) {
+            return 0;
+        }
+
+        // Считаем количество файлов в папке
+        int count = 0;
+        for (int i = 1; i <= 604; i++) {
+            String fileName = String.format(Locale.getDefault(), "%03d.mp3", i);
+            File file = new File(directory, fileName);
+            if (file.exists()) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+
+
     public interface OnPageChangedListener {
         void onPageChanged(int position);
         int getCurrentPosition();
@@ -624,6 +833,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // Пишем в журнал ошибок перед уничтожением активности
+
     }
 
 }
