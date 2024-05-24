@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+        android:id="@+id/tajweed"
+        android:icon="@drawable/baseline_auto_stories_24"
+        android:title="Правила Таджвида" />
+
+    <item
+        android:id="@+id/hatm_quran"
+        android:icon="@drawable/cycle_svg"
+        android:title="Хатм Корана" />
+
+    <item
+        android:id="@+id/our_projects"
+        android:icon="@drawable/projects_svg"
+        android:title="Наши проекты" />
+
+    <item
+        android:id="@+id/about_app"
+        android:icon="@drawable/ic_vector_info"
+        android:title="О приложении" />
+
+</menu>

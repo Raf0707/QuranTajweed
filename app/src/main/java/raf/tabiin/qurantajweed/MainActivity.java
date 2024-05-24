@@ -1,10 +1,13 @@
 package raf.tabiin.qurantajweed;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-import static java.security.AccessController.getContext;
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import static raf.tabiin.qurantajweed.utils.UtilFragment.changeFragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
@@ -14,13 +17,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -43,10 +44,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 import raf.tabiin.qurantajweed.adapters.BookmarkAdapter;
@@ -55,12 +54,13 @@ import raf.tabiin.qurantajweed.adapters.ImageAdapter;
 import raf.tabiin.qurantajweed.databinding.ActivityMainBinding;
 import raf.tabiin.qurantajweed.model.Bookmark;
 import raf.tabiin.qurantajweed.model.QuranItemContent;
+import raf.tabiin.qurantajweed.ui.container.ConteinerActivity;
+import raf.tabiin.qurantajweed.ui.details.tutorials.TutorialTafsirPanelActivity;
 import raf.tabiin.qurantajweed.utils.AsyncHttpClient;
-import raf.tabiin.qurantajweed.utils.BookmarksPref;
-import raf.tabiin.qurantajweed.utils.ErrorLogger;
+import raf.tabiin.qurantajweed.utils.MailRuDownloader;
 import raf.tabiin.qurantajweed.utils.MusicPlayer;
+import raf.tabiin.qurantajweed.utils.OnSwipeTouchListener;
 import raf.tabiin.qurantajweed.utils.QuranAudioDownloader;
-import raf.tabiin.qurantajweed.utils.StandartMediaPlayer;
 
 public class MainActivity extends AppCompatActivity implements AsyncHttpClient.DownloadListener {
 
@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     private static final String PREFS_NAME = "LastPagePrefs";
     private static final String LAST_PAGE_KEY = "last_page_key";
     ActivityMainBinding b;
+    String audioUrl = "https://ia801605.us.archive.org/3/items/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
+
 
     private ImageButton btnStartPause;
     private MediaPlayer mediaPlayer;
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     // Создайте экземпляр BottomSheetBehavior для управления BottomSheet
 
     private AsyncHttpClient asyncHttpClient;
+    private MailRuDownloader mailRuDownloader;
 
     private QuranAudioDownloader quranAudioDownloader;
 
@@ -99,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
         asyncHttpClient = new AsyncHttpClient();
 
+        mailRuDownloader = new MailRuDownloader(getApplicationContext());
 
         BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(b.translateBottomSheet);
 
@@ -185,16 +189,9 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         boolean isCollapsed = true;
 
-        b.translateQuran.setOnClickListener(v -> {
-            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                // Если BottomSheet свернут, то развернуть его
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                b.imOpenCloseTafsir.setImageResource(R.drawable.close_svg);
-            } else {
-                // Если BottomSheet развернут или находится в состоянии перетаскивания, то свернуть его
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                b.imOpenCloseTafsir.setImageResource(R.drawable.open_svg);
-            }
+        b.settingsAppFragment.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ConteinerActivity.class);
+            startActivity(intent);
         });
 
         b.imOpenCloseTafsir.setOnClickListener(v -> {
@@ -226,11 +223,43 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
             }
         });
 
-        // Настройка слушателя событий для ScrollView
-        b.scrollTafsir.setOnTouchListener((v, event) -> {
-            // Обработка касания на прокрутку ScrollView
-            // Возвращаем true, чтобы указать, что событие было обработано и не передавать его дальше
-            return false;
+        b.translateBottomSheet.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()){
+            @Override
+            public void onDoubleClick() {
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    // Если BottomSheet свернут, то развернуть его
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    b.imOpenCloseTafsir.setImageResource(R.drawable.close_svg);
+                    //Snackbar.make(b.getRoot(), "Нажмите дважды, чтобы закрыть", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    // Если BottomSheet развернут или находится в состоянии перетаскивания, то свернуть его
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    b.imOpenCloseTafsir.setImageResource(R.drawable.open_svg);
+                    //Snackbar.make(b.getRoot(), "Нажмите дважды, чтобы открыть", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onSwipeDown() {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                b.imOpenCloseTafsir.setImageResource(R.drawable.open_svg);
+                //Snackbar.make(b.getRoot(), "Свайп вверх от кнопки управления - открыть", Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSwipeUp() {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                b.imOpenCloseTafsir.setImageResource(R.drawable.close_svg);
+                //Snackbar.make(b.getRoot(), "Свайп вниз от кнопки управления - закрыть", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        b.tafsirText.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()){
+            @Override
+            public void onDoubleClick() {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                b.imOpenCloseTafsir.setImageResource(R.drawable.open_svg);
+            }
         });
 
         b.playQuran.setOnClickListener(v -> {
@@ -270,6 +299,9 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
         //TODO
 
+        b.infoOpenCloseTafsir.setOnClickListener(v -> {
+            infoGesture();
+        });
 
     }
 
@@ -308,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
         alert.setView(dialogView);
         alert.show();
-    
+
     }
 
     // Проверка на наличие интернет-подключения
@@ -329,9 +361,8 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     }*/
 
     private String getAudioUrlForCurrentPage() {
-        int currentPage = bookmarkAdapter.getCurrentPosition() + 1; // Получаем текущую страницу ViewPager
-        String fileName = String.format(Locale.getDefault(), "%03d.mp3", currentPage);
-        return getFilesDir() + File.separator + "QuranPagesAudio" + File.separator + fileName;
+        int currentPage = bookmarkAdapter.getCurrentPosition() + 1; // Здесь должен быть код для получения текущей страницы ViewPager
+        return audioUrl + String.format("%03d", currentPage) + ".mp3";
     }
 
     //TODO
@@ -655,7 +686,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         File dir = new File(destinationDir);
         if (!dir.exists()) {
             // Если папка не существует, скачиваем все файлы
-            downloadAllFilesFromMailRu();
+            downloadAllFiles();
         } else {
             // Если папка существует, проверяем наличие всех файлов
             File[] files = dir.listFiles();
@@ -669,13 +700,14 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         }
     }
 
-    private void downloadAllFilesFromMailRu() {
+    private void downloadAllFiles() {
         String urlPrefix = "https://cloud.mail.ru/public/ojSg/Wv4cLhWVc/";
         String destinationDir = getFilesDir() + File.separator + "QuranPagesAudio";
         for (int i = 1; i <= 604; i++) {
             String url = urlPrefix + i + ".mp3";
             String destinationPath = destinationDir + File.separator + i + ".mp3";
-            asyncHttpClient.downloadFile(url, destinationPath, this);
+            //asyncHttpClient.downloadFile(url, destinationPath, this);
+            mailRuDownloader.downloadAudioFile(url);
         }
     }
 
@@ -687,7 +719,8 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         for (int i : missingFiles) {
             String url = urlPrefix + i + ".mp3";
             String destinationPath = destinationDir + File.separator + i + ".mp3";
-            asyncHttpClient.downloadFile(url, destinationPath, this);
+            //asyncHttpClient.downloadFile(url, destinationPath, this);
+            mailRuDownloader.downloadAudioFile(url);
         }
     }
 
@@ -823,6 +856,33 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         return count;
     }
 
+    private void infoGesture() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle("Инструкция по использованию панели перевода");
+        builder.setMessage("Открыть и закрыть панель перевода можно:\n" +
+                "1. Двойным кликом по любому месту панели\n" +
+                "2. По кнопке \"открыть и закрыть\" справа в углу\n" +
+                "3. Свайпами на начале панели:\n" +
+                "   - Свайп вверх от начала панели - открыть\n" +
+                "   - Свайп вниз от начала панели - закрыть.\n" +
+                "   Важно: свайпы работают только на верхней части панели, чтобы не мешать прокрутке перевода (Тафсира)");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Не понял", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), TutorialTafsirPanelActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.show();
+    }
+
+
 
 
     public interface OnPageChangedListener {
@@ -834,7 +894,10 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     public void onDestroy() {
         super.onDestroy();
         // Пишем в журнал ошибок перед уничтожением активности
-
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
 }

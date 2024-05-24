@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/about_app"
+    tools:openDrawer="start"
+    tools:context=".ui.container.modules.about_app.AppAboutFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollZickr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:id="@+id/titleCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:orientation="horizontal"
+                            android:padding="4dp">
+
+                            <ImageView
+                                android:layout_width="160dp"
+                                android:layout_height="wrap_content"
+
+                                android:src="@drawable/quran_icon" />
+
+                            <LinearLayout
+                                android:layout_width="240dp"
+                                android:layout_height="120dp"
+                                android:layout_gravity="center|center_vertical"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:gravity="center"
+                                    android:text="Quran Tajweed"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:gravity="center"
+                                    android:text="@string/from_tabiin"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="4dp">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/appVersionBtn"
+                                style="@style/Widget.Material3.Button.TextButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/version"
+                                android:textAlignment="textStart"
+                                android:textSize="20sp"
+                                app:icon="@drawable/ic_baseline_error_outline_24"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/sourceCodeBtn"
+                                style="@style/Widget.Material3.Button.TextButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/source_code"
+                                android:textAlignment="textStart"
+                                android:textSize="20sp"
+                                app:icon="@drawable/ic_baseline_code_24"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/donateBtn"
+                                style="@style/Widget.Material3.Button.TextButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Поддержать автора"
+                                android:textAlignment="textStart"
+                                android:textSize="20sp"
+                                app:icon="@drawable/baseline_donate_on_24"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:id="@+id/authorsCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/rafailBtn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Raf_title"
+                                android:textSize="20sp"
+                                app:icon="@drawable/ic_baseline_person_24"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp"
+                                android:textAlignment="textStart"
+                                style="@style/Widget.Material3.Button.TextButton" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/mailRafBtn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/raf_android_dev_mail_ru"
+                                android:textSize="20sp"
+                                app:icon="@drawable/baseline_alternate_email_24"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp"
+                                android:textAlignment="textStart"
+                                style="@style/Widget.Material3.Button.TextButton" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/rateBtn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Оценить приложение"
+                                android:textSize="20sp"
+                                app:icon="@drawable/ic_baseline_rate_review_24"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp"
+                                android:textAlignment="textStart"
+                                style="@style/Widget.Material3.Button.TextButton" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/vkGroupBtn"
+                                style="@style/Widget.Material3.Button.TextButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Мы в VK"
+                                android:textAlignment="textStart"
+                                android:textSize="20sp"
+                                app:icon="@drawable/i_vk"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/tgGroupBtn"
+                                style="@style/Widget.Material3.Button.TextButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Мы в Telegram"
+                                android:textAlignment="textStart"
+                                android:textSize="20sp"
+                                app:icon="@drawable/i_tg"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/otherAppsBtn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Другие Приложения"
+                                android:textSize="20sp"
+                                app:icon="@drawable/ic_baseline_apps_24"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp"
+                                android:textAlignment="textStart"
+                                style="@style/Widget.Material3.Button.TextButton" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/settingsBtn"
+                                style="@style/Widget.Material3.Button.TextButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Настройки"
+                                android:textAlignment="textStart"
+                                android:textSize="20sp"
+                                app:icon="@drawable/baseline_settings_24"
+                                android:onClick="buttonPressed"
+                                app:iconPadding="16dp"
+                                app:iconSize="24dp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</FrameLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="version">1.0.0.0</string>
+    <string name="from_tabiin">from Tabiin</string>
+    <string name="source_code">Исходный код</string>
+    <string name="Raf_title">Рафаил Кикматулин</string>
+    <string name="raf_android_dev_mail_ru">raf_android-dev@mail.ru</string>
+</resources>

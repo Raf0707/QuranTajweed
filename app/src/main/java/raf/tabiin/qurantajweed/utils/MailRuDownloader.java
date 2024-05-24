@@ -14,8 +14,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class MailRuDownloader {
 
-    private static final String TAG = "MailRuDownloader";
-    private static final String BASE_URL = "https://cloud.mail.ru/public/";
+    private static final String TAG = "QuranAudioPages";
+    private static final String BASE_URL = "https://cloud.mail.ru/public/ojSg/Wv4cLhWVc/";
 
     private Context context;
 

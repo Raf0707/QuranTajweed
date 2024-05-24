@@ -1,7 +1,11 @@
 package raf.tabiin.qurantajweed.utils;
 
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -24,6 +28,26 @@ public class MusicPlayer {
         setupSeekBar();
     }
 
+    private void setupMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mediaPlayer.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+            );
+        } else {
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        }
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                isPaused = false;
+            }
+        });
+    }
+
     // Метод для настройки SeekBar
     private void setupSeekBar() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -39,6 +63,17 @@ public class MusicPlayer {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+    }
+
+    public void create(int rawResourceId) {
+        mediaPlayer = MediaPlayer.create(context, rawResourceId);
+        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                Toast.makeText(context, "Error occurred while playing audio", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         });
     }
 
@@ -76,6 +111,7 @@ public class MusicPlayer {
             mediaPlayer.stop();
         }
         stopUpdatingProgress();
+        isPaused = false;
     }
 
     // Метод для получения текущего прогресса воспроизведения
@@ -86,6 +122,26 @@ public class MusicPlayer {
     // Метод для получения общей продолжительности аудиофайла
     private int getDuration() {
         return mediaPlayer.getDuration();
+    }
+
+    // Метод для установки пути источника данных для аудиофайла
+    public void setDataSource(String filePath) {
+        try {
+            mediaPlayer.setDataSource(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(context, "Failed to set data source", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Метод для асинхронной подготовки MediaPlayer к воспроизведению
+    public void prepareAsync() {
+        mediaPlayer.prepareAsync();
+    }
+
+    // Метод для установки слушателя для события готовности MediaPlayer к воспроизведению
+    public void setOnPreparedListener(MediaPlayer.OnPreparedListener listener) {
+        mediaPlayer.setOnPreparedListener(listener);
     }
 
     // Метод для запуска обновления прогресса воспроизведения

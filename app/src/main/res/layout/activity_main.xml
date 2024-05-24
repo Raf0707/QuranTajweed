@@ -92,13 +92,13 @@
             android:layout_marginLeft="10dp">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/translateQuran"
+                android:id="@+id/settingsAppFragment"
                 style="@style/Widget.Material3.Button.IconButton.Filled"
                 app:iconSize="30dp"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/language_svg">
+                app:icon="@drawable/settings">
 
             </com.google.android.material.button.MaterialButton>
 
@@ -132,7 +132,7 @@
         <FrameLayout
             android:id="@+id/translateBottomSheet"
             android:layout_width="match_parent"
-            android:layout_height="800dp"
+            android:layout_height="700dp"
             android:background="@drawable/rounded"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -142,7 +142,26 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:src="@drawable/open_svg"
+                android:layout_gravity="right|top"
+                android:scaleType="centerCrop">
+            </ImageView>
+
+            <ImageView
+                android:id="@+id/imOpenCloseTafsirGesture"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/remove_svg"
                 android:layout_gravity="center|top"
+                android:scaleType="centerCrop">
+            </ImageView>
+
+            <ImageView
+                android:id="@+id/infoOpenCloseTafsir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:src="@drawable/info"
+                android:layout_gravity="left|top"
                 android:scaleType="centerCrop">
             </ImageView>
 
