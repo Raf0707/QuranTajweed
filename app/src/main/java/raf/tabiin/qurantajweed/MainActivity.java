@@ -2,6 +2,8 @@ package raf.tabiin.qurantajweed;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -35,6 +38,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +48,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import raf.tabiin.qurantajweed.adapters.BookmarkAdapter;
 import raf.tabiin.qurantajweed.adapters.DrawerQuranContentAdapter;
@@ -58,9 +64,12 @@ import raf.tabiin.qurantajweed.ui.player.res_downloaders.DownloadFilesTask;
 import raf.tabiin.qurantajweed.ui.player.res_downloaders.MailRuDownloader;
 import raf.tabiin.qurantajweed.ui.player.players.MusicPlayer;
 import raf.tabiin.qurantajweed.utils.OnSwipeTouchListener;
-import raf.tabiin.qurantajweed.ui.player.res_downloaders.QuranAudioDownloader;
+import raf.tabiin.qurantajweed.ui.player.res_downloaders.QuranAudioZipDownloader;
 
 public class MainActivity extends AppCompatActivity implements AsyncHttpClient.DownloadListener {
+
+    private static final String ZIP_FILE_NAME = "QuranPagesAudio.zip";
+    private static final int TOTAL_FILES_COUNT = 604;
 
     private ViewPager2 viewPager;
     private BookmarkAdapter bookmarkAdapter;
@@ -70,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     private static final String LAST_PAGE_KEY = "last_page_key";
     ActivityMainBinding b;
     String audioUrl = "https://ia801605.us.archive.org/3/items/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
-
 
     private ImageButton btnStartPause;
     private MediaPlayer mediaPlayer;
@@ -83,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     private AsyncHttpClient asyncHttpClient;
     private MailRuDownloader mailRuDownloader;
 
-    private QuranAudioDownloader quranAudioDownloader;
+    private QuranAudioZipDownloader quranAudioZipDownloader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -679,85 +687,82 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
     }
 
-    private void checkAndDownloadFiles() {
-        String destinationDir = getFilesDir() + File.separator + "QuranPagesAudio";
-        File dir = new File(destinationDir);
-        if (!dir.exists()) {
-            // Если папка не существует, скачиваем все файлы
-            downloadAllFiles();
-        } else {
-            // Если папка существует, проверяем наличие всех файлов
-            File[] files = dir.listFiles();
-            if (files != null && files.length == 604) {
-                // Если все файлы присутствуют, ничего не делаем
-                Log.d(TAG, "All files are present");
-            } else {
-                // Если некоторых файлов нет, скачиваем недостающие
-                downloadMissingFiles(files);
-            }
-        }
-    }
-
-    private void downloadAllFiles() {
-        String urlPrefix = "https://cloud.mail.ru/public/ojSg/Wv4cLhWVc/";
-        String destinationDir = getFilesDir() + File.separator + "QuranPagesAudio";
-        for (int i = 1; i <= 604; i++) {
-            String url = urlPrefix + i + ".mp3";
-            String destinationPath = destinationDir + File.separator + i + ".mp3";
-            //asyncHttpClient.downloadFile(url, destinationPath, this);
-            mailRuDownloader.downloadAudioFile(url);
-        }
-    }
-
-
-    private void downloadMissingFiles(File[] files) {
-        String urlPrefix = "https://cloud.mail.ru/public/ojSg/Wv4cLhWVc/";
-        String destinationDir = getFilesDir() + File.separator + "QuranPagesAudio";
-        List<Integer> missingFiles = findMissingFiles(files);
-        for (int i : missingFiles) {
-            String url = urlPrefix + i + ".mp3";
-            String destinationPath = destinationDir + File.separator + i + ".mp3";
-            //asyncHttpClient.downloadFile(url, destinationPath, this);
-            mailRuDownloader.downloadAudioFile(url);
-        }
-    }
-
-    private List<Integer> findMissingFiles(File[] files) {
-        List<Integer> presentFiles = new ArrayList<>();
-        for (File file : files) {
-            String fileName = file.getName();
-            int fileNumber = Integer.parseInt(fileName.substring(0, fileName.lastIndexOf(".")));
-            presentFiles.add(fileNumber);
-        }
-
-        List<Integer> missingFiles = new ArrayList<>();
-        for (int i = 1; i <= 604; i++) {
-            if (!presentFiles.contains(i)) {
-                missingFiles.add(i);
-            }
-        }
-        return missingFiles;
-    }
-
     private boolean areQuranAudioFilesDownloaded() {
-        File directory = new File(getFilesDir() + File.separator + "QuranPagesAudio");
-        if (!directory.exists()) {
-            return false; // Папка не существует, значит файлы не скачаны
-        }
-
-        // Проверяем наличие каждого файла
-        for (int i = 1; i <= 604; i++) {
-            String fileName = String.format(Locale.getDefault(), "%03d.mp3", i);
-            File file = new File(directory, fileName);
-            if (!file.exists()) {
-                return false; // Если хотя бы один файл отсутствует, возвращаем false
+        File targetDirectory = new File(getApplicationContext().getFilesDir(), "QuranPagesAudio");
+        if (targetDirectory.exists() && targetDirectory.isDirectory()) {
+            File[] files = targetDirectory.listFiles();
+            if (files != null && files.length == 604) {
+                return true; // Все файлы найдены, возвращаем true
+            }
+        } else {
+            File zipFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "QuranPagesAudio.zip");
+            if (zipFile.exists()) {
+                try {
+                    unzipFile(zipFile, targetDirectory);
+                    return true; // Архив найден и успешно распакован
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
-        return true; // Все файлы найдены, возвращаем true
+        return false; // Файлы не найдены, возвращаем false
     }
+
+
+    private void unzipFile(File zipFile, File targetDirectory) throws IOException {
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+        ZipEntry zipEntry = zis.getNextEntry();
+        byte[] buffer = new byte[1024];
+        while (zipEntry != null) {
+            File newFile = new File(targetDirectory, zipEntry.getName());
+            new File(newFile.getParent()).mkdirs();
+            FileOutputStream fos = new FileOutputStream(newFile);
+            int len;
+            while ((len = zis.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+            fos.close();
+            zipEntry = zis.getNextEntry();
+        }
+        zis.closeEntry();
+        zis.close();
+    }
+
+
+    private void checkAndPrepareQuranAudioFiles() {
+        File downloadDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), ZIP_FILE_NAME);
+        File targetDirectory = new File(getApplicationContext().getFilesDir(), "QuranPagesAudio");
+
+        if (areQuranAudioFilesDownloaded()) {
+            // Все файлы найдены, ничего не делаем
+            playAudio();
+        } else if (downloadDir.exists()) {
+            // Архив найден в папке загрузок, но не распакован
+            try {
+                unzipFile(downloadDir, targetDirectory);
+                playAudio();
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Обработка ошибки распаковки
+                Snackbar.make(findViewById(android.R.id.content), "Ошибка распаковки архива", Snackbar.LENGTH_LONG).show();
+            }
+        } else {
+            // Архив не найден, переходим к скачиванию
+            showDownloadQuranAudioAlert();
+        }
+    }
+
+
+
+    private boolean isDownloading = false; // Переменная для отслеживания состояния загрузки
 
     private void showDownloadQuranAudioAlert() {
+        if (isDownloading) {
+            // Если уже идет загрузка, показываем Snackbar
+            Snackbar.make(findViewById(android.R.id.content), "Дождитесь полной загрузки архива", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
         // Создаем прогрессбар
         final ProgressBar progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
         progressBar.setIndeterminate(true);
@@ -770,20 +775,54 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        // Действия при отмене
                     }
                 })
                 .setPositiveButton("Download", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Запускаем процесс загрузки всех файлов или недостающих файлов
-                        quranAudioDownloader = new QuranAudioDownloader();
+                        if (isDownloading) {
+                            // Если уже идет загрузка, показываем Snackbar
+                            Snackbar.make(findViewById(android.R.id.content), "Дождитесь полной загрузки архива", Snackbar.LENGTH_LONG).show();
+                        } else {
+                            // Запускаем процесс загрузки всех файлов или недостающих файлов
+                            isDownloading = true; // Устанавливаем флаг загрузки
+                            QuranAudioZipDownloader quranAudioDownloader = new QuranAudioZipDownloader(getApplicationContext());
 
-                        // Указываем путь назначения для загрузки файлов
-                        String destinationPath = "https://cloclo.datacloudmail.ru/zip64/DZ6ueuwdIYgeqe69ZXjB01Tvi42JqWINYggsDWCh6USi6hUb0Q0a2a8kZt/QuranPagesAudio.zip";
+                            // Указываем путь назначения для загрузки файлов
+                            String downloadUrl = "https://cloclo.datacloudmail.ru/zip64/DZ6ueuwdIYgeqe69ZXjB01Tvi42JqWINYggsDWCh6USi6hUb0Q0a2a8kZt/QuranPagesAudio.zip";
 
-                        // Запускаем загрузку файлов
-                        quranAudioDownloader.downloadFiles(destinationPath);
+                            // Запускаем загрузку файлов
+                            quranAudioDownloader.downloadFiles(downloadUrl, new DownloadCallback() {
+                                @Override
+                                public void onDownloadComplete() {
+                                    isDownloading = false; // Сбрасываем флаг загрузки
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // Обновляем UI после завершения загрузки
+                                            Snackbar.make(b.getRoot(), "Download complete!", Snackbar.LENGTH_SHORT).show();
+                                            checkAndPrepareQuranAudioFiles(); // Проверяем и готовим аудиофайлы
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onDownloadError(String error) {
+                                    isDownloading = false; // Сбрасываем флаг загрузки в случае ошибки
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // Обновляем UI после ошибки загрузки
+                                            Snackbar.make(findViewById(android.R.id.content), "Ошибка загрузки: " + error, Snackbar.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            });
+
+                            // Отображаем уведомление о начале загрузки
+                            quranAudioDownloader.showDownloadNotification();
+                        }
                     }
                 });
 
@@ -800,39 +839,72 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // Получаем количество скачанных файлов
-                int downloadedFiles = getDownloadedFilesCount();
-                // Обновляем текст и прогрессбар
-                updateProgress(downloadedFiles, progressBar, progressText);
-                // Проверяем, завершено ли скачивание
-                if (downloadedFiles == 604) {
-                    // Если все файлы скачаны, выводим сообщение "готово"
+                while (isDownloading) {
+                    // Получаем количество скачанных файлов
+                    int downloadedFiles = getDownloadedFilesCount();
+                    // Обновляем текст и прогрессбар
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            dialog.setMessage("Download complete!");
+                            updateProgress(downloadedFiles, progressBar, progressText);
                         }
                     });
+
+                    // Проверяем, завершено ли скачивание
+                    if (downloadedFiles == 604) {
+                        // Если все файлы скачаны, выводим сообщение "готово"
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.setMessage("Download complete!");
+                            }
+                        });
+                        isDownloading = false;
+                        break;
+                    }
+
+                    try {
+                        // Задержка перед следующей проверкой
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();
     }
 
-    // Метод для обновления прогрессбара и текста
-    private void updateProgress(final int downloadedFiles, final ProgressBar progressBar, final TextView progressText) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // Устанавливаем прогресс в прогрессбаре
-                progressBar.setIndeterminate(false);
-                progressBar.setMax(604);
-                progressBar.setProgress(downloadedFiles);
 
-                // Обновляем текст с количеством скачанных файлов
-                progressText.setText(downloadedFiles + "/604");
-            }
-        });
+    // Метод для обновления прогресса загрузки
+    private void updateProgress(int downloadedFiles, ProgressBar progressBar, TextView progressText) {
+        // Обновляем текст прогресса
+        String progressString = downloadedFiles + " / 604";
+        progressText.setText(progressString);
+
+        // Устанавливаем максимальное значение прогрессбара
+        progressBar.setMax(604);
+
+        // Обновляем прогрессбар
+        progressBar.setProgress(downloadedFiles);
+
+        // Устанавливаем индикатор выполнения (например, можно показывать процент)
+        int progressPercentage = (int) ((downloadedFiles / 604.0) * 100);
+        progressBar.setIndeterminate(false);
+        progressBar.setProgress(progressPercentage);
     }
+
+    // Метод для воспроизведения аудио
+    private void playAudio() {
+        // Реализуйте воспроизведение аудио здесь
+    }
+
+    // Интерфейс для обратного вызова завершения загрузки
+    public interface DownloadCallback {
+        void onDownloadComplete();
+        void onDownloadError(String error);
+    }
+
+
 
     public void startDownload() {
         DownloadFilesTask downloadFilesTask = new DownloadFilesTask(this);
