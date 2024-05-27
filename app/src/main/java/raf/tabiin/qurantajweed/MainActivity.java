@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import static java.security.AccessController.getContext;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -27,8 +29,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -45,6 +49,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -59,6 +64,7 @@ import raf.tabiin.qurantajweed.model.Bookmark;
 import raf.tabiin.qurantajweed.model.QuranItemContent;
 import raf.tabiin.qurantajweed.ui.container.ConteinerActivity;
 import raf.tabiin.qurantajweed.ui.details.tutorials.TutorialTafsirPanelActivity;
+import raf.tabiin.qurantajweed.ui.player.players.SoulPlayer;
 import raf.tabiin.qurantajweed.utils.AsyncHttpClient;
 import raf.tabiin.qurantajweed.ui.player.res_downloaders.DownloadFilesTask;
 import raf.tabiin.qurantajweed.ui.player.res_downloaders.MailRuDownloader;
@@ -70,10 +76,15 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
     private static final String ZIP_FILE_NAME = "QuranPagesAudio.zip";
     private static final int TOTAL_FILES_COUNT = 604;
+    private static final int REQUEST_CODE_OPEN_DOCUMENT_TREE = 42;
 
     private ViewPager2 viewPager;
     private BookmarkAdapter bookmarkAdapter;
     private int currentPosition = 0;
+
+    private MediaPlayer mediaPlayer;
+    private List<File> audioFiles;
+    private int currentFileIndex = 0;
 
     private static final String PREFS_NAME = "LastPagePrefs";
     private static final String LAST_PAGE_KEY = "last_page_key";
@@ -81,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     String audioUrl = "https://ia801605.us.archive.org/3/items/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
 
     private ImageButton btnStartPause;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer zipMediaPlayer;
     private boolean isPlaying = false;
     private Integer[] numPageSures = new Integer[]{1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262, 267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396, 404, 411, 415, 418, 428, 434, 440, 446, 453, 458, 467, 477, 483, 489, 496, 499, 502, 507, 511, 515, 518, 520, 523, 526, 528, 531, 534, 537, 542, 545, 549, 551, 553, 554, 556, 568, 560, 562, 564, 566, 568, 570, 572, 574, 575, 577, 578, 580, 582, 583, 585, 586, 587, 587, 589, 590, 591, 591, 592, 593, 594, 595, 595, 596, 596, 597, 597, 598, 598, 599, 599, 600, 600, 601, 601, 601, 602, 602, 602, 603, 603, 603, 604, 604, 604, 605};
     private String[] sures = new String[115];
@@ -176,6 +187,11 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                 b.tafsirText.setText(loadTextFromFile(position+1 + ".txt"));
                 b.scrollTafsir.scrollTo(0, 0);
                 bookmarkAdapter.notifyDataSetChanged();
+                //TODO
+                if (isPlaying) {
+                    playAudio(position);
+                }
+                //TODO
             }
         });
 
@@ -279,28 +295,53 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         });
 
         MusicPlayer musicPlayer = new MusicPlayer(getApplicationContext(), b.seekBar);
+        SoulPlayer player = new SoulPlayer(getApplicationContext(), b.seekBar, b.btnStartPause, b.btnLoopMode);
         //TODO
         btnStartPause.setOnClickListener(v -> {
             if (!isPlaying) {
-                // Проверяем, скачаны ли файлы с облака
-                if (areQuranAudioFilesDownloaded()) {
-                    // Начинаем проигрывание
-                    musicPlayer.play(getAudioUrlForCurrentPage());
-                    isPlaying = true;
-                    btnStartPause.setImageResource(R.drawable.pause);
-                    startSeekBarUpdateThread(); // Запускаем поток обновления SeekBar
+                Uri treeUri = getSavedTreeUri();
+                if (treeUri != null) {
+                    // Используйте сохраненный URI для проверки и воспроизведения аудиофайлов
+                    checkAndPrepareQuranAudioFiles(treeUri);
                 } else {
-                    // Файлы еще не скачаны, отображаем диалоговое окно с предложением скачать
-                    showDownloadQuranAudioAlert();
+                    // Запрос на выбор директории
+                    openDocumentTree();
                 }
             } else {
                 // Поставить на паузу
-                musicPlayer.pause(); // Используем musicPlayer для паузы
-                isPlaying = false;
-                btnStartPause.setImageResource(R.drawable.play);
-                stopSeekBarUpdateThread(); // Останавливаем поток обновления SeekBar
-                Snackbar.make(v, "Not play", Snackbar.LENGTH_SHORT).show();
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    isPlaying = false;
+                    btnStartPause.setImageResource(R.drawable.play);
+                    stopSeekBarUpdateThread(); // Останавливаем поток обновления SeekBar
+                    Snackbar.make(v, "Paused", Snackbar.LENGTH_SHORT).show();
+                }
             }
+            // /storage/emulated/0/Download/QuranPagesAudio.zip
+
+            /*try {
+                File zipFile = new File("/storage/emulated/0/Download/QuranPagesAudio.zip");
+                File targetDirectory = new File(String.valueOf(getDir("/storage/emulated/0/Download", 0)));
+                unzipFile(zipFile, targetDirectory);
+                File zipFile = new File(getFilesDir(), "Download/QuranPagesAudio.zip");
+                File targetDirectory = new File(getFilesDir(), "Download");
+                unzipFile(zipFile, targetDirectory);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }*/
+
+
+            /*if (player.isPlaying()) {
+                player.pause();
+                b.btnStartPause.setImageResource(R.drawable.play);
+            } else if (player.isPaused()) {
+                player.resume();
+                b.btnStartPause.setImageResource(R.drawable.pause);
+            } else {
+                player.play(getAudioUrlForCurrentPage());
+                b.btnStartPause.setImageResource(R.drawable.pause);
+            }*/
         });
 
         //TODO
@@ -687,6 +728,62 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
     }
 
+    private void openDocumentTree() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        startActivityForResult(intent, REQUEST_CODE_OPEN_DOCUMENT_TREE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_OPEN_DOCUMENT_TREE && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri treeUri = data.getData();
+                // Grant permissions to the content URI
+                getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                // Save the URI for later use
+                saveTreeUri(treeUri);
+
+                // Call the method to check and prepare audio files
+                checkAndPrepareQuranAudioFiles(treeUri);
+            }
+        }
+    }
+
+
+    private void saveTreeUri(Uri treeUri) {
+        SharedPreferences sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("tree_uri", treeUri.toString());
+        editor.apply();
+    }
+
+    private Uri getSavedTreeUri() {
+        SharedPreferences sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        String treeUriString = sharedPreferences.getString("tree_uri", null);
+        if (treeUriString != null) {
+            return Uri.parse(treeUriString);
+        }
+        return null;
+    }
+
+    private void listFilesInDirectory(Uri treeUri) {
+        if (treeUri == null) {
+            return;
+        }
+
+        DocumentFile directory = DocumentFile.fromTreeUri(this, treeUri);
+        if (directory != null && directory.isDirectory()) {
+            for (DocumentFile file : directory.listFiles()) {
+                // Process each file in the directory
+                Log.d("File", "File name: " + file.getName());
+            }
+        }
+    }
+
+
+
     private boolean areQuranAudioFilesDownloaded() {
         File targetDirectory = new File(getApplicationContext().getFilesDir(), "QuranPagesAudio");
         if (targetDirectory.exists() && targetDirectory.isDirectory()) {
@@ -698,7 +795,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
             File zipFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "QuranPagesAudio.zip");
             if (zipFile.exists()) {
                 try {
-                    unzipFile(zipFile, targetDirectory);
+                    unzipFile(DocumentFile.fromFile(zipFile), targetDirectory);
                     return true; // Архив найден и успешно распакован
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -709,8 +806,13 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     }
 
 
-    private void unzipFile(File zipFile, File targetDirectory) throws IOException {
-        ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+    private void unzipFile(DocumentFile zipFile, File targetDirectory) throws IOException {
+        if (!targetDirectory.exists()) {
+            targetDirectory.mkdirs();
+        }
+
+        InputStream is = getContentResolver().openInputStream(zipFile.getUri());
+        ZipInputStream zis = new ZipInputStream(is);
         ZipEntry zipEntry = zis.getNextEntry();
         byte[] buffer = new byte[1024];
         while (zipEntry != null) {
@@ -729,18 +831,81 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     }
 
 
-    private void checkAndPrepareQuranAudioFiles() {
-        File downloadDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), ZIP_FILE_NAME);
+    private void unzipQuranPagesAudio(Uri zipUri) {
+        try {
+            // Получаем доступ к содержимому архива через ContentResolver
+            ContentResolver resolver = getContentResolver();
+            // Открываем поток для чтения архива
+            InputStream inputStream = resolver.openInputStream(zipUri);
+
+            // Создаем временную директорию для разархивации
+            File tempDir = new File(getCacheDir(), "temp");
+            if (!tempDir.exists()) {
+                tempDir.mkdirs();
+            }
+
+            // Разархивируем файлы
+            ZipInputStream zis = new ZipInputStream(inputStream);
+            ZipEntry zipEntry = zis.getNextEntry();
+            while (zipEntry != null) {
+                // Создаем файл для текущего элемента архива
+                File newFile = new File(tempDir, zipEntry.getName());
+                // Создаем поток для записи файла
+                FileOutputStream fos = new FileOutputStream(newFile);
+                byte[] buffer = new byte[1024];
+                int length;
+                // Копируем содержимое файла в созданный файл
+                while ((length = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, length);
+                }
+                fos.close();
+                zipEntry = zis.getNextEntry();
+            }
+            zis.closeEntry();
+            zis.close();
+
+            // Разархивация завершена, теперь вы можете использовать файлы в tempDir
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Обработка ошибок
+        }
+    }
+
+
+
+    private void checkAndPrepareQuranAudioFiles(Uri treeUri) {
+        DocumentFile directory = DocumentFile.fromTreeUri(this, treeUri);
+        if (directory == null || !directory.isDirectory()) {
+            Snackbar.make(findViewById(android.R.id.content), "Ошибка доступа к директории", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        DocumentFile zipFile = null;
+        for (DocumentFile file : directory.listFiles()) {
+            if (file.getName().equals(ZIP_FILE_NAME) && file.isFile()) {
+                zipFile = file;
+                break;
+            }
+        }
+
         File targetDirectory = new File(getApplicationContext().getFilesDir(), "QuranPagesAudio");
 
         if (areQuranAudioFilesDownloaded()) {
-            // Все файлы найдены, ничего не делаем
-            playAudio();
-        } else if (downloadDir.exists()) {
+            // Все файлы найдены, начинаем проигрывание
+            int currentPage = viewPager.getCurrentItem(); // Получаем текущую позицию ViewPager2
+            playAudio(currentPage);
+        } else if (zipFile != null) {
             // Архив найден в папке загрузок, но не распакован
             try {
-                unzipFile(downloadDir, targetDirectory);
-                playAudio();
+                unzipFile(zipFile, targetDirectory);
+                if (areQuranAudioFilesDownloaded()) {
+                    // Если файлы успешно распакованы, начинаем проигрывание
+                    int currentPage = viewPager.getCurrentItem(); // Получаем текущую позицию ViewPager2
+                    playAudio(currentPage);
+                } else {
+                    // Обработка ошибки распаковки
+                    Snackbar.make(findViewById(android.R.id.content), "Ошибка распаковки архива", Snackbar.LENGTH_LONG).show();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 // Обработка ошибки распаковки
@@ -751,8 +916,6 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
             showDownloadQuranAudioAlert();
         }
     }
-
-
 
     private boolean isDownloading = false; // Переменная для отслеживания состояния загрузки
 
@@ -772,10 +935,10 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                 .setTitle("Download Quran Audio")
                 .setMessage("Some audio files are missing. Do you want to download them?")
                 .setView(progressBar)
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Действия при отмене
+                        isDownloading = false; // Сбрасываем флаг загрузки при отмене
                     }
                 })
                 .setPositiveButton("Download", new DialogInterface.OnClickListener() {
@@ -801,8 +964,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                                         @Override
                                         public void run() {
                                             // Обновляем UI после завершения загрузки
-                                            Snackbar.make(b.getRoot(), "Download complete!", Snackbar.LENGTH_SHORT).show();
-                                            checkAndPrepareQuranAudioFiles(); // Проверяем и готовим аудиофайлы
+                                            checkAndPrepareQuranAudioFiles(getSavedTreeUri()); // Проверяем и готовим аудиофайлы
                                         }
                                     });
                                 }
@@ -875,6 +1037,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     }
 
 
+
     // Метод для обновления прогресса загрузки
     private void updateProgress(int downloadedFiles, ProgressBar progressBar, TextView progressText) {
         // Обновляем текст прогресса
@@ -893,9 +1056,60 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         progressBar.setProgress(progressPercentage);
     }
 
-    // Метод для воспроизведения аудио
-    private void playAudio() {
-        // Реализуйте воспроизведение аудио здесь
+    private void playAudio(int pageIndex) {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
+
+        File audioDir = new File(getApplicationContext().getFilesDir(), "QuranPagesAudio");
+        File audioFile = new File(audioDir, String.format("%03d.mp3", pageIndex + 1));
+
+        if (!audioFile.exists()) {
+            Snackbar.make(findViewById(android.R.id.content), "Аудиофайл не найден: " + audioFile.getName(), Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(audioFile.getAbsolutePath());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            isPlaying = true;
+            btnStartPause.setImageResource(R.drawable.pause);
+
+            mediaPlayer.setOnCompletionListener(mp -> {
+                // Здесь вы можете определить, что произойдет после завершения воспроизведения файла
+                // Например, можно воспроизводить следующий файл или останавливаться
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            Snackbar.make(findViewById(android.R.id.content), "Ошибка воспроизведения аудио", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+
+    private void playNextAudioFile() {
+        if (currentFileIndex >= audioFiles.size()) {
+            currentFileIndex = 0; // Перезапуск с первого файла
+        }
+
+        File audioFile = audioFiles.get(currentFileIndex);
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(audioFile.getAbsolutePath());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            isPlaying = true;
+            btnStartPause.setImageResource(R.drawable.pause);
+
+            mediaPlayer.setOnCompletionListener(mp -> {
+                currentFileIndex++;
+                playNextAudioFile();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            Snackbar.make(findViewById(android.R.id.content), "Ошибка воспроизведения аудио", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     // Интерфейс для обратного вызова завершения загрузки
