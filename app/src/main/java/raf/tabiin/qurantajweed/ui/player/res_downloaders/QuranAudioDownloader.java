@@ -1,14 +1,17 @@
-package raf.tabiin.qurantajweed.utils;
+package raf.tabiin.qurantajweed.ui.player.res_downloaders;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import raf.tabiin.qurantajweed.utils.AsyncHttpClient;
+
 public class QuranAudioDownloader {
 
-    private static final String URL_PREFIX = "https://cloud.mail.ru/public/ojSg/Wv4cLhWVc/";
+    private static final String URL_PREFIX = "https://ia801605.us.archive.org/3/items/quran__by--mashary-al3afasy---128-kb----604-part-full-quran-604-page--safahat-/Page";
     private static final int NUM_FILES = 604;
 
     private ExecutorService executorService;
@@ -28,7 +31,8 @@ public class QuranAudioDownloader {
     private List<String> generateDownloadUrls() {
         List<String> urls = new ArrayList<>();
         for (int i = 1; i <= NUM_FILES; i++) {
-            urls.add(URL_PREFIX + i + ".mp3");
+            String url = String.format(Locale.US, "%s%03d.mp3", URL_PREFIX, i);
+            urls.add(url);
         }
         return urls;
     }

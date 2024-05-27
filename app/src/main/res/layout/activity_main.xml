@@ -31,6 +31,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+
         <LinearLayout
             android:id="@+id/playerLayout"
             android:layout_width="match_parent"
@@ -49,6 +50,7 @@
                 android:src="@drawable/play"
                 android:background="?android:selectableItemBackground" />
 
+
             <SeekBar
                 android:id="@+id/seekBar"
                 android:layout_width="match_parent"
@@ -63,7 +65,7 @@
                 android:id="@+id/btnLoopMode"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/loop_play_all"
+                android:src="@drawable/cycle_svg"
                 android:paddingRight="13dp"
                 android:paddingLeft="13dp"
                 android:background="?android:selectableItemBackground" />

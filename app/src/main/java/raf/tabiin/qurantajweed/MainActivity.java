@@ -1,9 +1,6 @@
 package raf.tabiin.qurantajweed;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
-import static raf.tabiin.qurantajweed.utils.UtilFragment.changeFragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -57,10 +54,11 @@ import raf.tabiin.qurantajweed.model.QuranItemContent;
 import raf.tabiin.qurantajweed.ui.container.ConteinerActivity;
 import raf.tabiin.qurantajweed.ui.details.tutorials.TutorialTafsirPanelActivity;
 import raf.tabiin.qurantajweed.utils.AsyncHttpClient;
-import raf.tabiin.qurantajweed.utils.MailRuDownloader;
-import raf.tabiin.qurantajweed.utils.MusicPlayer;
+import raf.tabiin.qurantajweed.ui.player.res_downloaders.DownloadFilesTask;
+import raf.tabiin.qurantajweed.ui.player.res_downloaders.MailRuDownloader;
+import raf.tabiin.qurantajweed.ui.player.players.MusicPlayer;
 import raf.tabiin.qurantajweed.utils.OnSwipeTouchListener;
-import raf.tabiin.qurantajweed.utils.QuranAudioDownloader;
+import raf.tabiin.qurantajweed.ui.player.res_downloaders.QuranAudioDownloader;
 
 public class MainActivity extends AppCompatActivity implements AsyncHttpClient.DownloadListener {
 
@@ -782,7 +780,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                         quranAudioDownloader = new QuranAudioDownloader();
 
                         // Указываем путь назначения для загрузки файлов
-                        String destinationPath = getFilesDir() + File.separator + "QuranPagesAudio";
+                        String destinationPath = "https://cloclo.datacloudmail.ru/zip64/DZ6ueuwdIYgeqe69ZXjB01Tvi42JqWINYggsDWCh6USi6hUb0Q0a2a8kZt/QuranPagesAudio.zip";
 
                         // Запускаем загрузку файлов
                         quranAudioDownloader.downloadFiles(destinationPath);
@@ -795,7 +793,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
         // Отображаем количество скачанных файлов над прогрессбаром
         final TextView progressText = new TextView(this);
-        progressText.setText("0/604");
+        progressText.setText("0 / 604");
         builder.setView(progressText);
 
         // Поток для обновления прогрессбара и текста
@@ -835,6 +833,13 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
             }
         });
     }
+
+    public void startDownload() {
+        DownloadFilesTask downloadFilesTask = new DownloadFilesTask(this);
+        List<String> downloadUrls = downloadFilesTask.generateDownloadUrls();
+        downloadFilesTask.execute(downloadUrls);
+    }
+
 
     // Метод для получения количества скачанных файлов
     private int getDownloadedFilesCount() {

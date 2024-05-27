@@ -1,4 +1,4 @@
-package raf.tabiin.qurantajweed.utils;
+package raf.tabiin.qurantajweed.ui.player.res_downloaders;
 
 import android.app.DownloadManager;
 import android.content.Context;

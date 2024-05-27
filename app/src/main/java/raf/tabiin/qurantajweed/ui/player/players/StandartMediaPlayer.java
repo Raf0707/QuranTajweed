@@ -1,4 +1,4 @@
-package raf.tabiin.qurantajweed.utils;
+package raf.tabiin.qurantajweed.ui.player.players;
 
 import android.media.MediaPlayer;
 
