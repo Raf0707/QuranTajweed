@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         viewPager.setAdapter(imageAdapter);
 
         btnStartPause = b.btnStartPause;
-        final SeekBar seekBar = b.seekBar;
+        SeekBar seekBar = b.seekBar;
         b.playerLayout.setVisibility(View.INVISIBLE);
 
         imageAdapter.setOnPageChangedListener(new OnPageChangedListener() {
@@ -317,31 +317,6 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                     Snackbar.make(v, "Paused", Snackbar.LENGTH_SHORT).show();
                 }
             }
-            // /storage/emulated/0/Download/QuranPagesAudio.zip
-
-            /*try {
-                File zipFile = new File("/storage/emulated/0/Download/QuranPagesAudio.zip");
-                File targetDirectory = new File(String.valueOf(getDir("/storage/emulated/0/Download", 0)));
-                unzipFile(zipFile, targetDirectory);
-                File zipFile = new File(getFilesDir(), "Download/QuranPagesAudio.zip");
-                File targetDirectory = new File(getFilesDir(), "Download");
-                unzipFile(zipFile, targetDirectory);
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }*/
-
-
-            /*if (player.isPlaying()) {
-                player.pause();
-                b.btnStartPause.setImageResource(R.drawable.play);
-            } else if (player.isPaused()) {
-                player.resume();
-                b.btnStartPause.setImageResource(R.drawable.pause);
-            } else {
-                player.play(getAudioUrlForCurrentPage());
-                b.btnStartPause.setImageResource(R.drawable.pause);
-            }*/
         });
 
         //TODO
