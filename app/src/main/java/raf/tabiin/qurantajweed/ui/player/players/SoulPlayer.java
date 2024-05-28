@@ -18,12 +18,26 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.button.MaterialButton;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import raf.tabiin.qurantajweed.R;
 
@@ -82,7 +96,7 @@ public class SoulPlayer {
     }
 
     // Метод для проигрывания аудиофайла по пути (локальному или по URL)
-    public void play(String source) {
+    /*public void play(String source) {
         Log.d("SoulPlayer", "Playing: " + source); // Добавим лог для отладки
         try {
             mediaPlayer.reset();
@@ -102,33 +116,34 @@ public class SoulPlayer {
             updateTotalTime(mediaPlayer.getDuration());
             isPaused = false;
 
-            // Получение информации о треке с помощью MediaMetadataRetriever
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.setDataSource(source);
-
-            /*String title = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-            String artist = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            String album = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-            byte[] coverArt = retriever.getEmbeddedPicture();*/
-
             retriever.release();
 
-            // Установка информации о треке
-            /*songTitleTextView.setText(title != null ? title : "Неизвестное название");
-            artistTextView.setText(artist != null ? artist : "Неизвестный исполнитель");
-            albumTextView.setText(album != null ? album : "Неизвестный альбом");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(context, "Failed to play the audio", Toast.LENGTH_SHORT).show();
+        }
+    }*/
 
-            if (coverArt != null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(coverArt, 0, coverArt.length);
-                coverImageView.setImageBitmap(bitmap);
-            } else {
-                coverImageView.setImageResource(R.mipmap.ic_launcher);
-            }*/
+    public void play(String sourceUrl) {
+        Log.d("SoulPlayer", "Playing: " + sourceUrl); // Добавим лог для отладки
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(sourceUrl);
+            mediaPlayer.prepareAsync(); // Асинхронная подготовка для стриминга
+            mediaPlayer.setOnPreparedListener(mp -> {
+                mp.start();
+                startUpdatingProgress();
+                updateTotalTime(mp.getDuration());
+                isPaused = false;
+            });
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, "Failed to play the audio", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     // Метод для остановки проигрывания
     public void stop() {
@@ -261,6 +276,62 @@ public class SoulPlayer {
 
     public boolean isLooping() {
         return isLooping;
+    }
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(8); // Используем пул из пяти потоков для загрузки
+    public void playAudioWithStreaming(String url) {
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(mp -> {
+                mp.start();
+                startUpdatingProgress();
+                executorService.execute(() -> {
+                    try {
+                        byte[] remainingData = downloadRemainingAudioData(url);
+                        if (remainingData != null) {
+                            File tempFile = File.createTempFile(String.valueOf(getCurrentPosition()), ".mp3");
+                            FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
+                            fileOutputStream.write(remainingData);
+                            fileOutputStream.close();
+                            FileInputStream fileInputStream = new FileInputStream(tempFile);
+                            mp.setDataSource(fileInputStream.getFD());
+                            mp.prepare();
+                            fileInputStream.close();
+                            tempFile.delete(); // Удалить временный файл после использования
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private byte[] downloadRemainingAudioData(String urlStr) throws IOException {
+        /*URL url = new URL(urlStr);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+
+        InputStream inputStream = connection.getInputStream();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+        byte[] remainingData = outputStream.toByteArray();
+
+        outputStream.close();
+        inputStream.close();
+        connection.disconnect();
+
+        return remainingData;*/
+        return null;
     }
 
     /*
