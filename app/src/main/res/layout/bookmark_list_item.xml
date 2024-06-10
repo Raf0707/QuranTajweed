@@ -25,8 +25,18 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="65dp"
             android:textSize="18sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteBookmark"
+            style="@style/Widget.Material3.Button.IconButton"
+            app:iconSize="30dp"
+            android:layout_gravity="right|center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/baseline_delete_forever_24"/>
+
 
     </com.google.android.material.card.MaterialCardView>
 

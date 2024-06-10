@@ -41,7 +41,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String fileName = String.format("Quran_Tajweed/%03d.jpg", position + 1);
+        String fileName = String.format("Quran_Tajweed_Classic/%03d.jpg", position + 1);
         try {
             InputStream is = context.getAssets().open(fileName);
             Drawable drawable = Drawable.createFromStream(is, null);

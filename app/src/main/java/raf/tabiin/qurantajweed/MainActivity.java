@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                     // Вывод исключения в лог для отладки
                     e.printStackTrace();
                 }
+                b.pageNumberText.setText(String.valueOf(position+1));
                 b.tafsirText.setText(loadTextFromFile(position+1 + ".txt"));
                 b.scrollTafsir.scrollTo(0, 0);
                 bookmarkAdapter.notifyDataSetChanged();
