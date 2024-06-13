@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -92,7 +93,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             "Сура 48. Аль-Фатх — Победа",
             "Сура 49. Аль-Худжурат — Комнаты",
             "Сура 50. Каф — Буква Каф",
-            "Сура 51. Аль-Дариат — Рассеивающие",
+            "Сура 51. Аз-Зарият — Рассеивающие",
             "Сура 52. Ат-Тур — Гора",
             "Сура 53. Ан-Наджм — Звезда",
             "Сура 54. Аль-Камар — Луна",
@@ -260,16 +261,15 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             removeBookmark(bookmark.getPosition());
             saveBookmarks();
             notifyDataSetChanged();
-            //Log.d("Remove Bookmark", ""+position);
         });
     }
 
-    private String getAyatsOnPage(int page) {
+    public String getAyatsOnPage(int page) {
         switch (page) {
-            //Сура Аль-Фатиха
+            //Сура 1 Аль-Фатиха - Открывающая
             case 1: return " аяты: 1-7";
 
-            //Сура Аль-Бакара
+            //Сура 2 Аль-Бакара - Корова
             case 2: return " аяты: 1-5";
             case 3: return " аяты: 6-16";
             case 4: return " аяты: 17-24";
@@ -319,7 +319,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 48: return " аят: 282";
             case 49: return " аяты: 283-286";
 
-            //Сура Аль-Имран
+            //Сура 3 Аль-Имран - Семейство Имрана
             case 50: return " аяты: 1-9";
             case 51: return " аяты: 10-15";
             case 52: return " аяты: 16-22";
@@ -348,7 +348,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 75: return " аяты: 187-194";
             case 76: return " аяты: 195-200";
 
-            //Сура Ан-Ниса
+            //Сура 4 Ан-Ниса - Женщины
             case 77: return " аяты: 1-6";
             case 78: return " аяты: 7-11";
             case 79: return " аяты: 12-14";
@@ -379,8 +379,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 104: return " аяты: 163-170";
             case 105: return " аяты: 171-175";
 
-            //Конец суры Ан-Ниса, начало Суры Аль-Маида
             case 106: return "";
+
+            // Сура 5 Аль-Маида - Трапеза
             case 107: return " аяты: 3-5";
             case 108: return " аяты: 6-9";
             case 109: return " аяты: 10-13";
@@ -403,7 +404,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 126: return " аяты: 109-113";
             case 127: return " аяты: 114-120";
 
-            //Сура Аль-Ан'ам
+            //Сура 6 Аль-Ан'ам - Скот
             case 128: return " аяты: 1-8";
             case 129: return " аяты: 9-18";
             case 130: return " аяты: 19-27";
@@ -428,7 +429,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 149: return " аяты: 152-157";
             case 150: return " аяты: 158-165";
 
-            //Сура Аль-А'раф
+            //Сура 7 Аль-А'раф - Преграды
             case 151: return " аяты: 1-11";
             case 152: return " аяты: 12-22";
             case 153: return " аяты: 23-30";
@@ -449,445 +450,627 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 168: return " аяты: 144-149";
             case 169: return " аяты: 150-155";
             case 170: return " аяты: 156-159";
-            case 171: return " аяты: ";
-            case 172: return " аяты: ";
-            case 173: return " аяты: ";
-            case 174: return " аяты: ";
-            case 175: return " аяты: ";
-            case 176: return " аяты: ";
-            case 177: return " аяты: ";
-            case 178: return " аяты: ";
-            case 179: return " аяты: ";
-            case 180: return " аяты: ";
-            case 181: return " аяты: ";
-            case 182: return " аяты: ";
-            case 183: return " аяты: ";
-            case 184: return " аяты: ";
-            case 185: return " аяты: ";
-            case 186: return " аяты: ";
-            case 187: return " аяты: ";
-            case 188: return " аяты: ";
-            case 189: return " аяты: ";
-            case 190: return " аяты: ";
-            case 191: return " аяты: ";
-            case 192: return " аяты: ";
-            case 193: return " аяты: ";
-            case 194: return " аяты: ";
-            case 195: return " аяты: ";
-            case 196: return " аяты: ";
-            case 197: return " аяты: ";
-            case 198: return " аяты: ";
-            case 199: return " аяты: ";
-            case 200: return " аяты: ";
-            case 201: return " аяты: ";
-            case 202: return " аяты: ";
-            case 203: return " аяты: ";
-            case 204: return " аяты: ";
-            case 205: return " аяты: ";
-            case 206: return " аяты: ";
-            case 207: return " аяты: ";
-            case 208: return " аяты: ";
-            case 209: return " аяты: ";
-            case 210: return " аяты: ";
-            case 211: return " аяты: ";
-            case 212: return " аяты: ";
-            case 213: return " аяты: ";
-            case 214: return " аяты: ";
-            case 215: return " аяты: ";
-            case 216: return " аяты: ";
-            case 217: return " аяты: ";
-            case 218: return " аяты: ";
-            case 219: return " аяты: ";
-            case 220: return " аяты: ";
+            case 171: return " аяты: 160-163";
+            case 172: return " аяты: 164-170";
+            case 173: return " аяты: 171-178";
+            case 174: return " аяты: 179-187";
+            case 175: return " аяты: 188-195";
+            case 176: return " аяты: 196-206, Саджда-Тилява после 206-го аята";
+
+            // Сура 8 Аль-Анфаль - Трофеи
+            case 177: return " аяты: 1-8";
+            case 178: return " аяты: 9-16";
+            case 179: return " аяты: 17-25";
+            case 180: return " аяты: 26-33";
+            case 181: return " аяты: 34-40";
+            case 182: return " аяты: 41-45";
+            case 183: return " аяты: 46-52";
+            case 184: return " аяты: 53-61";
+            case 185: return " аяты: 62-69";
+            case 186: return " аяты: 70-75";
+
+            // Сура 9 Ат-Тауба - Покаяние
+            case 187: return " аяты: 1-6";
+            case 188: return " аяты: 7-13";
+            case 189: return " аяты: 14-20";
+            case 190: return " аяты: 21-26";
+            case 191: return " аяты: 27-31";
+            case 192: return " аяты: 32-36";
+            case 193: return " аяты: 37-40";
+            case 194: return " аяты: 41-47";
+            case 195: return " аяты: 48-53";
+            case 196: return " аяты: 54-61";
+            case 197: return " аяты: 62-68";
+            case 198: return " аяты: 69-72";
+            case 199: return " аяты: 73-79";
+            case 200: return " аяты: 80-86";
+            case 201: return " аяты: 87-93";
+            case 202: return " аяты: 94-99";
+            case 203: return " аяты: 100-106";
+            case 204: return " аяты: 107-111";
+            case 205: return " аяты: 112-117";
+            case 206: return " аяты: 118-122";
+            case 207: return " аяты: 123-129";
+
+            //Сура 10 Юнус - Пророк Юнус, мир ему
+            case 208: return " аяты: 1-6";
+            case 209: return " аяты: 7-14";
+            case 210: return " аяты: 15-20";
+            case 211: return " аяты: 21-25";
+            case 212: return " аяты: 26-33";
+            case 213: return " аяты: 34-42";
+            case 214: return " аяты: 43-53";
+            case 215: return " аяты: 54-61";
+            case 216: return " аяты: 62-70";
+            case 217: return " аяты: 71-78";
+            case 218: return " аяты: 79-88";
+            case 219: return " аяты: 89-97";
+            case 220: return " аяты: 98-106";
+
             case 221: return " аяты: ";
-            case 222: return " аяты: ";
-            case 223: return " аяты: ";
-            case 224: return " аяты: ";
-            case 225: return " аяты: ";
-            case 226: return " аяты: ";
-            case 227: return " аяты: ";
-            case 228: return " аяты: ";
-            case 229: return " аяты: ";
-            case 230: return " аяты: ";
-            case 231: return " аяты: ";
-            case 232: return " аяты: ";
-            case 233: return " аяты: ";
-            case 234: return " аяты: ";
-            case 235: return " аяты: ";
-            case 236: return " аяты: ";
-            case 237: return " аяты: ";
-            case 238: return " аяты: ";
-            case 239: return " аяты: ";
-            case 240: return " аяты: ";
-            case 241: return " аяты: ";
-            case 242: return " аяты: ";
-            case 243: return " аяты: ";
-            case 244: return " аяты: ";
-            case 245: return " аяты: ";
-            case 246: return " аяты: ";
-            case 247: return " аяты: ";
-            case 248: return " аяты: ";
-            case 249: return " аяты: ";
-            case 250: return " аяты: ";
-            case 251: return " аяты: ";
-            case 252: return " аяты: ";
-            case 253: return " аяты: ";
-            case 254: return " аяты: ";
-            case 255: return " аяты: ";
-            case 256: return " аяты: ";
-            case 257: return " аяты: ";
-            case 258: return " аяты: ";
-            case 259: return " аяты: ";
-            case 260: return " аяты: ";
-            case 261: return " аяты: ";
-            case 262: return " аяты: ";
-            case 263: return " аяты: ";
-            case 264: return " аяты: ";
-            case 265: return " аяты: ";
-            case 266: return " аяты: ";
-            case 267: return " аяты: ";
-            case 268: return " аяты: ";
-            case 269: return " аяты: ";
-            case 270: return " аяты: ";
-            case 271: return " аяты: ";
-            case 272: return " аяты: ";
-            case 273: return " аяты: ";
-            case 274: return " аяты: ";
-            case 275: return " аяты: ";
-            case 276: return " аяты: ";
-            case 277: return " аяты: ";
-            case 278: return " аяты: ";
-            case 279: return " аяты: ";
-            case 280: return " аяты: ";
-            case 281: return " аяты: ";
-            case 282: return " аяты: ";
-            case 283: return " аяты: ";
-            case 284: return " аяты: ";
-            case 285: return " аяты: ";
-            case 286: return " аяты: ";
-            case 287: return " аяты: ";
-            case 288: return " аяты: ";
-            case 289: return " аяты: ";
-            case 290: return " аяты: ";
-            case 291: return " аяты: ";
-            case 292: return " аяты: ";
-            case 293: return " аяты: ";
-            case 294: return " аяты: ";
-            case 295: return " аяты: ";
-            case 296: return " аяты: ";
-            case 297: return " аяты: ";
-            case 298: return " аяты: ";
-            case 299: return " аяты: ";
-            case 300: return " аяты: ";
-            case 301: return " аяты: ";
-            case 302: return " аяты: ";
-            case 303: return " аяты: ";
-            case 304: return " аяты: ";
-            case 305: return " аяты: ";
-            case 306: return " аяты: ";
-            case 307: return " аяты: ";
-            case 308: return " аяты: ";
-            case 309: return " аяты: ";
-            case 310: return " аяты: ";
-            case 311: return " аяты: ";
-            case 312: return " аяты: ";
-            case 313: return " аяты: ";
-            case 314: return " аяты: ";
-            case 315: return " аяты: ";
-            case 316: return " аяты: ";
-            case 317: return " аяты: ";
-            case 318: return " аяты: ";
-            case 319: return " аяты: ";
-            case 320: return " аяты: ";
-            case 321: return " аяты: ";
-            case 322: return " аяты: ";
-            case 323: return " аяты: ";
-            case 324: return " аяты: ";
-            case 325: return " аяты: ";
-            case 326: return " аяты: ";
-            case 327: return " аяты: ";
-            case 328: return " аяты: ";
-            case 329: return " аяты: ";
-            case 330: return " аяты: ";
-            case 331: return " аяты: ";
-            case 332: return " аяты: ";
-            case 333: return " аяты: ";
-            case 334: return " аяты: ";
-            case 335: return " аяты: ";
-            case 336: return " аяты: ";
-            case 337: return " аяты: ";
-            case 338: return " аяты: ";
-            case 339: return " аяты: ";
-            case 340: return " аяты: ";
-            case 341: return " аяты: ";
-            case 342: return " аяты: ";
-            case 343: return " аяты: ";
-            case 344: return " аяты: ";
-            case 345: return " аяты: ";
-            case 346: return " аяты: ";
-            case 347: return " аяты: ";
-            case 348: return " аяты: ";
-            case 349: return " аяты: ";
-            case 350: return " аяты: ";
-            case 351: return " аяты: ";
-            case 352: return " аяты: ";
-            case 353: return " аяты: ";
-            case 354: return " аяты: ";
-            case 355: return " аяты: ";
-            case 356: return " аяты: ";
-            case 357: return " аяты: ";
-            case 358: return " аяты: ";
-            case 359: return " аяты: ";
-            case 360: return " аяты: ";
-            case 361: return " аяты: ";
-            case 362: return " аяты: ";
-            case 363: return " аяты: ";
-            case 364: return " аяты: ";
-            case 365: return " аяты: ";
-            case 366: return " аяты: ";
-            case 367: return " аяты: ";
-            case 368: return " аяты: ";
-            case 369: return " аяты: ";
-            case 370: return " аяты: ";
-            case 371: return " аяты: ";
-            case 372: return " аяты: ";
-            case 373: return " аяты: ";
-            case 374: return " аяты: ";
-            case 375: return " аяты: ";
-            case 376: return " аяты: ";
-            case 377: return " аяты: ";
-            case 378: return " аяты: ";
-            case 379: return " аяты: ";
-            case 380: return " аяты: ";
-            case 381: return " аяты: ";
-            case 382: return " аяты: ";
-            case 383: return " аяты: ";
-            case 384: return " аяты: ";
-            case 385: return " аяты: ";
-            case 386: return " аяты: ";
-            case 387: return " аяты: ";
-            case 388: return " аяты: ";
-            case 389: return " аяты: ";
-            case 390: return " аяты: ";
-            case 391: return " аяты: ";
-            case 392: return " аяты: ";
-            case 393: return " аяты: ";
-            case 394: return " аяты: ";
-            case 395: return " аяты: ";
-            case 396: return " аяты: ";
-            case 397: return " аяты: ";
-            case 398: return " аяты: ";
-            case 399: return " аяты: ";
-            case 400: return " аяты: ";
-            case 401: return " аяты: ";
-            case 402: return " аяты: ";
-            case 403: return " аяты: ";
-            case 404: return " аяты: ";
-            case 405: return " аяты: ";
-            case 406: return " аяты: ";
-            case 407: return " аяты: ";
-            case 408: return " аяты: ";
-            case 409: return " аяты: ";
-            case 410: return " аяты: ";
-            case 411: return " аяты: ";
-            case 412: return " аяты: ";
-            case 413: return " аяты: ";
-            case 414: return " аяты: ";
-            case 415: return " аяты: ";
-            case 416: return " аяты: ";
-            case 417: return " аяты: ";
-            case 418: return " аяты: ";
-            case 419: return " аяты: ";
-            case 420: return " аяты: ";
-            case 421: return " аяты: ";
-            case 422: return " аяты: ";
-            case 423: return " аяты: ";
-            case 424: return " аяты: ";
-            case 425: return " аяты: ";
-            case 426: return " аяты: ";
-            case 427: return " аяты: ";
-            case 428: return " аяты: ";
-            case 429: return " аяты: ";
-            case 430: return " аяты: ";
-            case 431: return " аяты: ";
-            case 432: return " аяты: ";
-            case 433: return " аяты: ";
+
+            // Сура 11 Худ - Пророк Худ
+            case 222: return " аяты: 6-12";
+            case 223: return " аяты: 13-19";
+            case 224: return " аяты: 20-28";
+            case 225: return " аяты: 29-37";
+            case 226: return " аяты: 38-45";
+            case 227: return " аяты: 46-53";
+            case 228: return " аяты: 54-62";
+            case 229: return " аяты: 63-71";
+            case 230: return " аяты: 72-81";
+            case 231: return " аяты: 82-88";
+            case 232: return " аяты: 89-97";
+            case 233: return " аяты: 98-108";
+            case 234: return " аяты: 109-117";
+
+            case 235: return "";
+
+            // Сура 12 Юсуф - Пророк Юсуф, мир ему
+            case 236: return " аяты: 5-14";
+            case 237: return " аяты: 15-22";
+            case 238: return " аяты: 23-30";
+            case 239: return " аяты: 31-37";
+            case 240: return " аяты: 38-43";
+            case 241: return " аяты: 44-52";
+            case 242: return " аяты: 53-63";
+            case 243: return " аяты: 64-69";
+            case 244: return " аяты: 70-78";
+            case 245: return " аяты: 79-86";
+            case 246: return " аяты: 87-95";
+            case 247: return " аяты: 96-103";
+            case 248: return " аяты: 104-111";
+
+            // Сура 13 Ар-Рад - Гром
+            case 249: return " аяты: 1-5";
+            case 250: return " аяты: 6-13";
+            case 251: return " аяты: 14-18, Саджда-Тилява после 15-го аята";
+            case 252: return " аяты: 19-28";
+            case 253: return " аяты: 29-34";
+            case 254: return " аяты: 35-42";
+
+            case 255: return "";
+
+            // Сура 14 Ибрахим - Пророк Ибрахим, мир ему
+            case 256: return " аяты: 6-10";
+            case 257: return " аяты: 11-18";
+            case 258: return " аяты: 19-24";
+            case 259: return " аяты: 25-33";
+            case 260: return " аяты: 34-42";
+            case 261: return " аяты: 43-52";
+
+            // Сура 15 Аль-Хиджр - Каменное плато
+            case 262: return " аяты: 1-15";
+            case 263: return " аяты: 16-31";
+            case 264: return " аяты: 32-51";
+            case 265: return " аяты: 52-70";
+            case 266: return " аяты: 71-90";
+
+            case 267: return "";
+
+            // Сура 16 Ан-Нахль - Пчелы
+            case 268: return " аяты: 7-14";
+            case 269: return " аяты: 15-26";
+            case 270: return " аяты: 27-34";
+            case 271: return " аяты: 35-42";
+            case 272: return " аяты: 43-54, Саджда-Тилява после 50-го аята";
+            case 273: return " аяты: 55-64";
+            case 274: return " аяты: 65-72";
+            case 275: return " аяты: 73-79";
+            case 276: return " аяты: 80-87";
+            case 277: return " аяты: 88-93";
+            case 278: return " аяты: 94-102";
+            case 279: return " аяты: 103-110";
+            case 280: return " аяты: 111-118";
+            case 281: return " аяты: 119-128";
+
+            // Сура 17 Аль-Исра - Ночной перенос
+            case 282: return " аяты: 1-7";
+            case 283: return " аяты: 8-17";
+            case 284: return " аяты: 18-27";
+            case 285: return " аяты: 28-38";
+            case 286: return " аяты: 39-49";
+            case 287: return " аяты: 50-58";
+            case 288: return " аяты: 59-66";
+            case 289: return " аяты: 67-75";
+            case 290: return " аяты: 76-86";
+            case 291: return " аяты: 87-96";
+            case 292: return " аяты: 97-104";
+
+            case 293: return "";
+
+            // Сура 18 Аль-Кяхф - Пещера
+            case 294: return " аяты: 5-15";
+            case 295: return " аяты: 16-20";
+            case 296: return " аяты: 21-27";
+            case 297: return " аяты: 28-34";
+            case 298: return " аяты: 35-45";
+            case 299: return " аяты: 46-53";
+            case 300: return " аяты: 54-61";
+            case 301: return " аяты: 62-74";
+            case 302: return " аяты: 75-83";
+            case 303: return " аяты: 84-97";
+            case 304: return " аяты: 98-110";
+
+            // Сура 19 Марьям
+            case 305: return " аяты: 1-11";
+            case 306: return " аяты: 12-25";
+            case 307: return " аяты: 26-38";
+            case 308: return " аяты: 39-51";
+            case 309: return " аяты: 52-64, Саджда-Тилява после 58-го аята";
+            case 310: return " аяты: 65-76";
+            case 311: return " аяты: 77-95";
+
+            case 312: return "";
+
+            // Сура 20 Та Ха
+            case 313: return " аяты: 13-37";
+            case 314: return " аяты: 38-51";
+            case 315: return " аяты: 52-64";
+            case 316: return " аяты: 65-76";
+            case 317: return " аяты: 77-87";
+            case 318: return " аяты: 88-98";
+            case 319: return " аяты: 99-113";
+            case 320: return " аяты: 114-125";
+            case 321: return " аяты: 126-135";
+
+            // Сура 21 Аль-Анбия - Пророки
+            case 322: return " аяты: 1-10";
+            case 323: return " аяты: 11-24";
+            case 324: return " аяты: 25-35";
+            case 325: return " аяты: 36-44";
+            case 326: return " аяты: 45-57";
+            case 327: return " аяты: 58-72";
+            case 328: return " аяты: 73-81";
+            case 329: return " аяты: 82-90";
+            case 330: return " аяты: 91-101";
+            case 331: return " аяты: 102-112";
+
+            // Сура 22 Аль-Хадж
+            case 332: return " аяты: 1-5";
+            case 333: return " аяты: 6-15";
+            case 334: return " аяты: 16-23, Саджда-Тилява после 18-го аята";
+            case 335: return " аяты: 24-30";
+            case 336: return " аяты: 31-38";
+            case 337: return " аяты: 39-46";
+            case 338: return " аяты: 47-55";
+            case 339: return " аяты: 56-64";
+            case 340: return " аяты: 65-72";
+            case 341: return " аяты: 73-78, Саджда-Тилява после 77-го аята";
+
+            // Сура 23 Аль-Му'минун - Верующие
+            case 342: return " аяты: 1-17";
+            case 343: return " аяты: 18-27";
+            case 344: return " аяты: 28-42";
+            case 345: return " аяты: 43-59";
+            case 346: return " аяты: 60-74";
+            case 347: return " аяты: 75-89";
+            case 348: return " аяты: 90-104";
+            case 349: return " аяты: 105-118";
+
+            // Сура 24 Ан-Нур - Свет
+            case 350: return " аяты: 1-10";
+            case 351: return " аяты: 11-20";
+            case 352: return " аяты: 21-27";
+            case 353: return " аяты: 28-31";
+            case 354: return " аяты: 32-36";
+            case 355: return " аяты: 37-43";
+            case 356: return " аяты: 44-53";
+            case 357: return " аяты: 54-58";
+            case 358: return " аяты: 59-61";
+
+            case 359: return "";
+
+            // Сура 25 Аль-Фуркан - Различение
+            case 360: return " аяты: 3-11";
+            case 361: return " аяты: 12-20";
+            case 362: return " аяты: 21-32";
+            case 363: return " аяты: 33-43";
+            case 364: return " аяты: 44-55";
+            case 365: return " аяты: 56-67, Саджда-Тилява после 60-го аята";
+            case 366: return " аяты: 68-77";
+
+            // Сура 26 Аш-Шуара - Поэты
+            case 367: return " аяты: 1-19";
+            case 368: return " аяты: 20-39";
+            case 369: return " аяты: 40-60";
+            case 370: return " аяты: 61-83";
+            case 371: return " аяты: 84-111";
+            case 372: return " аяты: 112-136";
+            case 373: return " аяты: 137-159";
+            case 374: return " аяты: 160-183";
+            case 375: return " аяты: 184-206";
+            case 376: return " аяты: 207-227";
+
+            // Сура 27 Ан-Намль - Муравьи
+            case 377: return " аяты: 1-13";
+            case 378: return " аяты: 14-22";
+            case 379: return " аяты: 23-35, Саджда-Тилява после 26-го аята";
+            case 380: return " аяты: 36-44";
+            case 381: return " аяты: 45-55";
+            case 382: return " аяты: 56-63";
+            case 383: return " аяты: 64-76";
+            case 384: return " аяты: 77-88";
+
+            case 385: return "";
+
+            // Сура 28 Аль-Касас - Рассказы
+            case 386: return " аяты: 6-13";
+            case 387: return " аяты: 14-21";
+            case 388: return " аяты: 22-28";
+            case 389: return " аяты: 29-35";
+            case 390: return " аяты: 36-43";
+            case 391: return " аяты: 44-50";
+            case 392: return " аяты: 51-59";
+            case 393: return " аяты: 60-70";
+            case 394: return " аяты: 71-77";
+            case 395: return " аяты: 78-84";
+
+            case 396: return "";
+
+            // Сура 29 Аль-Анкабут - Паук
+            case 397: return " аяты: 7-14";
+            case 398: return " аяты: 15-23";
+            case 399: return " аяты: 24-30";
+            case 400: return " аяты: 31-38";
+            case 401: return " аяты: 39-45";
+            case 402: return " аяты: 46-52";
+            case 403: return " аяты: 53-63";
+
+            case 404: return "";
+
+            // Сура 30 Ар-Рум - Римляне
+            case 405: return " аяты: 6-15";
+            case 406: return " аяты: 16-24";
+            case 407: return " аяты: 25-32";
+            case 408: return " аяты: 33-41";
+            case 409: return " аяты: 42-50";
+            case 410: return " аяты: 51-60";
+
+            // Сура 31 Лукман
+            case 411: return " аяты: 1-11";
+            case 412: return " аяты: 12-19";
+            case 413: return " аяты: 20-28";
+            case 414: return " аяты: 29-34";
+
+            // Сура 32 Ас-Саджда - Земной поклон
+            case 415: return " аяты: 1-11";
+            case 416: return " аяты: 12-20, Саджда-Тилява после 15-го аята";
+            case 417: return " аяты: 21-30";
+
+            // Сура 33 Аль-Ахзаб - Союзники
+            case 418: return " аяты: 1-6";
+            case 419: return " аяты: 7-15";
+            case 420: return " аяты: 16-22";
+            case 421: return " аяты: 23-30";
+            case 422: return " аяты: 31-35";
+            case 423: return " аяты: 36-43";
+            case 424: return " аяты: 44-50";
+            case 425: return " аяты: 51-54";
+            case 426: return " аяты: 55-62";
+            case 427: return " аяты: 63-73";
+
+            // Сура 34 Саба - Сабейцы
+            case 428: return " аяты: 1-7";
+            case 429: return " аяты: 8-14";
+            case 430: return " аяты: 15-22";
+            case 431: return " аяты: 23-31";
+            case 432: return " аяты: 32-39";
+            case 433: return " аяты: 40-48";
+
             case 434: return " аяты: ";
-            case 435: return " аяты: ";
-            case 436: return " аяты: ";
-            case 437: return " аяты: ";
-            case 438: return " аяты: ";
-            case 439: return " аяты: ";
-            case 440: return " аяты: ";
-            case 441: return " аяты: ";
-            case 442: return " аяты: ";
-            case 443: return " аяты: ";
-            case 444: return " аяты: ";
-            case 445: return " аяты: ";
-            case 446: return " аяты: ";
-            case 447: return " аяты: ";
-            case 448: return " аяты: ";
-            case 449: return " аяты: ";
-            case 450: return " аяты: ";
-            case 451: return " аяты: ";
-            case 452: return " аяты: ";
-            case 453: return " аяты: ";
-            case 454: return " аяты: ";
-            case 455: return " аяты: ";
-            case 456: return " аяты: ";
-            case 457: return " аяты: ";
-            case 458: return " аяты: ";
-            case 459: return " аяты: ";
-            case 460: return " аяты: ";
-            case 461: return " аяты: ";
-            case 462: return " аяты: ";
-            case 463: return " аяты: ";
-            case 464: return " аяты: ";
-            case 465: return " аяты: ";
-            case 466: return " аяты: ";
-            case 467: return " аяты: ";
-            case 468: return " аяты: ";
-            case 469: return " аяты: ";
-            case 470: return " аяты: ";
-            case 471: return " аяты: ";
-            case 472: return " аяты: ";
-            case 473: return " аяты: ";
-            case 474: return " аяты: ";
-            case 475: return " аяты: ";
-            case 476: return " аяты: ";
-            case 477: return " аяты: ";
-            case 478: return " аяты: ";
-            case 479: return " аяты: ";
-            case 480: return " аяты: ";
-            case 481: return " аяты: ";
-            case 482: return " аяты: ";
-            case 483: return " аяты: ";
-            case 484: return " аяты: ";
-            case 485: return " аяты: ";
-            case 486: return " аяты: ";
-            case 487: return " аяты: ";
-            case 488: return " аяты: ";
-            case 489: return " аяты: ";
-            case 490: return " аяты: ";
-            case 491: return " аяты: ";
-            case 492: return " аяты: ";
-            case 493: return " аяты: ";
-            case 494: return " аяты: ";
-            case 495: return " аяты: ";
-            case 496: return " аяты: ";
-            case 497: return " аяты: ";
-            case 498: return " аяты: ";
-            case 499: return " аяты: ";
-            case 500: return " аяты: ";
-            case 501: return " аяты: ";
-            case 502: return " аяты: ";
-            case 503: return " аяты: ";
-            case 504: return " аяты: ";
-            case 505: return " аяты: ";
-            case 506: return " аяты: ";
-            case 507: return " аяты: ";
-            case 508: return " аяты: ";
-            case 509: return " аяты: ";
-            case 510: return " аяты: ";
-            case 511: return " аяты: ";
-            case 512: return " аяты: ";
-            case 513: return " аяты: ";
-            case 514: return " аяты: ";
-            case 515: return " аяты: ";
-            case 516: return " аяты: ";
-            case 517: return " аяты: ";
-            case 518: return " аяты: ";
-            case 519: return " аяты: ";
-            case 520: return " аяты: ";
-            case 521: return " аяты: ";
-            case 522: return " аяты: ";
-            case 523: return " аяты: ";
-            case 524: return " аяты: ";
-            case 525: return " аяты: ";
-            case 526: return " аяты: ";
-            case 527: return " аяты: ";
-            case 528: return " аяты: ";
-            case 529: return " аяты: ";
-            case 530: return " аяты: ";
-            case 531: return " аяты: ";
-            case 532: return " аяты: ";
-            case 533: return " аяты: ";
-            case 534: return " аяты: ";
-            case 535: return " аяты: ";
-            case 536: return " аяты: ";
-            case 537: return " аяты: ";
-            case 538: return " аяты: ";
-            case 539: return " аяты: ";
-            case 540: return " аяты: ";
-            case 541: return " аяты: ";
-            case 542: return " аяты: ";
-            case 543: return " аяты: ";
-            case 544: return " аяты: ";
-            case 545: return " аяты: ";
-            case 546: return " аяты: ";
-            case 547: return " аяты: ";
-            case 548: return " аяты: ";
-            case 549: return " аяты: ";
-            case 550: return " аяты: ";
-            case 551: return " аяты: ";
-            case 552: return " аяты: ";
-            case 553: return " аяты: ";
-            case 554: return " аяты: ";
-            case 555: return " аяты: ";
-            case 556: return " аяты: ";
-            case 557: return " аяты: ";
-            case 558: return " аяты: ";
-            case 559: return " аяты: ";
-            case 560: return " аяты: ";
-            case 561: return " аяты: ";
-            case 562: return " аяты: ";
-            case 563: return " аяты: ";
-            case 564: return " аяты: ";
-            case 565: return " аяты: ";
-            case 566: return " аяты: ";
-            case 567: return " аяты: ";
-            case 568: return " аяты: ";
-            case 569: return " аяты: ";
-            case 570: return " аяты: ";
-            case 571: return " аяты: ";
-            case 572: return " аяты: ";
-            case 573: return " аяты: ";
-            case 574: return " аяты: ";
-            case 575: return " аяты: ";
-            case 576: return " аяты: ";
-            case 577: return " аяты: ";
-            case 578: return " аяты: ";
-            case 579: return " аяты: ";
-            case 580: return " аяты: ";
-            case 581: return " аяты: ";
-            case 582: return " аяты: ";
-            case 583: return " аяты: ";
-            case 584: return " аяты: ";
-            case 585: return " аяты: ";
-            case 586: return " аяты: ";
-            case 587: return " аяты: ";
-            case 588: return " аяты: ";
-            case 589: return " аяты: ";
-            case 590: return " аяты: ";
-            case 591: return " аяты: ";
-            case 592: return " аяты: ";
-            case 593: return " аяты: ";
-            case 594: return " аяты: ";
-            case 595: return " аяты: ";
-            case 596: return " аяты: ";
-            case 597: return " аяты: ";
-            case 598: return " аяты: ";
-            case 599: return " аяты: ";
-            case 600: return " аяты: ";
-            case 601: return " аяты: ";
-            case 602: return " аяты: ";
-            case 603: return " аяты: ";
-            case 604: return " аяты: ";
+
+            // Сура 35 Фатыр - Творец
+            case 435: return " аяты: 4-11";
+            case 436: return " аяты: 12-18";
+            case 437: return " аяты: 19-30";
+            case 438: return " аяты: 31-38";
+            case 439: return " аяты: 39-44";
+
+            case 440: return "";
+
+            // Сура 36 Йа Син
+            case 441: return " аяты: 13-27";
+            case 442: return " аяты: 28-40";
+            case 443: return " аяты: 41-54";
+            case 444: return " аяты: 55-70";
+            case 445: return " аяты: 71-83";
+
+            //Сура 37 Ас-Саффат - Выстраивающиеся в ряды
+            case 446: return " аяты: 1-24";
+            case 447: return " аяты: 25-51";
+            case 448: return " аяты: 52-76";
+            case 449: return " аяты: 77-102";
+            case 450: return " аяты: 103-126";
+            case 451: return " аяты: 127-153";
+            case 452: return " аяты: 154-182";
+
+            //Сура 38 Сад - буква Сад
+            case 453: return " аяты: 1-16";
+            case 454: return " аяты: 17-26";
+            case 455: return " аяты: 18-42";
+            case 456: return " аяты: 43-61";
+            case 457: return " аяты: 62-83";
+
+            case 458: return "";
+
+            // Сура Аз-Зумар - Толпы
+            case 459: return " аяты: 6-10";
+            case 460: return " аяты: 11-21";
+            case 461: return " аяты: 22-31";
+            case 462: return " аяты: 32-40";
+            case 463: return " аяты: 41-47";
+            case 464: return " аяты: 48-56";
+            case 465: return " аяты: 57-67";
+            case 466: return " аяты: 68-83";
+
+            case 467: return "";
+
+            // Сура 40 Аль-Гафир - Прощающий
+            case 468: return " аяты: 8-16";
+            case 469: return " аяты: 17-25";
+            case 470: return " аяты: 26-33";
+            case 471: return " аяты: 34-40";
+            case 472: return " аяты: 41-49";
+            case 473: return " аяты: 50-58";
+            case 474: return " аяты: 59-66";
+            case 475: return " аяты: 67-77";
+            case 476: return " аяты: 78-85";
+
+            // Сура 41 Фуссылят - Разъяснены
+            case 477: return " аяты: 1-11";
+            case 478: return " аяты: 12-20";
+            case 479: return " аяты: 21-29";
+            case 480: return " аяты: 30-38, Саджда-Тилява после 38-го аята";
+            case 481: return " аяты: 39-46";
+            case 482: return " аяты: 47-54";
+
+            // Сура 42 Аш-Шура - Совет
+            case 483: return " аяты: 1-10";
+            case 484: return " аяты: 11-15";
+            case 485: return " аяты: 16-22";
+            case 486: return " аяты: 23-31";
+            case 487: return " аяты: 32-44";
+            case 488: return " аяты: 45-51";
+
+            case 489: return "";
+
+            // Сура 43 Аз-Зухруф - Украшения
+            case 490: return " аяты: 11-22";
+            case 491: return " аяты: 23-33";
+            case 492: return " аяты: 34-47";
+            case 493: return " аяты: 48-60";
+            case 494: return " аяты: 61-73"; //TODO
+            case 495: return " аяты: 74-89";
+
+            //Сура 44 - Ад-Духан - Дым
+            case 496: return " аяты: 1-18";
+            case 497: return " аяты: 19-39";
+            case 498: return " аяты: 40-59";
+
+            //Сура 45 - Аль-Джасия - Коленопреклоненные
+            case 499: return " аяты: 1-13";
+            case 500: return " аяты: 14-22";
+            case 501: return " аяты: 23-32";
+
+            case 502: return "";
+
+            // Сура 46 - Аль-Ахкаф - Пески
+            case 503: return " аяты: 6-14";
+            case 504: return " аяты: 15-20";
+            case 505: return " аяты: 21-28";
+            case 506: return " аяты: 29-35";
+
+            // Сура 47 - Мухаммад - Пророк Мухаммад, мир ему и благословение Аллаха
+            case 507: return " аяты: 1-11";
+            case 508: return " аяты: 12-19";
+            case 509: return " аяты: 20-29";
+            case 510: return " аяты: 30-38";
+
+            // Сура 48 - Аль-Фатх - Победа
+            case 511: return " аяты: 1-9";
+            case 512: return " аяты: 10-15";
+            case 513: return " аяты: 16-23";
+            case 514: return " аяты: 24-28";
+
+            case 515: return "";
+
+            // Сура 49 - Аль-Худжурат - Комнаты
+            case 516: return " аяты: 5-11";
+            case 517: return " аяты: 12-18";
+
+            // Сура 50 - Каф - буква Каф
+            case 518: return " аяты: 1-15";
+            case 519: return " аяты: 16-35";
+            case 520: return "";
+
+            // Сура 51 Аз-Зарият
+            case 521: return " аяты: 7-30";
+            case 522: return " аяты: 31-51";
+            case 523: return "";
+
+            // Сура 52 - Ат-Тур - Гора
+            case 524: return " аяты: 15-31";
+            case 525: return " аяты: 32-49";
+
+            // Сура 53 Ан-Наджм - Звезда
+            case 526: return " аяты: 1-26";
+            case 527: return " аяты: 27-44";
+
+            case 528: return "";
+
+            // Сура 54
+            case 529: return " аяты: 7-27";
+            case 530: return " аяты: 28-49";
+
+            case 531: return "";
+
+            // Сура 55 - Ар-Рахман - Милостивый
+            case 532: return " аяты: 17-40";
+            case 533: return " аяты: 41-67";
+
+            case 534: return "";
+
+            // Сура 56 - Аль-Вакиа - Неотвратимое событие
+            case 535: return " аяты: 17-50";
+            case 536: return " аяты: 51-76";
+
+            case 537: return "";
+
+            // Сура 57 - Аль-Хадид - Железо
+            case 538: return " аяты: 4-11";
+            case 539: return " аяты: 12-18";
+            case 540: return " аяты: 19-24";
+            case 541: return " аяты: 25-29";
+
+            // Сура 58 - Аль-Муджадаля - Препирающаяся
+            case 542: return " аяты: 1-6";
+            case 543: return " аяты: 7-11";
+            case 544: return " аяты: 12-21";
+
+            case 545: return "";
+
+            // Сура 59 - Аль-Хашр - Сбор
+            case 546: return " аяты: 4-9";
+            case 547: return " аяты: 10-16";
+            case 548: return " аяты: 17-24";
+
+            // Сура 60 - Аль-Мумтахина - Испытуемая
+            case 549: return " аяты: 1-5";
+            case 550: return " аяты: 6-11";
+
+            case 551: return "";
+
+            // Сура 61 - Ас-Саф - Ряд
+            case 552: return " аяты: 6-14";
+
+            // Сура 62 - Аль-Джуму'а - Пятница
+            case 553: return " аяты: 1-8";
+
+            case 554: return "";
+
+            // Сура 63 - Аль-Мунаффикун - Лицемеры
+            case 555: return " аяты: 5-11";
+
+            // Сура 64 - Ат-Тагабун - Раскрытие самообмана
+            case 556: return " аяты: 1-9";
+            case 557: return " аяты: 10-18";
+
+            // Сура 65 - Ат-Таляк - развод
+            case 558: return " аяты: 1-5";
+            case 559: return " аяты: 6-12";
+
+            // Сура 66 - Ат-Тахрим - Запрещение
+            case 560: return " аяты: 1-7";
+            case 561: return " аяты: 8-12";
+
+            // Сура 67 - Аль-Мульк - Власть
+            case 562: return " аяты: 1-12";
+            case 563: return " аяты: 13-26";
+
+            case 564: return "";
+
+            // Сура 68 - Аль-Калям - Письменная трость
+            case 565: return " аяты: 16-42";
+
+            case 566: return "";
+
+            // Сура 69 - Аль-Хакка - Неизбежное
+            case 567: return " аяты: 9-34";
+
+            case 568: return "";
+
+            // Сура 70 - Аль-Ма'аридж - Ступени
+            case 569: return " аяты: 11-39";
+
+            case 570: return "";
+
+            // Сура 71 - Нух - Пророк Нух, мир ему
+            case 571: return " аяты: 11-28";
+
+            // Сура 72 - Аль-Джинн - Джинны
+            case 572: return " аяты: 1-13";
+            case 573: return " аяты: 14-28";
+
+            // Сура 73 - Аль-Музаммиль - Завернувшийся
+            case 574: return " аяты: 1-19";
+
+            case 575: return "";
+
+            // Сура 74 - Аль-Мудассир - Закутавшийся
+            case 576: return " аяты: 18-47";
+
+            case 577: return "";
+
+            // Сура 75 - Аль-Кыяма - Воскресение
+            case 578: return "";
+
+            // Сура 76 - Аль-Инсан - Человек
+            case 579: return " аяты: 6-25";
+
+            case 580: return "";
+
+            // Сура 77 - Аль-Мурсалят - Посланные
+            case 581: return " аяты: 20-40";
+
+            // Сура 78 - Ан-Наба - Весть
+            case 582: return " аяты: 1-30";
+
+            case 583: return "";
+
+            // Сура 79 - Ан-Назиат - Вырывающие
+            case 584: return " аяты: 16-46";
+
+            // Сура 80 - Абаса - Нахмурившийся
+            case 585: return " аяты: 1-42";
+
+            // Сура 81 - Ат-Таквир - Погружение во мрак
+            case 586: return " аяты: 1-29";
+
+            // Сура 82 - Аль-Инфитар
+            case 587: return "";
+            case 588: return "";
+            case 589: return "";
+            case 590: return "";
+            case 591: return "";
+            case 592: return "";
+            case 593: return "";
+            case 594: return "";
+            case 595: return "";
+            case 596: return "";
+            case 597: return "";
+            case 598: return "";
+            case 599: return "";
+            case 600: return "";
+            case 601: return "";
+            case 602: return "";
+            case 603: return "";
+            case 604: return "";
             default: return "";
         }
     }
 
-    private String getSuraTitle(int page) {
+    public String getSuraTitle(int page) {
         switch (page) {
             case 1:
                 return "Сура 1. Аль-Фатиха - Открывающая";
@@ -916,7 +1099,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 97: case 98: case 99: case 100: case 101:
             case 102: case 103: case 104: case 105:
                 return "Сура 4. Ан-Ниса - Женщины";
-            case 106: return "Сура 4. Ан-Ниса - Женщины, аяты: 176, \nСура 5. Аль-Маида - Трапеза, аяты 1-2";
+            case 106: return "Сура 4. Ан-Ниса - Женщины, аят 176, \nСура 5. Аль-Маида - Трапеза, аяты 1-2";
             case 107: case 108:
             case 109: case 110: case 111: case 112: case 113:
             case 114: case 115: case 116: case 117: case 118:
@@ -949,12 +1132,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 212: case 213: case 214: case 215: case 216:
             case 217: case 218: case 219: case 220:
                 return "Сура 10. Юнус - Пророк Юнус, мир ему";
-            case 221: case 222: case 223: case 224:
+            case 221: return "Сура 10. Юнус - Пророк Юнус, мир ему, аяты 107-109, \nСура 11. Худ - Пророк Худ, мир ему, аяты 1-5";
+            case 222: case 223: case 224:
             case 225: case 226: case 227: case 228:
             case 229: case 230: case 231: case 232:
             case 233: case 234:
                 return "Сура 11. Худ - Пророк Худ, мир ему";
-            case 235: case 236: case 237: case 238:
+            case 235: return "Сура 11. Худ - Пророк Худ, мир ему, аяты 118-123, \nСура 12. Йусуф - Пророк Йусуф, мир ему, аяты 1-4";
+            case 236: case 237: case 238:
             case 239: case 240: case 241: case 242:
             case 243: case 244: case 245: case 246:
             case 247: case 248:
@@ -962,7 +1147,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 249: case 250: case 251: case 252:
             case 253: case 254:
                 return "Сура 13. Ар-Ра'д - Гром";
-            case 255: case 256: case 257: case 258:
+            case 255: return "Сура 13. Ар-Ра'д - Гром, аят 43, \nСура 14. Ибрахим - Пророк Ибрахим, мир ему, аяты 1-5";
+            case 256: case 257: case 258:
             case 259: case 260: case 261:
                 return "Сура 14. Ибрахим - Пророк Ибрахим, мир ему";
             case 262:
@@ -971,7 +1157,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 265:
             case 266:
                 return "Сура 15. Аль-Хиджр - Каменное плато";
-            case 267:
+            case 267: return "Сура 15. Аль-Хиджр - Каменное плато, аяты 91-99, \nСура 16. Ан-Нахль - Пчелы, аяты 1-6";
             case 268:
             case 269:
             case 270:
@@ -999,7 +1185,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 291:
             case 292:
                 return "Сура 17. Аль-Исра - Ночной перенос";
-            case 293:
+            case 293: return "Сура 17. Аль-Исра - Ночной перенос, аяты 105-111, Саджда-Тилява после 109-го аята,\nСура 18. Аль-Кахф - Пещера, аяты 1-4";
             case 294:
             case 295:
             case 296:
@@ -1020,7 +1206,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 310:
             case 311:
                 return "Сура 19. Марьям - Марьям (Мария)";
-            case 312:
+            case 312: return "Сура 19. Марьям - Марьям (Мария), аяты 96-98, \nСура 20. Та-Ха - Та-Ха, аяты 1-12";
             case 313:
             case 314:
             case 315:
@@ -1072,7 +1258,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 357:
             case 358:
                 return "Сура 24. Ан-Нур - Свет";
-            case 359:
+            case 359: return "Сура 24. Ан-Нур - Свет, аяты 62-64, \nСура 25. Аль-Фуркан - Различение, аяты 1-2";
             case 360:
             case 361:
             case 362:
@@ -1101,7 +1287,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 383:
             case 384:
                 return "Сура 27. Ан-Намль - Муравьи";
-            case 385:
+            case 385: return "Сура 27. Ан-Намль - Муравьи, аяты 89-93, \nСура 28. Аль-Касас - Рассказы, аяты 1-5";
             case 386:
             case 387:
             case 388:
@@ -1113,7 +1299,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 394:
             case 395:
                 return "Сура 28. Аль-Касас - Рассказы";
-            case 396:
+            case 396: return "Сура 28. Аль-Касас - Рассказы, аяты 85-88, \nСура 29. Аль-Анкабут - Паук, аяты 1-6";
             case 397:
             case 398:
             case 399:
@@ -1122,7 +1308,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 402:
             case 403:
                 return "Сура 29. Аль-Анкабут - Паук";
-            case 404:
+            case 404: return "Сура 29. Аль-Анкабут - Паук, аяты 64-69, \nСура 30. Ар-Рум - Римляне, аяты 1-5";
             case 405:
             case 406:
             case 407:
@@ -1157,14 +1343,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 432:
             case 433:
                 return "Сура 34. Саба - Сабейцы";
-            case 434:
+            case 434: return "Сура 34. Саба - Сабейцы, аяты 49-54, \nСура 35. Фатыр - Творец, аяты 1-3";
             case 435:
             case 436:
             case 437:
             case 438:
             case 439:
                 return "Сура 35. Фатыр - Творец";
-            case 440:
+            case 440: return "Сура 35. Фатыр - Творец, аят 45, \nСура 36. Йа Син - Йа Син, аяты 1-12";
             case 441:
             case 442:
             case 443:
@@ -1185,7 +1371,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 456:
             case 457:
                 return "Сура 38. Сад - Буква Сад";
-            case 458:
+            case 458: return "Сура 38. Сад - Буква Сад, аяты 84-88, \nСура 39. Аз-Зумар - Толпы, аяты 1-5";
             case 459:
             case 460:
             case 461:
@@ -1195,7 +1381,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 465:
             case 466:
                 return "Сура 39. Аз-Зумар - Толпы";
-            case 467:
+            case 467: return "Сура 39. Аз-Зумар - Толпы, аят 75, \nСура 40. Гафир - Прощающий, аяты 1-7";
             case 468:
             case 469:
             case 470:
@@ -1220,7 +1406,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 487:
             case 488:
                 return "Сура 42. Аш-Шура - Совет";
-            case 489:
+            case 489: return "Сура 42. Аш-Шура - Совет, аяты 52-53, \nСура 43. Аз-Зухруф - Украшения, аяты 1-10";
             case 490:
             case 491:
             case 492:
@@ -1236,7 +1422,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 500:
             case 501:
                 return "Сура 45. Аль-Джасия - Коленопреклоненные";
-            case 502:
+            case 502: return "Сура 45. Аль-Джасия - Коленопреклоненные, аяты 33-37, \nСура 46. Аль-Ахкаф - Дюны, аяты 1-5";
             case 503:
             case 504:
             case 505:
@@ -1252,37 +1438,37 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 513:
             case 514:
                 return "Сура 48. Аль-Фатх - Победа";
-            case 515:
+            case 515: return "Сура 48. Аль-Фатх - Победа, аят 29, \nСура 49. Аль-Худжурат - Комнаты, аяты 1-4";
             case 516:
             case 517:
                 return "Сура 49. Аль-Худжурат - Комнаты";
             case 518:
             case 519:
                 return "Сура 50. Каф - Буква Каф";
-            case 520:
+            case 520: return "Сура 50. Каф - Буква Каф, аяты 36-45, \nСура 51. Аз-Зарият - Рассеивающие, аяты 1-6";
             case 521:
             case 522:
-                return "Сура 51. Аль-Дариат - Рассеивающие";
-            case 523:
+                return "Сура 51. Аз-Зарият - Рассеивающие";
+            case 523: return "Сура 51. Аз-Зарият - Рассеивающие, аяты 52-60, \nСура 52. Ат-Тур - Гора, аяты 1-14";
             case 524:
             case 525:
                 return "Сура 52. Ат-Тур - Гора";
             case 526:
             case 527:
                 return "Сура 53. Ан-Наджм - Звезда";
-            case 528:
+            case 528: return "Сура 53. Ан-Наджм - Звезда, аяты 45-62, Саджда-Тилява после 62-го аята, \nСура 54. Аль-Камар - Луна, аяты 1-6";
             case 529:
             case 530:
                 return "Сура 54. Аль-Камар - Луна";
-            case 531:
+            case 531: return "Сура 54. Аль-Камар - Луна, аяты 50-55, \nСура 55. Ар-Рахман - Милостивый, аяты 1-16";
             case 532:
             case 533:
                 return "Сура 55. Ар-Рахман - Милостивый";
-            case 534:
+            case 534: return "Сура 55. Ар-Рахман - Милостивый, аяты 68-78, \nСура 56. Аль-Вакы'а - Неотвратимое событие - аяты 1-16";
             case 535:
             case 536:
                 return "Сура 56. Аль-Вакы'а - Неотвратимое событие";
-            case 537:
+            case 537: return "Сура 56. Аль-Вакы'а - Неотвратимое событие, аяты 77-96, \nСура 57. Аль-Хадид - Железо, аяты 1-3";
             case 538:
             case 539:
             case 540:
@@ -1292,20 +1478,20 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 543:
             case 544:
                 return "Сура 58. Аль-Муджадала - Препирающаяся";
-            case 545:
+            case 545: return "Сура 58. Аль-Муджадала - Препирающаяся, аят 22, \nСура 59. Аль-Хашр - Сбор, аяты 1-3";
             case 546:
             case 547:
             case 548:
                 return "Сура 59. Аль-Хашр - Сбор";
             case 549:
             case 550:
-                return "Сура 60. Аль-Мумтахина - Испытуемые";
-            case 551:
+                return "Сура 60. Аль-Мумтахина - Испытуемая";
+            case 551: return "Сура 60. Аль-Мумтахина - Испытуемая, аяты 12-13, \nСура 61. Ас-Сафф - Ряд, аяты 1-5";
             case 552:
                 return "Сура 61. Ас-Сафф - Ряд";
             case 553:
                 return "Сура 62. Аль-Джуму'а - Пятница";
-            case 554:
+            case 554: return "Сура 62. Аль-Джуму'а - Пятница, аяты 9-11, \nСура 63. Аль-Мунафикун - Лицемеры, аяты 1-4";
             case 555:
                 return "Сура 63. Аль-Мунафикун - Лицемеры";
             case 556:
@@ -1320,16 +1506,16 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 562:
             case 563:
                 return "Сура 67. Аль-Мульк - Власть";
-            case 564:
+            case 564: return "Сура 67. Аль-Мульк - Власть, аяты 27-30, \nСура 68. Аль-Калям - Письменная трость, аяты 1-15";
             case 565:
-                return "Сура 68. Аль-Калам - Письменная трость";
-            case 566:
+                return "Сура 68. Аль-Калям - Письменная трость";
+            case 566: return "Сура 68. Аль-Калям - Письменная трость, аяты 43-52, \nСура 69. Аль-Хакка - Неизбежное, аяты 1-8";
             case 567:
                 return "Сура 69. Аль-Хакка - Неизбежное";
-            case 568:
+            case 568: return "Сура 69. Аль-Хакка - Неизбежное, аяты 35-52, \nСура 70. Аль-Ма'аридж - Ступени, аяты 1-10";
             case 569:
                 return "Сура 70. Аль-Ма'аридж - Ступени";
-            case 570:
+            case 570: return "Сура 70. Аль-Ма'аридж - Ступени, аяты 40-44, \nСура 71. Нух - Нух (Ной), аяты 1-10";
             case 571:
                 return "Сура 71. Нух - Нух (Ной)";
             case 572:
@@ -1337,44 +1523,43 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                 return "Сура 72. Аль-Джинн - Джинны";
             case 574:
                 return "Сура 73. Аль-Муззаммиль - Закутавшийся";
-            case 575:
+            case 575: return "Сура 73. Аль-Муззаммиль - Закутавшийся, аят 20, \nСура 74. Аль-Муддассир - Завернувшийся, аяты 1-17";
             case 576:
                 return "Сура 74. Аль-Муддассир - Завернувшийся";
-            case 577:
-                return "Сура 75. Аль-Кыяма - Воскресение";
-            case 578:
+            case 577: return "Сура 74. Аль-Муддассир - Завернувшийся, аяты 48-56, \nСура 75. Аль-Кыяма - Воскресение, аяты 1-19";
+            case 578: return "Сура 75. Аль-Кыяма - Воскресение, аяты 20-30, \nСура 76. Аль-Инсан - Человек, аяты 1-5";
             case 579:
                 return "Сура 76. Аль-Инсан - Человек";
-            case 580:
+            case 580: return "Сура 76. Аль-Инсан - Человек, 26-31, \nСура 77. Аль-Мурсалят - Посланные, аяты 1-19";
             case 581:
                 return "Сура 77. Аль-Мурсалят - Посланные";
             case 582:
                 return "Сура 78. Ан-Наба - Весть";
-            case 583:
+            case 583: return "Сура 78. Ан-Наба - Весть, аяты 31-40, \nСура 79. Ан-Назиат - Вырывающие, аяты 1-15";
             case 584:
                 return "Сура 79. Ан-Назиат - Вырывающие";
             case 585:
                 return "Сура 80. Абаса - Нахмурившийся";
             case 586:
                 return "Сура 81. Ат-Таквир - Скручивание";
-            case 587: return "Сура 82. Аль-Инфитар - Раскалывание \n Сура 83. Аль-Мутаффифин - Обвешивающие";
-            case 588: return "Сура 83. Аль-Мутаффифин - Обвешивающие";
-            case 589: return "Сура 84. Аль-Иншикак - Разверзнется";
-            case 590: return "Сура 85. Аль-Бурудж - Созвездия";
-            case 591: return "Сура 86. Ат-Тарик - Ночной путник \n Сура 87. Аль-А'ля - Высочайший";
-            case 592: return "Сура 88. Аль-Гашия - Покрывающее";
-            case 593: return "Сура 89. Аль-Фаджр - Заря";
-            case 594: return "Сура 90. Аль-Баляд - Город";
-            case 595: return "Сура 91. Аш-Шамс - Солнце \n Сура 92. Аль-Ляйл - Ночь";
-            case 596: return "Сура 93. Ад-Духа - Утро \n Сура 94. Аш-Шарх - Раскрытие";
-            case 597: return "Сура 95. Ат-Тин - Инжир \n Сура 96. Аль-'Аляк - Сгусток крови";
-            case 598: return "Сура 97. Аль-Кадр - Ночь предопределения \n Сура 98. Аль-Баййина - Ясное знамение";
-            case 599: return "Сура 99. Аз-Зальзаля - Землетрясение \n Сура 100. Аль-'Адият - Скачущие";
-            case 600: return "Сура 101. Аль-Кари'а - Великое бедствие \n Сура 102. Ат-Такасур - Страсть к приумножению";
-            case 601: return "Сура 103. Аль-'Аср - Предвечернее время \n Сура 104. Аль-Хумаза - Хулитель \n Сура 105. Аль-Филь - Слон";
-            case 602: return "Сура 106. Курайш - Курайшиты \n Сура 107. Аль-Ма'ун - Мелочь \n Сура 108. Аль-Кяусар - Изобилие";
-            case 603: return "Сура 109. Аль-Кяфирун - Неверующие \n Сура 110. Ан-Наср - Победа \n Сура 111. Аль-Ляхаб - Пальмовые волокна";
-            case 604: return "Сура 112. Аль-Ихляс - Искренность \n Сура 113. Аль-Фаляк - Рассвет \n Сура 114. Ан-Нас - Люди";
+            case 587: return "Сура 82. Аль-Инфитар - Раскалывание, аяты 1-19, \n Сура 83. Аль-Мутаффифин - Обвешивающие, аяты 1-6";
+            case 588: return "Сура 83. Аль-Мутаффифин - Обвешивающие, аяты 7-34";
+            case 589: return "Сура 83. Аль-Мутаффифин - Обвешивающие, аят 35, \nСура 84. Аль-Иншикак - Разверзнется, аяты 1-25, Саджда-Тилява после 21-го аята";
+            case 590: return "Сура 85. Аль-Бурудж - Созвездия, аяты 1-22";
+            case 591: return "Сура 86. Ат-Тарик - Ночной путник, аяты 1-17, \n Сура 87. Аль-А'ля - Высочайший, аяты 1-15";
+            case 592: return "Сура 87. Аль-А'ля - Высочайший, аяты 16-19, \nСура 88. Аль-Гашия - Покрывающее, аяты 1-26";
+            case 593: return "Сура 89. Аль-Фаджр - Заря, аяты 1-23";
+            case 594: return "Сура 89. Аль-Фаджр - Заря, аяты 24-30, \nСура 90. Аль-Баляд - Город, аяты 1-20";
+            case 595: return "Сура 91. Аш-Шамс - Солнце, аяты 1-15, \nСура 92. Аль-Ляйль - Ночь, аяты 1-14";
+            case 596: return "Сура 92. Аль-Ляйль - Ночь, аяты 15-21, \nСура 93. Ад-Духа - Утро, аяты 1-11, \n Сура 94. Аш-Шарх - Раскрытие, аяты 1-8";
+            case 597: return "Сура 95. Ат-Тин - Инжир, аяты 1-8, \nСура 96. Аль-'Аляк - Сгусток крови, аяты 1-19, Саджда-Тилява после 19-го аята";
+            case 598: return "Сура 97. Аль-Кадр - Ночь предопределения, аяты 1-5, \nСура 98. Аль-Баййина - Ясное знамение, аяты 1-7";
+            case 599: return "Сура 98. Аль-Баййина - Ясное знамение, аят 8, \nСура 99. Аз-Зальзаля - Землетрясение, аяты 1-8, \nСура 100. Аль-'Адият - Скачущие, аяты 1-9";
+            case 600: return "Сура 100. Аль-'Адият - Скачущие, аяты 10-11, \nСура 101. Аль-Кари'а - Великое бедствие, аяты 1-11, \nСура 102. Ат-Такасур - Страсть к приумножению, аяты 1-8";
+            case 601: return "Сура 103. Аль-'Аср - Предвечернее время, аяты 1-3 \nСура 104. Аль-Хумаза - Хулитель, аяты 1-9, \nСура 105. Аль-Филь - Слон, аяты 1-5";
+            case 602: return "Сура 106. Курайш - Курайшиты, аяты 1-4, \nСура 107. Аль-Ма'ун - Мелочь, аяты 1-7, \nСура 108. Аль-Кяусар - Изобилие, аяты 1-3";
+            case 603: return "Сура 109. Аль-Кяфирун - Неверующие, аяты 1-6, \nСура 110. Ан-Наср - Победа, аяты 1-3, \nСура 111. Аль-Ляхаб - Пальмовые волокна, аяты 1-5";
+            case 604: return "Сура 112. Аль-Ихляс - Искренность, аяты 1-4, \nСура 113. Аль-Фаляк - Рассвет, аяты 1-5, \nСура 114. Ан-Нас - Люди, аяты 1-6";
 
             default:
                 return "Страница не найдена";
@@ -1416,6 +1601,25 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         return false;
     }
 
+    public void updateBookmarkIcon(int page, MenuItem menuItem) {
+        try {
+            // Проверка наличия закладки на текущей странице
+            BookmarkAdapter bookmarkAdapter = BookmarkAdapter.this;
+            boolean isBookmarked = bookmarkAdapter.isBookmarked(page);
+
+            if (isBookmarked) {
+                // Если на текущей странице есть закладка, установите значок bookmark_full
+                menuItem.setIcon(R.drawable.bookmark_full);
+            } else {
+                // Если закладки нет, установите значок bookmark_empty
+                menuItem.setIcon(R.drawable.bookmark_empty);
+            }
+        } catch (Exception e) {
+            // Вывод исключения в лог для отладки
+            e.printStackTrace();
+        }
+    }
+
     /*private int getSuraIndex(int page) {
         for (int i = 0; i < numPageSures.length - 1; i++) {
             if (page >= numPageSures[i] && page < numPageSures[i + 1]) {
@@ -1451,5 +1655,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
      * к заданной странице
      * 2. Исправить ошибку с закладками (для каждой позиции должна быть отдельная закладка)
      */
+
+    public interface BookmarkCallback {
+        void onBookmarkRemoved(int page);
+    }
 
 }

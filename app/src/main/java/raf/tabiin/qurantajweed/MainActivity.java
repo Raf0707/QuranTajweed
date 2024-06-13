@@ -16,6 +16,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -355,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
     }
 
-    private void goToPageAlert() {
+    /*private void goToPageAlert() {
 
         MaterialAlertDialogBuilder alert =
                 new MaterialAlertDialogBuilder(this);
@@ -391,7 +393,77 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         alert.setView(dialogView);
         alert.show();
 
+    }*/
+
+    private void goToPageAlert() {
+
+        MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(this);
+
+        View dialogView = getLayoutInflater().inflate(R.layout.go_to_page_dialog, null);
+
+        alert.setTitle("Перейти на страницу");
+        alert.setMessage("Введите страницу");
+        alert.setCancelable(true);
+
+        EditText pageNum = dialogView.findViewById(R.id.pageNum);
+        TextView suraTitle = dialogView.findViewById(R.id.suraTitleAyats);
+
+        // Добавляем TextWatcher для обновления названия суры и аятов при вводе номера страницы
+        pageNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Не требуется реализация
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Не требуется реализация
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String input = s.toString().replaceAll("[\\.\\-,\\s]+", "");
+                if (!input.isEmpty()) {
+                    int page;
+                    try {
+                        page = Integer.parseInt(input);
+                    } catch (NumberFormatException e) {
+                        suraTitle.setText("");
+                        return;
+                    }
+                    if (page >= 1 && page <= 604) {
+                        suraTitle.setText(bookmarkAdapter.getSuraTitle(page)+",\n"+bookmarkAdapter.getAyatsOnPage(page));
+
+                    } else {
+                        suraTitle.setText("");
+                    }
+                } else {
+                    suraTitle.setText("");
+                }
+            }
+        });
+
+        alert.setNegativeButton("Отмена", (dialogInterface, i) -> {
+            // Ничего не делаем
+        });
+
+        alert.setPositiveButton("Перейти", (dialogInterface, i) -> {
+            if (pageNum.getText().toString().length() == 0) {
+                Snackbar.make(b.getRoot(), "Ничего не введено. Введите номер страницы", Snackbar.LENGTH_SHORT).show();
+            } else {
+                int page = Integer.parseInt(pageNum.getText().toString().replaceAll("[\\.\\-,\\s]+", ""));
+                if ((page < 1) || (page > 604) || (pageNum.getText().toString().isEmpty())) {
+                    Snackbar.make(b.getRoot(), "В Коране 604 страницы. Введите номер от 1 до 604", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    viewPager.setCurrentItem(page - 1, true);
+                }
+            }
+        });
+
+        alert.setView(dialogView);
+        alert.show();
     }
+
 
     // Проверка на наличие интернет-подключения
     private boolean isInternetConnected(Context context) {
