@@ -507,7 +507,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 219: return " аяты: 89-97";
             case 220: return " аяты: 98-106";
 
-            case 221: return " аяты: ";
+            case 221: return "";
 
             // Сура 11 Худ - Пророк Худ
             case 222: return " аяты: 6-12";
@@ -778,7 +778,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 432: return " аяты: 32-39";
             case 433: return " аяты: 40-48";
 
-            case 434: return " аяты: ";
+            case 434: return "";
 
             // Сура 35 Фатыр - Творец
             case 435: return " аяты: 4-11";
@@ -814,7 +814,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
             case 458: return "";
 
-            // Сура Аз-Зумар - Толпы
+            // Сура 39 - Аз-Зумар - Толпы
             case 459: return " аяты: 6-10";
             case 460: return " аяты: 11-21";
             case 461: return " аяты: 22-31";
@@ -822,11 +822,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 463: return " аяты: 41-47";
             case 464: return " аяты: 48-56";
             case 465: return " аяты: 57-67";
-            case 466: return " аяты: 68-83";
+            case 466: return " аяты: 68-74";
 
             case 467: return "";
 
-            // Сура 40 Аль-Гафир - Прощающий
+            // Сура 40 - Аль-Гафир - Прощающий
             case 468: return " аяты: 8-16";
             case 469: return " аяты: 17-25";
             case 470: return " аяты: 26-33";
@@ -1564,6 +1564,1014 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             default:
                 return "Страница не найдена";
         }
+    }
+
+    //TODO
+    public int goToAyat(int numSure, int numAyat) {
+        int numPage = 1;
+        switch (numSure) {
+            case 1:
+                if (numAyat >= 1 && numAyat <= 7) numPage = 1;
+                else return -1;
+                break;
+            case 2:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 2;
+                else if (numAyat >= 6 && numAyat <= 16) numPage = 3;
+                else if (numAyat >= 17 && numAyat <= 24) numPage = 4;
+                else if (numAyat >= 25 && numAyat <= 29) numPage = 5;
+                else if (numAyat >= 30 && numAyat <= 37) numPage = 6;
+                else if (numAyat >= 38 && numAyat <= 48) numPage = 7;
+                else if (numAyat >= 49 && numAyat <= 57) numPage = 8;
+                else if (numAyat >= 58 && numAyat <= 61) numPage = 9;
+                else if (numAyat >= 62 && numAyat <= 69) numPage = 10;
+                else if (numAyat >= 70 && numAyat <= 76) numPage = 11;
+                else if (numAyat >= 77 && numAyat <= 83) numPage = 12;
+                else if (numAyat >= 84 && numAyat <= 88) numPage = 13;
+                else if (numAyat >= 89 && numAyat <= 93) numPage = 14;
+                else if (numAyat >= 94 && numAyat <= 101) numPage = 15;
+                else if (numAyat >= 102 && numAyat <= 105) numPage = 16;
+                else if (numAyat >= 106 && numAyat <= 112) numPage = 17;
+                else if (numAyat >= 113 && numAyat <= 119) numPage = 18;
+                else if (numAyat >= 120 && numAyat <= 126) numPage = 19;
+                else if (numAyat >= 127 && numAyat <= 134) numPage = 20;
+                else if (numAyat >= 135 && numAyat <= 141) numPage = 21;
+                else if (numAyat >= 142 && numAyat <= 145) numPage = 22;
+                else if (numAyat >= 146 && numAyat <= 153) numPage = 23;
+                else if (numAyat >= 154 && numAyat <= 163) numPage = 24;
+                else if (numAyat >= 164 && numAyat <= 169) numPage = 25;
+                else if (numAyat >= 170 && numAyat <= 176) numPage = 26;
+                else if (numAyat >= 177 && numAyat <= 181) numPage = 27;
+                else if (numAyat >= 182 && numAyat <= 186) numPage = 28;
+                else if (numAyat >= 187 && numAyat <= 190) numPage = 29;
+                else if (numAyat >= 191 && numAyat <= 196) numPage = 30;
+                else if (numAyat >= 197 && numAyat <= 202) numPage = 31;
+                else if (numAyat >= 203 && numAyat <= 210) numPage = 32;
+                else if (numAyat >= 211 && numAyat <= 215) numPage = 33;
+                else if (numAyat >= 216 && numAyat <= 219) numPage = 34;
+                else if (numAyat >= 220 && numAyat <= 224) numPage = 35;
+                else if (numAyat >= 225 && numAyat <= 230) numPage = 36;
+                else if (numAyat >= 231 && numAyat <= 233) numPage = 37;
+                else if (numAyat >= 234 && numAyat <= 237) numPage = 38;
+                else if (numAyat >= 238 && numAyat <= 245) numPage = 39;
+                else if (numAyat >= 246 && numAyat <= 248) numPage = 40;
+                else if (numAyat >= 249 && numAyat <= 252) numPage = 41;
+                else if (numAyat >= 253 && numAyat <= 256) numPage = 42;
+                else if (numAyat >= 257 && numAyat <= 259) numPage = 43;
+                else if (numAyat >= 260 && numAyat <= 264) numPage = 44;
+                else if (numAyat >= 265 && numAyat <= 269) numPage = 45;
+                else if (numAyat >= 270 && numAyat <= 274) numPage = 46;
+                else if (numAyat >= 275 && numAyat <= 281) numPage = 47;
+                else if (numAyat == 282) numPage = 48;
+                else if (numAyat >= 283 && numAyat <= 286) numPage = 49;
+                break;
+            case 3:
+                if (numAyat >= 1 && numAyat <= 9) numPage = 50;
+                else if (numAyat >= 10 && numAyat <= 15) numPage = 51;
+                else if (numAyat >= 16 && numAyat <= 22) numPage = 52;
+                else if (numAyat >= 23 && numAyat <= 29) numPage = 53;
+                else if (numAyat >= 30 && numAyat <= 37) numPage = 54;
+                else if (numAyat >= 38 && numAyat <= 45) numPage = 55;
+                else if (numAyat >= 46 && numAyat <= 52) numPage = 56;
+                else if (numAyat >= 53 && numAyat <= 61) numPage = 57;
+                else if (numAyat >= 62 && numAyat <= 70) numPage = 58;
+                else if (numAyat >= 71 && numAyat <= 77) numPage = 59;
+                else if (numAyat >= 78 && numAyat <= 83) numPage = 60;
+                else if (numAyat >= 84 && numAyat <= 91) numPage = 61;
+                else if (numAyat >= 92 && numAyat <= 100) numPage = 62;
+                else if (numAyat >= 101 && numAyat <= 108) numPage = 63;
+                else if (numAyat >= 109 && numAyat <= 115) numPage = 64;
+                else if (numAyat >= 116 && numAyat <= 121) numPage = 65;
+                else if (numAyat >= 122 && numAyat <= 132) numPage = 66;
+                else if (numAyat >= 133 && numAyat <= 140) numPage = 67;
+                else if (numAyat >= 141 && numAyat <= 148) numPage = 68;
+                else if (numAyat >= 149 && numAyat <= 153) numPage = 69;
+                else if (numAyat >= 154 && numAyat <= 157) numPage = 70;
+                else if (numAyat >= 158 && numAyat <= 165) numPage = 71;
+                else if (numAyat >= 166 && numAyat <= 173) numPage = 72;
+                else if (numAyat >= 174 && numAyat <= 180) numPage = 73;
+                else if (numAyat >= 181 && numAyat <= 186) numPage = 74;
+                else if (numAyat >= 187 && numAyat <= 194) numPage = 75;
+                else if (numAyat >= 195 && numAyat <= 200) numPage = 76;
+                break;
+
+            case 4:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 77;
+                else if (numAyat >= 7 && numAyat <= 11) numPage = 78;
+                else if (numAyat >= 12 && numAyat <= 14) numPage = 79;
+                else if (numAyat >= 15 && numAyat <= 19) numPage = 80;
+                else if (numAyat >= 20 && numAyat <= 23) numPage = 81;
+                else if (numAyat >= 24 && numAyat <= 26) numPage = 82;
+                else if (numAyat >= 27 && numAyat <= 33) numPage = 83;
+                else if (numAyat >= 34 && numAyat <= 37) numPage = 84;
+                else if (numAyat >= 38 && numAyat <= 44) numPage = 85;
+                else if (numAyat >= 45 && numAyat <= 51) numPage = 86;
+                else if (numAyat >= 52 && numAyat <= 59) numPage = 87;
+                else if (numAyat >= 60 && numAyat <= 65) numPage = 88;
+                else if (numAyat >= 66 && numAyat <= 74) numPage = 89;
+                else if (numAyat >= 75 && numAyat <= 79) numPage = 90;
+                else if (numAyat >= 80 && numAyat <= 86) numPage = 91;
+                else if (numAyat >= 87 && numAyat <= 91) numPage = 92;
+                else if (numAyat >= 92 && numAyat <= 94) numPage = 93;
+                else if (numAyat >= 95 && numAyat <= 101) numPage = 94;
+                else if (numAyat >= 102 && numAyat <= 105) numPage = 95;
+                else if (numAyat >= 106 && numAyat <= 113) numPage = 96;
+                else if (numAyat >= 114 && numAyat <= 121) numPage = 97;
+                else if (numAyat >= 122 && numAyat <= 127) numPage = 98;
+                else if (numAyat >= 128 && numAyat <= 134) numPage = 99;
+                else if (numAyat >= 135 && numAyat <= 140) numPage = 100;
+                else if (numAyat >= 141 && numAyat <= 147) numPage = 101;
+                else if (numAyat >= 148 && numAyat <= 153) numPage = 102;
+                else if (numAyat >= 154 && numAyat <= 162) numPage = 103;
+                else if (numAyat >= 163 && numAyat <= 170) numPage = 104;
+                else if (numAyat >= 171 && numAyat <= 175) numPage = 105;
+                else if (numAyat == 176) numPage = 106;
+                break;
+
+            case 5:
+                if (numAyat >= 1 && numAyat <= 2) numPage = 106;
+                else if (numAyat >= 3 && numAyat <= 5) numPage = 107;
+                else if (numAyat >= 6 && numAyat <= 9) numPage = 108;
+                else if (numAyat >= 10 && numAyat <= 13) numPage = 109;
+                else if (numAyat >= 14 && numAyat <= 17) numPage = 110;
+                else if (numAyat >= 18 && numAyat <= 23) numPage = 111;
+                else if (numAyat >= 24 && numAyat <= 311) numPage = 112; // Поменяйте диапазон с 24-311 на корректный
+                else if (numAyat >= 32 && numAyat <= 36) numPage = 113;
+                else if (numAyat >= 37 && numAyat <= 41) numPage = 114;
+                else if (numAyat >= 42 && numAyat <= 45) numPage = 115;
+                else if (numAyat >= 46 && numAyat <= 50) numPage = 116;
+                else if (numAyat >= 51 && numAyat <= 57) numPage = 117;
+                else if (numAyat >= 58 && numAyat <= 64) numPage = 118;
+                else if (numAyat >= 65 && numAyat <= 70) numPage = 119;
+                else if (numAyat >= 71 && numAyat <= 76) numPage = 120;
+                else if (numAyat >= 77 && numAyat <= 82) numPage = 121;
+                else if (numAyat >= 83 && numAyat <= 89) numPage = 122;
+                else if (numAyat >= 90 && numAyat <= 95) numPage = 123;
+                else if (numAyat >= 96 && numAyat <= 103) numPage = 124;
+                else if (numAyat >= 104 && numAyat <= 108) numPage = 125;
+                else if (numAyat >= 109 && numAyat <= 113) numPage = 126;
+                else if (numAyat >= 114 && numAyat <= 120) numPage = 127;
+                break;
+
+            case 6:
+                if (numAyat >= 1 && numAyat <= 8) numPage = 128;
+                else if (numAyat >= 9 && numAyat <= 18) numPage = 129;
+                else if (numAyat >= 19 && numAyat <= 27) numPage = 130;
+                else if (numAyat >= 28 && numAyat <= 35) numPage = 131;
+                else if (numAyat >= 36 && numAyat <= 44) numPage = 132;
+                else if (numAyat >= 45 && numAyat <= 52) numPage = 133;
+                else if (numAyat >= 53 && numAyat <= 59) numPage = 134;
+                else if (numAyat >= 60 && numAyat <= 68) numPage = 135;
+                else if (numAyat >= 69 && numAyat <= 73) numPage = 136;
+                else if (numAyat >= 74 && numAyat <= 81) numPage = 137;
+                else if (numAyat >= 82 && numAyat <= 90) numPage = 138;
+                else if (numAyat >= 91 && numAyat <= 94) numPage = 139;
+                else if (numAyat >= 95 && numAyat <= 101) numPage = 140;
+                else if (numAyat >= 102 && numAyat <= 110) numPage = 141;
+                else if (numAyat >= 111 && numAyat <= 118) numPage = 142;
+                else if (numAyat >= 119 && numAyat <= 124) numPage = 143;
+                else if (numAyat >= 125 && numAyat <= 131) numPage = 144;
+                else if (numAyat >= 132 && numAyat <= 137) numPage = 145;
+                else if (numAyat >= 138 && numAyat <= 142) numPage = 146;
+                else if (numAyat >= 143 && numAyat <= 146) numPage = 147;
+                else if (numAyat >= 147 && numAyat <= 151) numPage = 148;
+                else if (numAyat >= 152 && numAyat <= 157) numPage = 149;
+                else if (numAyat >= 158 && numAyat <= 165) numPage = 150;
+                break;
+
+            case 7:
+                if (numAyat >= 1 && numAyat <= 11) numPage = 151;
+                else if (numAyat >= 12 && numAyat <= 22) numPage = 152;
+                else if (numAyat >= 23 && numAyat <= 30) numPage = 153;
+                else if (numAyat >= 31 && numAyat <= 37) numPage = 154;
+                else if (numAyat >= 38 && numAyat <= 43) numPage = 155;
+                else if (numAyat >= 44 && numAyat <= 51) numPage = 156;
+                else if (numAyat >= 52 && numAyat <= 57) numPage = 157;
+                else if (numAyat >= 58 && numAyat <= 67) numPage = 158;
+                else if (numAyat >= 68 && numAyat <= 73) numPage = 159;
+                else if (numAyat >= 74 && numAyat <= 81) numPage = 160;
+                else if (numAyat >= 82 && numAyat <= 87) numPage = 161;
+                else if (numAyat >= 88 && numAyat <= 95) numPage = 162;
+                else if (numAyat >= 96 && numAyat <= 104) numPage = 163;
+                else if (numAyat >= 105 && numAyat <= 120) numPage = 164;
+                else if (numAyat >= 121 && numAyat <= 130) numPage = 165;
+                else if (numAyat >= 131 && numAyat <= 137) numPage = 166;
+                else if (numAyat >= 138 && numAyat <= 143) numPage = 167;
+                else if (numAyat >= 144 && numAyat <= 149) numPage = 168;
+                else if (numAyat >= 150 && numAyat <= 155) numPage = 169;
+                else if (numAyat >= 156 && numAyat <= 159) numPage = 170;
+                else if (numAyat >= 160 && numAyat <= 163) numPage = 171;
+                else if (numAyat >= 164 && numAyat <= 170) numPage = 172;
+                else if (numAyat >= 171 && numAyat <= 178) numPage = 173;
+                else if (numAyat >= 179 && numAyat <= 187) numPage = 174;
+                else if (numAyat >= 188 && numAyat <= 195) numPage = 175;
+                else if (numAyat >= 196 && numAyat <= 206) numPage = 176;
+                break;
+
+            case 8:
+                if (numAyat >= 1 && numAyat <= 8) numPage = 177;
+                else if (numAyat >= 9 && numAyat <= 16) numPage = 178;
+                else if (numAyat >= 17 && numAyat <= 25) numPage = 179;
+                else if (numAyat >= 26 && numAyat <= 33) numPage = 180;
+                else if (numAyat >= 34 && numAyat <= 40) numPage = 181;
+                else if (numAyat >= 41 && numAyat <= 45) numPage = 182;
+                else if (numAyat >= 46 && numAyat <= 52) numPage = 183;
+                else if (numAyat >= 53 && numAyat <= 61) numPage = 184;
+                else if (numAyat >= 62 && numAyat <= 69) numPage = 185;
+                else if (numAyat >= 70 && numAyat <= 75) numPage = 186;
+                break;
+
+            case 9:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 187;
+                else if (numAyat >= 7 && numAyat <= 13) numPage = 188;
+                else if (numAyat >= 14 && numAyat <= 20) numPage = 189;
+                else if (numAyat >= 21 && numAyat <= 26) numPage = 190;
+                else if (numAyat >= 27 && numAyat <= 31) numPage = 191;
+                else if (numAyat >= 32 && numAyat <= 36) numPage = 192;
+                else if (numAyat >= 37 && numAyat <= 40) numPage = 193;
+                else if (numAyat >= 41 && numAyat <= 47) numPage = 194;
+                else if (numAyat >= 48 && numAyat <= 53) numPage = 195;
+                else if (numAyat >= 54 && numAyat <= 61) numPage = 196;
+                else if (numAyat >= 62 && numAyat <= 68) numPage = 197;
+                else if (numAyat >= 69 && numAyat <= 72) numPage = 198;
+                else if (numAyat >= 73 && numAyat <= 79) numPage = 199;
+                else if (numAyat >= 80 && numAyat <= 86) numPage = 200;
+                else if (numAyat >= 87 && numAyat <= 93) numPage = 201;
+                else if (numAyat >= 94 && numAyat <= 99) numPage = 202;
+                else if (numAyat >= 100 && numAyat <= 106) numPage = 203;
+                else if (numAyat >= 107 && numAyat <= 111) numPage = 204;
+                else if (numAyat >= 112 && numAyat <= 117) numPage = 205;
+                else if (numAyat >= 118 && numAyat <= 122) numPage = 206;
+                else if (numAyat >= 123 && numAyat <= 129) numPage = 207;
+                break;
+
+            case 10:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 208;
+                else if (numAyat >= 7 && numAyat <= 14) numPage = 209;
+                else if (numAyat >= 15 && numAyat <= 20) numPage = 210;
+                else if (numAyat >= 21 && numAyat <= 25) numPage = 211;
+                else if (numAyat >= 26 && numAyat <= 33) numPage = 212;
+                else if (numAyat >= 34 && numAyat <= 42) numPage = 213;
+                else if (numAyat >= 43 && numAyat <= 53) numPage = 214;
+                else if (numAyat >= 54 && numAyat <= 61) numPage = 215;
+                else if (numAyat >= 62 && numAyat <= 70) numPage = 216;
+                else if (numAyat >= 71 && numAyat <= 78) numPage = 217;
+                else if (numAyat >= 79 && numAyat <= 88) numPage = 218;
+                else if (numAyat >= 89 && numAyat <= 97) numPage = 219;
+                else if (numAyat >= 98 && numAyat <= 106) numPage = 220;
+                else if (numAyat >= 107 && numAyat <= 109) numPage = 221;
+                break;
+
+            case 11:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 221;
+                else if (numAyat >= 6 && numAyat <= 12) numPage = 222;
+                else if (numAyat >= 13 && numAyat <= 19) numPage = 223;
+                else if (numAyat >= 20 && numAyat <= 28) numPage = 224;
+                else if (numAyat >= 29 && numAyat <= 37) numPage = 225;
+                else if (numAyat >= 38 && numAyat <= 45) numPage = 226;
+                else if (numAyat >= 46 && numAyat <= 53) numPage = 227;
+                else if (numAyat >= 54 && numAyat <= 62) numPage = 228;
+                else if (numAyat >= 63 && numAyat <= 71) numPage = 229;
+                else if (numAyat >= 72 && numAyat <= 81) numPage = 230;
+                else if (numAyat >= 82 && numAyat <= 88) numPage = 231;
+                else if (numAyat >= 89 && numAyat <= 97) numPage = 232;
+                else if (numAyat >= 98 && numAyat <= 108) numPage = 233;
+                else if (numAyat >= 109 && numAyat <= 117) numPage = 234;
+                else if (numAyat >= 118 && numAyat <= 123) numPage = 235;
+                break;
+
+            case 12:
+                if (numAyat >= 1 && numAyat <= 4) numPage = 235;
+                else if (numAyat >= 5 && numAyat <= 14) numPage = 236;
+                else if (numAyat >= 15 && numAyat <= 22) numPage = 237;
+                else if (numAyat >= 23 && numAyat <= 30) numPage = 238;
+                else if (numAyat >= 31 && numAyat <= 37) numPage = 239;
+                else if (numAyat >= 38 && numAyat <= 43) numPage = 240;
+                else if (numAyat >= 44 && numAyat <= 52) numPage = 241;
+                else if (numAyat >= 53 && numAyat <= 63) numPage = 242;
+                else if (numAyat >= 64 && numAyat <= 69) numPage = 243;
+                else if (numAyat >= 70 && numAyat <= 78) numPage = 244;
+                else if (numAyat >= 79 && numAyat <= 86) numPage = 245;
+                else if (numAyat >= 87 && numAyat <= 95) numPage = 246;
+                else if (numAyat >= 96 && numAyat <= 103) numPage = 247;
+                else if (numAyat >= 104 && numAyat <= 111) numPage = 248;
+                break;
+
+            case 13:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 249;
+                else if (numAyat >= 6 && numAyat <= 13) numPage = 250;
+                else if (numAyat >= 14 && numAyat <= 18) numPage = 251;
+                else if (numAyat >= 19 && numAyat <= 28) numPage = 252;
+                else if (numAyat >= 29 && numAyat <= 34) numPage = 253;
+                else if (numAyat >= 35 && numAyat <= 42) numPage = 254;
+                else if (numAyat == 43) numPage = 255; // отдельный аят
+                break;
+
+            case 14:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 255;
+                else if (numAyat >= 6 && numAyat <= 10) numPage = 256;
+                else if (numAyat >= 11 && numAyat <= 18) numPage = 257;
+                else if (numAyat >= 19 && numAyat <= 24) numPage = 258;
+                else if (numAyat >= 25 && numAyat <= 33) numPage = 259;
+                else if (numAyat >= 34 && numAyat <= 42) numPage = 260;
+                else if (numAyat >= 43 && numAyat <= 52) numPage = 261;
+                break;
+
+            case 15:
+                if (numAyat >= 1 && numAyat <= 15) numPage = 262;
+                else if (numAyat >= 16 && numAyat <= 31) numPage = 263;
+                else if (numAyat >= 32 && numAyat <= 51) numPage = 264;
+                else if (numAyat >= 52 && numAyat <= 70) numPage = 265;
+                else if (numAyat >= 71 && numAyat <= 90) numPage = 266;
+                else if (numAyat >= 91 && numAyat <= 99) numPage = 267;
+                break;
+
+            case 16:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 267;
+                else if (numAyat >= 7 && numAyat <= 14) numPage = 268;
+                else if (numAyat >= 15 && numAyat <= 26) numPage = 269;
+                else if (numAyat >= 27 && numAyat <= 34) numPage = 270;
+                else if (numAyat >= 35 && numAyat <= 42) numPage = 271;
+                else if (numAyat >= 43 && numAyat <= 54) numPage = 272;
+                else if (numAyat >= 55 && numAyat <= 64) numPage = 273;
+                else if (numAyat >= 65 && numAyat <= 72) numPage = 274;
+                else if (numAyat >= 73 && numAyat <= 79) numPage = 275;
+                else if (numAyat >= 80 && numAyat <= 87) numPage = 276;
+                else if (numAyat >= 88 && numAyat <= 93) numPage = 277;
+                else if (numAyat >= 94 && numAyat <= 102) numPage = 278;
+                else if (numAyat >= 103 && numAyat <= 110) numPage = 279;
+                else if (numAyat >= 111 && numAyat <= 118) numPage = 280;
+                else if (numAyat >= 119 && numAyat <= 128) numPage = 281;
+                break;
+
+            case 17:
+                if (numAyat >= 1 && numAyat <= 7) numPage = 282;
+                else if (numAyat >= 8 && numAyat <= 17) numPage = 283;
+                else if (numAyat >= 18 && numAyat <= 27) numPage = 284;
+                else if (numAyat >= 28 && numAyat <= 38) numPage = 285;
+                else if (numAyat >= 39 && numAyat <= 49) numPage = 286;
+                else if (numAyat >= 50 && numAyat <= 58) numPage = 287;
+                else if (numAyat >= 59 && numAyat <= 66) numPage = 288;
+                else if (numAyat >= 67 && numAyat <= 75) numPage = 289;
+                else if (numAyat >= 76 && numAyat <= 86) numPage = 290;
+                else if (numAyat >= 87 && numAyat <= 96) numPage = 291;
+                else if (numAyat >= 97 && numAyat <= 104) numPage = 292;
+                else if (numAyat >= 105 && numAyat <= 111) numPage = 293;
+                break;
+
+            case 18:
+                if (numAyat >= 5 && numAyat <= 15) numPage = 294;
+                else if (numAyat >= 16 && numAyat <= 20) numPage = 295;
+                else if (numAyat >= 21 && numAyat <= 27) numPage = 296;
+                else if (numAyat >= 28 && numAyat <= 34) numPage = 297;
+                else if (numAyat >= 35 && numAyat <= 45) numPage = 298;
+                else if (numAyat >= 46 && numAyat <= 53) numPage = 299;
+                else if (numAyat >= 54 && numAyat <= 61) numPage = 300;
+                else if (numAyat >= 62 && numAyat <= 74) numPage = 301;
+                else if (numAyat >= 75 && numAyat <= 83) numPage = 302;
+                else if (numAyat >= 84 && numAyat <= 97) numPage = 303;
+                else if (numAyat >= 98 && numAyat <= 110) numPage = 304;
+                break;
+
+            case 19:
+                if (numAyat >= 1 && numAyat <= 11) numPage = 305;
+                else if (numAyat >= 12 && numAyat <= 25) numPage = 306;
+                else if (numAyat >= 26 && numAyat <= 38) numPage = 307;
+                else if (numAyat >= 39 && numAyat <= 51) numPage = 308;
+                else if (numAyat >= 52 && numAyat <= 64) numPage = 309;
+                else if (numAyat >= 65 && numAyat <= 76) numPage = 310;
+                else if (numAyat >= 77 && numAyat <= 95) numPage = 311;
+                else if (numAyat >= 96 && numAyat <= 98) numPage = 312;
+                break;
+
+            case 20:
+                if (numAyat >= 1 && numAyat <= 12) numPage = 312;
+                else if (numAyat >= 13 && numAyat <= 37) numPage = 313;
+                else if (numAyat >= 38 && numAyat <= 51) numPage = 314;
+                else if (numAyat >= 52 && numAyat <= 64) numPage = 315;
+                else if (numAyat >= 65 && numAyat <= 76) numPage = 316;
+                else if (numAyat >= 77 && numAyat <= 87) numPage = 317;
+                else if (numAyat >= 88 && numAyat <= 98) numPage = 318;
+                else if (numAyat >= 99 && numAyat <= 113) numPage = 319;
+                else if (numAyat >= 114 && numAyat <= 125) numPage = 320;
+                else if (numAyat >= 126 && numAyat <= 135) numPage = 321;
+                break;
+
+            case 21:
+                if (numAyat >= 1 && numAyat <= 10) numPage = 322;
+                else if (numAyat >= 11 && numAyat <= 24) numPage = 323;
+                else if (numAyat >= 25 && numAyat <= 35) numPage = 324;
+                else if (numAyat >= 36 && numAyat <= 44) numPage = 325;
+                else if (numAyat >= 45 && numAyat <= 57) numPage = 326;
+                else if (numAyat >= 58 && numAyat <= 72) numPage = 327;
+                else if (numAyat >= 73 && numAyat <= 81) numPage = 328;
+                else if (numAyat >= 82 && numAyat <= 90) numPage = 329;
+                else if (numAyat >= 91 && numAyat <= 101) numPage = 330;
+                else if (numAyat >= 102 && numAyat <= 112) numPage = 331;
+                break;
+
+            case 22:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 332;
+                else if (numAyat >= 6 && numAyat <= 15) numPage = 333;
+                else if (numAyat >= 16 && numAyat <= 23) numPage = 334;
+                else if (numAyat >= 24 && numAyat <= 30) numPage = 335;
+                else if (numAyat >= 31 && numAyat <= 38) numPage = 336;
+                else if (numAyat >= 39 && numAyat <= 46) numPage = 337;
+                else if (numAyat >= 47 && numAyat <= 55) numPage = 338;
+                else if (numAyat >= 56 && numAyat <= 64) numPage = 339;
+                else if (numAyat >= 65 && numAyat <= 72) numPage = 340;
+                else if (numAyat >= 73 && numAyat <= 78) numPage = 341;
+                break;
+
+            case 23:
+                if (numAyat >= 1 && numAyat <= 17) numPage = 342;
+                else if (numAyat >= 18 && numAyat <= 27) numPage = 343;
+                else if (numAyat >= 28 && numAyat <= 42) numPage = 344;
+                else if (numAyat >= 43 && numAyat <= 59) numPage = 345;
+                else if (numAyat >= 60 && numAyat <= 74) numPage = 346;
+                else if (numAyat >= 75 && numAyat <= 89) numPage = 347;
+                else if (numAyat >= 90 && numAyat <= 104) numPage = 348;
+                else if (numAyat >= 105 && numAyat <= 118) numPage = 349;
+                break;
+
+            case 24:
+                if (numAyat >= 1 && numAyat <= 10) numPage = 350;
+                else if (numAyat >= 11 && numAyat <= 20) numPage = 351;
+                else if (numAyat >= 21 && numAyat <= 27) numPage = 352;
+                else if (numAyat >= 28 && numAyat <= 31) numPage = 353;
+                else if (numAyat >= 32 && numAyat <= 36) numPage = 354;
+                else if (numAyat >= 37 && numAyat <= 43) numPage = 355;
+                else if (numAyat >= 44 && numAyat <= 53) numPage = 356;
+                else if (numAyat >= 54 && numAyat <= 58) numPage = 357;
+                else if (numAyat >= 59 && numAyat <= 61) numPage = 358;
+                else if (numAyat >= 62 && numAyat <= 64) numPage = 359;
+                break;
+
+            case 25:
+                if (numAyat >= 1 && numAyat <= 2) numPage = 359;
+                else if (numAyat >= 3 && numAyat <= 11) numPage = 360;
+                else if (numAyat >= 12 && numAyat <= 20) numPage = 361;
+                else if (numAyat >= 21 && numAyat <= 32) numPage = 362;
+                else if (numAyat >= 33 && numAyat <= 43) numPage = 363;
+                else if (numAyat >= 44 && numAyat <= 55) numPage = 364;
+                else if (numAyat >= 56 && numAyat <= 67) numPage = 365;
+                else if (numAyat >= 68 && numAyat <= 77) numPage = 366;
+                break;
+
+            case 26:
+                if (numAyat >= 1 && numAyat <= 19) numPage = 367;
+                else if (numAyat >= 20 && numAyat <= 39) numPage = 368;
+                else if (numAyat >= 40 && numAyat <= 60) numPage = 369;
+                else if (numAyat >= 61 && numAyat <= 83) numPage = 370;
+                else if (numAyat >= 84 && numAyat <= 111) numPage = 371;
+                else if (numAyat >= 112 && numAyat <= 136) numPage = 372;
+                else if (numAyat >= 137 && numAyat <= 159) numPage = 373;
+                else if (numAyat >= 160 && numAyat <= 183) numPage = 374;
+                else if (numAyat >= 184 && numAyat <= 206) numPage = 375;
+                else if (numAyat >= 207 && numAyat <= 227) numPage = 376;
+                break;
+
+            case 27:
+                if (numAyat >= 1 && numAyat <= 13) numPage = 377;
+                else if (numAyat >= 14 && numAyat <= 22) numPage = 378;
+                else if (numAyat >= 23 && numAyat <= 35) numPage = 379;
+                else if (numAyat >= 36 && numAyat <= 44) numPage = 380;
+                else if (numAyat >= 45 && numAyat <= 55) numPage = 381;
+                else if (numAyat >= 56 && numAyat <= 63) numPage = 382;
+                else if (numAyat >= 64 && numAyat <= 76) numPage = 383;
+                else if (numAyat >= 77 && numAyat <= 88) numPage = 384;
+                else if (numAyat >= 89 && numAyat <= 93) numPage = 385;
+                break;
+
+            case 28:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 385;
+                else if (numAyat >= 6 && numAyat <= 13) numPage = 386;
+                else if (numAyat >= 14 && numAyat <= 21) numPage = 387;
+                else if (numAyat >= 22 && numAyat <= 28) numPage = 388;
+                else if (numAyat >= 29 && numAyat <= 35) numPage = 389;
+                else if (numAyat >= 36 && numAyat <= 43) numPage = 390;
+                else if (numAyat >= 44 && numAyat <= 50) numPage = 391;
+                else if (numAyat >= 51 && numAyat <= 59) numPage = 392;
+                else if (numAyat >= 60 && numAyat <= 70) numPage = 393;
+                else if (numAyat >= 71 && numAyat <= 77) numPage = 394;
+                else if (numAyat >= 78 && numAyat <= 84) numPage = 395;
+                else if (numAyat >= 85 && numAyat <= 88) numPage = 396;
+                break;
+
+            case 29:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 396;
+                else if (numAyat >= 7 && numAyat <= 14) numPage = 397;
+                else if (numAyat >= 15 && numAyat <= 23) numPage = 398;
+                else if (numAyat >= 24 && numAyat <= 30) numPage = 399;
+                else if (numAyat >= 31 && numAyat <= 38) numPage = 400;
+                else if (numAyat >= 39 && numAyat <= 45) numPage = 401;
+                else if (numAyat >= 46 && numAyat <= 52) numPage = 402;
+                else if (numAyat >= 53 && numAyat <= 63) numPage = 403;
+                else if (numAyat >= 64 && numAyat <= 69) numPage = 404;
+                break;
+
+            case 30:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 404;
+                else if (numAyat >= 6 && numAyat <= 15) numPage = 405;
+                else if (numAyat >= 16 && numAyat <= 24) numPage = 406;
+                else if (numAyat >= 25 && numAyat <= 32) numPage = 407;
+                else if (numAyat >= 33 && numAyat <= 41) numPage = 408;
+                else if (numAyat >= 42 && numAyat <= 50) numPage = 409;
+                else if (numAyat >= 51 && numAyat <= 60) numPage = 410;
+                break;
+
+            case 31:
+                if (numAyat >= 1 && numAyat <= 11) numPage = 411;
+                else if (numAyat >= 12 && numAyat <= 19) numPage = 412;
+                else if (numAyat >= 20 && numAyat <= 28) numPage = 413;
+                else if (numAyat >= 29 && numAyat <= 34) numPage = 414;
+                break;
+
+            case 32:
+                if (numAyat >= 1 && numAyat <= 11) numPage = 415;
+                else if (numAyat >= 12 && numAyat <= 20) numPage = 416;
+                else if (numAyat >= 21 && numAyat <= 30) numPage = 417;
+                break;
+
+            case 33:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 418;
+                else if (numAyat >= 7 && numAyat <= 15) numPage = 419;
+                else if (numAyat >= 16 && numAyat <= 22) numPage = 420;
+                else if (numAyat >= 23 && numAyat <= 30) numPage = 421;
+                else if (numAyat >= 31 && numAyat <= 35) numPage = 422;
+                else if (numAyat >= 36 && numAyat <= 43) numPage = 423;
+                else if (numAyat >= 44 && numAyat <= 50) numPage = 424;
+                else if (numAyat >= 51 && numAyat <= 54) numPage = 425;
+                else if (numAyat >= 55 && numAyat <= 62) numPage = 426;
+                else if (numAyat >= 63 && numAyat <= 73) numPage = 427;
+                break;
+
+            case 34:
+                if (numAyat >= 1 && numAyat <= 7) numPage = 428;
+                else if (numAyat >= 8 && numAyat <= 14) numPage = 429;
+                else if (numAyat >= 15 && numAyat <= 22) numPage = 430;
+                else if (numAyat >= 23 && numAyat <= 31) numPage = 431;
+                else if (numAyat >= 32 && numAyat <= 39) numPage = 432;
+                else if (numAyat >= 40 && numAyat <= 48) numPage = 433;
+                else if (numAyat >= 49 && numAyat <= 54) numPage = 434;
+                break;
+
+            case 35:
+                if (numAyat >= 1 && numAyat <= 3) numPage = 434;
+                else if (numAyat >= 4 && numAyat <= 11) numPage = 435;
+                else if (numAyat >= 12 && numAyat <= 18) numPage = 436;
+                else if (numAyat >= 19 && numAyat <= 30) numPage = 437;
+                else if (numAyat >= 31 && numAyat <= 38) numPage = 438;
+                else if (numAyat == 39) numPage = 439;
+                break;
+
+            case 36:
+                if (numAyat >= 1 && numAyat <= 12) numPage = 440;
+                else if (numAyat >= 13 && numAyat <= 27) numPage = 441;
+                else if (numAyat >= 28 && numAyat <= 40) numPage = 442;
+                else if (numAyat >= 41 && numAyat <= 54) numPage = 443;
+                else if (numAyat >= 55 && numAyat <= 70) numPage = 444;
+                else if (numAyat >= 71 && numAyat <= 83) numPage = 445;
+                break;
+
+            case 37:
+                if (numAyat >= 1 && numAyat <= 24) numPage = 446;
+                else if (numAyat >= 25 && numAyat <= 51) numPage = 447;
+                else if (numAyat >= 52 && numAyat <= 76) numPage = 448;
+                else if (numAyat >= 77 && numAyat <= 102) numPage = 449;
+                else if (numAyat >= 103 && numAyat <= 126) numPage = 450;
+                else if (numAyat >= 127 && numAyat <= 153) numPage = 451;
+                else if (numAyat >= 154 && numAyat <= 182) numPage = 452;
+                break;
+
+            case 38:
+                if (numAyat >= 1 && numAyat <= 16) numPage = 453;
+                else if (numAyat >= 17 && numAyat <= 26) numPage = 454;
+                else if (numAyat >= 27 && numAyat <= 42) numPage = 455;
+                else if (numAyat >= 43 && numAyat <= 61) numPage = 456;
+                else if (numAyat >= 62 && numAyat <= 83) numPage = 457;
+                else if (numAyat >= 84 && numAyat <= 88) numPage = 458;
+                break;
+
+            case 39:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 458;
+                else if (numAyat >= 6 && numAyat <= 10) numPage = 459;
+                else if (numAyat >= 11 && numAyat <= 21) numPage = 460;
+                else if (numAyat >= 22 && numAyat <= 31) numPage = 461;
+                else if (numAyat >= 32 && numAyat <= 40) numPage = 462;
+                else if (numAyat >= 41 && numAyat <= 47) numPage = 463;
+                else if (numAyat >= 48 && numAyat <= 56) numPage = 464;
+                else if (numAyat >= 57 && numAyat <= 67) numPage = 465;
+                else if (numAyat == 75) numPage = 467;  // учтем "аят 75"
+                break;
+
+            case 40:
+                if (numAyat >= 1 && numAyat <= 7) numPage = 467;
+                else if (numAyat >= 8 && numAyat <= 16) numPage = 468;
+                else if (numAyat >= 17 && numAyat <= 25) numPage = 469;
+                else if (numAyat >= 26 && numAyat <= 33) numPage = 470;
+                else if (numAyat >= 34 && numAyat <= 40) numPage = 471;
+                else if (numAyat >= 41 && numAyat <= 49) numPage = 472;
+                else if (numAyat >= 50 && numAyat <= 58) numPage = 473;
+                else if (numAyat >= 59 && numAyat <= 66) numPage = 474;
+                else if (numAyat >= 67 && numAyat <= 77) numPage = 475;
+                else if (numAyat >= 78 && numAyat <= 85) numPage = 476;
+                break;
+
+            case 41:
+                if (numAyat >= 1 && numAyat <= 11) numPage = 477;
+                else if (numAyat >= 12 && numAyat <= 20) numPage = 478;
+                else if (numAyat >= 21 && numAyat <= 29) numPage = 479;
+                else if (numAyat >= 30 && numAyat <= 38) numPage = 480;
+                else if (numAyat >= 39 && numAyat <= 46) numPage = 481;
+                else if (numAyat >= 47 && numAyat <= 54) numPage = 482;
+                break;
+
+            case 42:
+                if (numAyat >= 1 && numAyat <= 10) numPage = 483;
+                else if (numAyat >= 11 && numAyat <= 15) numPage = 484;
+                else if (numAyat >= 16 && numAyat <= 22) numPage = 485;
+                else if (numAyat >= 23 && numAyat <= 31) numPage = 486;
+                else if (numAyat >= 32 && numAyat <= 44) numPage = 487;
+                else if (numAyat >= 45 && numAyat <= 51) numPage = 488;
+                else if (numAyat >= 52 && numAyat <= 53) numPage = 489;
+                break;
+
+            case 43:
+                if (numAyat >= 1 && numAyat <= 10) numPage = 489;
+                else if (numAyat >= 11 && numAyat <= 22) numPage = 490;
+                else if (numAyat >= 23 && numAyat <= 33) numPage = 491;
+                else if (numAyat >= 34 && numAyat <= 47) numPage = 492;
+                else if (numAyat >= 48 && numAyat <= 60) numPage = 493;
+                else if (numAyat >= 61 && numAyat <= 73) numPage = 494;
+                else if (numAyat >= 74 && numAyat <= 89) numPage = 495;
+                break;
+
+            case 44:
+                if (numAyat >= 1 && numAyat <= 18) numPage = 496;
+                else if (numAyat >= 19 && numAyat <= 39) numPage = 497;
+                else if (numAyat >= 40 && numAyat <= 59) numPage = 498;
+                break;
+
+            case 45:
+                if (numAyat >= 1 && numAyat <= 13) numPage = 499;
+                else if (numAyat >= 14 && numAyat <= 22) numPage = 500;
+                else if (numAyat >= 23 && numAyat <= 32) numPage = 501;
+                else if (numAyat >= 33 && numAyat <= 37) numPage = 502;
+                break;
+
+            case 46:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 502;
+                else if (numAyat >= 6 && numAyat <= 14) numPage = 503;
+                else if (numAyat >= 15 && numAyat <= 20) numPage = 504;
+                else if (numAyat >= 21 && numAyat <= 28) numPage = 505;
+                else if (numAyat >= 29 && numAyat <= 35) numPage = 506;
+                break;
+
+            case 47:
+                if (numAyat >= 1 && numAyat <= 11) numPage = 507;
+                else if (numAyat >= 12 && numAyat <= 19) numPage = 508;
+                else if (numAyat >= 20 && numAyat <= 29) numPage = 509;
+                else if (numAyat >= 30 && numAyat <= 38) numPage = 510;
+                break;
+
+            case 48:
+                if (numAyat >= 1 && numAyat <= 9) numPage = 511;
+                else if (numAyat >= 10 && numAyat <= 15) numPage = 512;
+                else if (numAyat >= 16 && numAyat <= 23) numPage = 513;
+                else if (numAyat >= 24 && numAyat <= 28) numPage = 514;
+                else if (numAyat == 29) numPage = 515;  // учтем "аят 29"
+                break;
+
+            case 49:
+                if (numAyat >= 1 && numAyat <= 4) numPage = 515;
+                else if (numAyat >= 5 && numAyat <= 11) numPage = 516;
+                else if (numAyat >= 12 && numAyat <= 18) numPage = 517;
+                break;
+
+            case 50:
+                if (numAyat >= 1 && numAyat <= 15) numPage = 518;
+                else if (numAyat >= 16 && numAyat <= 35) numPage = 519;
+                else if (numAyat >= 36 && numAyat <= 45) numPage = 520;
+                break;
+
+            case 51:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 520;
+                else if (numAyat >= 7 && numAyat <= 30) numPage = 521;
+                else if (numAyat >= 31 && numAyat <= 51) numPage = 522;
+                else if (numAyat >= 52 && numAyat <= 60) numPage = 523;
+                break;
+
+            case 52:
+                if (numAyat >= 1 && numAyat <= 14) numPage = 523;
+                else if (numAyat >= 15 && numAyat <= 31) numPage = 524;
+                else if (numAyat >= 32 && numAyat <= 49) numPage = 525;
+                break;
+
+            case 53:
+                if (numAyat >= 1 && numAyat <= 26) numPage = 526;
+                else if (numAyat >= 27 && numAyat <= 44) numPage = 527;
+                else if (numAyat >= 45 && numAyat <= 62) numPage = 528;
+                break;
+
+            case 54:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 528;
+                else if (numAyat >= 7 && numAyat <= 27) numPage = 529;
+                else if (numAyat >= 28 && numAyat <= 49) numPage = 530;
+                else if (numAyat >= 50 && numAyat <= 55) numPage = 531;
+                break;
+
+            case 55:
+                if (numAyat >= 1 && numAyat <= 16) numPage = 531;
+                else if (numAyat >= 17 && numAyat <= 40) numPage = 532;
+                else if (numAyat >= 41 && numAyat <= 67) numPage = 533;
+                else if (numAyat >= 68 && numAyat <= 78) numPage = 534;
+                break;
+
+            case 56:
+                if (numAyat >= 1 && numAyat <= 16) numPage = 534;
+                else if (numAyat >= 17 && numAyat <= 50) numPage = 535;
+                else if (numAyat >= 51 && numAyat <= 76) numPage = 536;
+                else if (numAyat >= 77 && numAyat <= 96) numPage = 537;
+                break;
+
+            case 57:
+                if (numAyat >= 1 && numAyat <= 3) numPage = 537;
+                else if (numAyat >= 4 && numAyat <= 11) numPage = 538;
+                else if (numAyat >= 12 && numAyat <= 18) numPage = 539;
+                else if (numAyat >= 19 && numAyat <= 24) numPage = 540;
+                else if (numAyat >= 25 && numAyat <= 29) numPage = 541;
+                break;
+
+            case 58:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 542;
+                else if (numAyat >= 7 && numAyat <= 11) numPage = 543;
+                else if (numAyat >= 12 && numAyat <= 21) numPage = 544;
+                else if (numAyat == 22) numPage = 545;  // учтем "аят 22"
+                break;
+
+            case 59:
+                if (numAyat >= 1 && numAyat <= 3) numPage = 545;
+                else if (numAyat >= 4 && numAyat <= 9) numPage = 546;
+                else if (numAyat >= 10 && numAyat <= 16) numPage = 547;
+                else if (numAyat >= 17 && numAyat <= 24) numPage = 548;
+                break;
+
+            case 60:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 549;
+                else if (numAyat >= 6 && numAyat <= 11) numPage = 550;
+                else if (numAyat == 12 || numAyat == 13) numPage = 551;  // учтем "аяты 12-13"
+                break;
+
+            case 61:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 551;
+                else if (numAyat >= 6 && numAyat <= 14) numPage = 552;
+                break;
+
+            case 62:
+                if (numAyat >= 1 && numAyat <= 8) numPage = 553;
+                else if (numAyat >= 9 && numAyat <= 11) numPage = 554;
+                break;
+
+            case 63:
+                if (numAyat >= 1 && numAyat <= 4) numPage = 554;
+                else if (numAyat >= 5 && numAyat <= 11) numPage = 555;
+                break;
+
+            case 64:
+                if (numAyat >= 1 && numAyat <= 9) numPage = 556;
+                else if (numAyat >= 10 && numAyat <= 18) numPage = 557;
+                break;
+
+            case 65:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 558;
+                else if (numAyat >= 6 && numAyat <= 12) numPage = 559;
+                break;
+
+            case 66:
+                if (numAyat >= 1 && numAyat <= 7) numPage = 560;
+                else if (numAyat >= 8 && numAyat <= 12) numPage = 561;
+                break;
+
+            case 67:
+                if (numAyat >= 1 && numAyat <= 12) numPage = 562;
+                else if (numAyat >= 13 && numAyat <= 26) numPage = 563;
+                else if (numAyat >= 27 && numAyat <= 30) numPage = 564;
+                break;
+
+            case 68:
+                if (numAyat >= 1 && numAyat <= 15) numPage = 564;
+                else if (numAyat >= 16 && numAyat <= 42) numPage = 565;
+                else if (numAyat >= 43 && numAyat <= 52) numPage = 566;
+                break;
+
+            case 69:
+                if (numAyat >= 1 && numAyat <= 8) numPage = 566;
+                else if (numAyat >= 9 && numAyat <= 34) numPage = 567;
+                else if (numAyat >= 35 && numAyat <= 52) numPage = 568;
+                break;
+
+            case 70:
+                if (numAyat >= 1 && numAyat <= 10) numPage = 568;
+                else if (numAyat >= 11 && numAyat <= 39) numPage = 569;
+                else if (numAyat >= 40 && numAyat <= 44) numPage = 570;
+                break;
+
+            case 71:
+                if (numAyat >= 1 && numAyat <= 10) numPage = 570;
+                else if (numAyat >= 11 && numAyat <= 28) numPage = 571;
+                break;
+
+            case 72:
+                if (numAyat >= 1 && numAyat <= 13) numPage = 572;
+                else if (numAyat >= 14 && numAyat <= 28) numPage = 573;
+                break;
+
+            case 73:
+                if (numAyat >= 1 && numAyat <= 19) numPage = 574;
+                else if (numAyat == 20) numPage = 575;  // учтем "аят 20"
+                break;
+
+            case 74:
+                if (numAyat >= 1 && numAyat <= 17) numPage = 575;
+                else if (numAyat >= 18 && numAyat <= 47) numPage = 576;
+                else if (numAyat >= 48 && numAyat <= 56) numPage = 577;
+                break;
+
+            case 75:
+                if (numAyat >= 1 && numAyat <= 19) numPage = 577;
+                else if (numAyat >= 20 && numAyat <= 30) numPage = 578;
+                break;
+
+            case 76:
+                if (numAyat >= 6 && numAyat <= 25) numPage = 579;
+                else if (numAyat >= 26 && numAyat <= 31) numPage = 580;
+                break;
+
+            case 77:
+                if (numAyat >= 1 && numAyat <= 19) numPage = 580;
+                else if (numAyat >= 20 && numAyat <= 40) numPage = 581;
+                break;
+
+            case 78:
+                if (numAyat >= 1 && numAyat <= 30) numPage = 582;
+                else if (numAyat >= 31 && numAyat <= 40) numPage = 583;
+                break;
+
+            case 79:
+                if (numAyat >= 1 && numAyat <= 15) numPage = 583;
+                else if (numAyat >= 16 && numAyat <= 46) numPage = 584;
+                break;
+
+            case 80:
+                if (numAyat >= 1 && numAyat <= 42) numPage = 585;
+                break;
+
+            case 81:
+                if (numAyat >= 1 && numAyat <= 29) numPage = 586;
+                break;
+
+            case 82:
+                if (numAyat >= 1 && numAyat <= 19) numPage = 587;
+                break;
+
+            case 83:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 587;
+                else if (numAyat >= 7 && numAyat <= 34) numPage = 588;
+                if (numAyat == 35) numPage = 589;
+                break;
+
+            case 84:
+                if (numAyat >= 1 && numAyat <= 25) numPage = 589;
+                break;
+
+            case 85:
+                if (numAyat >= 1 && numAyat <= 22) numPage = 590;
+                break;
+
+            case 86:
+                if (numAyat >= 1 && numAyat <= 17) numPage = 591;
+                break;
+
+            case 87:
+                if (numAyat >= 1 && numAyat <= 15) numPage = 591;
+                else if (numAyat >= 16 && numAyat <= 19) numPage = 592;
+                break;
+
+            case 88:
+                if (numAyat >= 1 && numAyat <= 26) numPage = 592;
+                break;
+
+            case 89:
+                if (numAyat >= 1 && numAyat <= 23) numPage = 593;
+                else if (numAyat >= 24 && numAyat <= 30) numPage = 594;
+                break;
+
+            case 90:
+                if (numAyat >= 1 && numAyat <= 20) numPage = 594;
+                break;
+
+            case 91:
+                if (numAyat >= 1 && numAyat <= 15) numPage = 595;
+                break;
+
+            case 92:
+                if (numAyat >= 1 && numAyat <= 14) numPage = 595;
+                else if (numAyat >= 15 && numAyat <= 21) numPage = 596;
+                break;
+
+            case 93:
+                if (numAyat >= 1 && numAyat <= 11) numPage = 596;
+                break;
+
+            case 94:
+                if (numAyat >= 1 && numAyat <= 8) numPage = 596;
+                break;
+
+            case 95:
+                if (numAyat >= 1 && numAyat <= 8) numPage = 597;
+                break;
+
+            case 96:
+                if (numAyat >= 1 && numAyat <= 19) numPage = 597;
+                break;
+
+            case 97:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 598;
+                break;
+
+            case 98:
+                if (numAyat >= 1 && numAyat <= 7) numPage = 598;
+                else if (numAyat == 8) numPage = 599;
+                break;
+
+            case 99:
+                if (numAyat >= 1 && numAyat <= 8) numPage = 599;
+                break;
+
+            case 100:
+                if (numAyat >= 1 && numAyat <= 9) numPage = 599;
+                else if (numAyat >= 10 && numAyat <= 11) numPage = 600;
+                break;
+
+            case 101:
+                if (numAyat >= 1 && numAyat <= 11) numPage = 600;
+                break;
+
+            case 102:
+                if (numAyat >= 1 && numAyat <= 8) numPage = 600;
+                break;
+
+            case 103:
+                if (numAyat >= 1 && numAyat <= 3) numPage = 601;
+                break;
+
+            case 104:
+                if (numAyat >= 1 && numAyat <= 9) numPage = 601;
+                break;
+
+            case 105:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 601;
+                break;
+
+            case 106:
+                if (numAyat >= 1 && numAyat <= 4) numPage = 602;
+                break;
+
+            case 107:
+                if (numAyat >= 1 && numAyat <= 7) numPage = 602;
+                break;
+
+            case 108:
+                if (numAyat >= 1 && numAyat <= 3) numPage = 602;
+                break;
+
+            case 109:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 603;
+                break;
+
+            case 110:
+                if (numAyat >= 1 && numAyat <= 3) numPage = 603;
+                break;
+
+            case 111:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 603;
+                break;
+
+            case 112:
+                if (numAyat >= 1 && numAyat <= 4) numPage = 604;
+                break;
+
+            case 113:
+                if (numAyat >= 1 && numAyat <= 5) numPage = 604;
+                break;
+
+            case 114:
+                if (numAyat >= 1 && numAyat <= 6) numPage = 604;
+                break;
+
+
+        }
+        return numPage;
     }
 
 

@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -407,6 +408,8 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
         EditText pageNum = dialogView.findViewById(R.id.pageNum);
         TextView suraTitle = dialogView.findViewById(R.id.suraTitleAyats);
+        AutoCompleteTextView suraClassic = dialogView.findViewById(R.id.suraClassic);
+        AutoCompleteTextView ayatClassic = dialogView.findViewById(R.id.ayatClassic);
 
         // Добавляем TextWatcher для обновления названия суры и аятов при вводе номера страницы
         pageNum.addTextChangedListener(new TextWatcher() {
@@ -442,6 +445,48 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                 }
             }
         });
+
+        // Добавляем TextWatcher для обновления страницы при вводе суры и аята
+        TextWatcher suraAyatWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Не требуется реализация
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Не требуется реализация
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String suraInput = suraClassic.getText().toString().replaceAll("[\\.\\-,\\s]+", "");
+                String ayatInput = ayatClassic.getText().toString().replaceAll("[\\.\\-,\\s]+", "");
+
+                if (!suraInput.isEmpty() && !ayatInput.isEmpty()) {
+                    int sura, ayat;
+                    try {
+                        sura = Integer.parseInt(suraInput);
+                        ayat = Integer.parseInt(ayatInput);
+                    } catch (NumberFormatException e) {
+                        pageNum.setText("");
+                        return;
+                    }
+                    int page = bookmarkAdapter.goToAyat(sura, ayat);
+                    if (page != -1) {
+                        pageNum.setText(String.valueOf(page));
+                        suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
+                    } else {
+                        pageNum.setText("");
+                    }
+                } else {
+                    pageNum.setText("");
+                }
+            }
+        };
+
+        suraClassic.addTextChangedListener(suraAyatWatcher);
+        ayatClassic.addTextChangedListener(suraAyatWatcher);
 
         alert.setNegativeButton("Отмена", (dialogInterface, i) -> {
             // Ничего не делаем
