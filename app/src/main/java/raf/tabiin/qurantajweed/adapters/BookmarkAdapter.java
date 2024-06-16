@@ -1919,7 +1919,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                 break;
 
             case 18:
-                if (numAyat >= 5 && numAyat <= 15) numPage = 294;
+                if (numAyat >= 1 && numAyat <= 4) numPage = 293;
+                else if (numAyat >= 5 && numAyat <= 15) numPage = 294;
                 else if (numAyat >= 16 && numAyat <= 20) numPage = 295;
                 else if (numAyat >= 21 && numAyat <= 27) numPage = 296;
                 else if (numAyat >= 28 && numAyat <= 34) numPage = 297;
