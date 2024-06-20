@@ -1694,7 +1694,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                 else if (numAyat >= 10 && numAyat <= 13) numPage = 109;
                 else if (numAyat >= 14 && numAyat <= 17) numPage = 110;
                 else if (numAyat >= 18 && numAyat <= 23) numPage = 111;
-                else if (numAyat >= 24 && numAyat <= 311) numPage = 112; // Поменяйте диапазон с 24-311 на корректный
+                else if (numAyat >= 24 && numAyat <= 31) numPage = 112;
                 else if (numAyat >= 32 && numAyat <= 36) numPage = 113;
                 else if (numAyat >= 37 && numAyat <= 41) numPage = 114;
                 else if (numAyat >= 42 && numAyat <= 45) numPage = 115;
@@ -2404,7 +2404,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                 break;
 
             case 76:
-                if (numAyat >= 6 && numAyat <= 25) numPage = 579;
+                if (numAyat >= 1 && numAyat <= 5) numPage = 578;
+                else if (numAyat >= 6 && numAyat <= 25) numPage = 579;
                 else if (numAyat >= 26 && numAyat <= 31) numPage = 580;
                 break;
 
