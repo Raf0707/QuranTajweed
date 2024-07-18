@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -207,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                 }
                 b.pageNumberText.setText(String.valueOf(position+1));
                 b.tafsirText.setText(loadTextFromFile(position+1 + ".txt"));
+                //TODO Выводить название суры
                 b.scrollTafsir.scrollTo(0, 0);
                 bookmarkAdapter.notifyDataSetChanged();
                 //TODO
@@ -214,6 +217,20 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                     //playAudio(position, );
                 }
                 //TODO
+            }
+        });
+
+        b.tafsirDictQuranRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                String directory = "tafsir_abu_ali_al_ashary"; // Default directory
+
+                if (checkedId == R.id.dictRadioButton) {
+                    directory = "quran_dict";
+                }
+
+                b.tafsirText.setText(loadTextFromFile(directory, bookmarkAdapter.getCurrentPosition()+1 + ".txt"));
+
             }
         });
 
@@ -410,6 +427,40 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         TextView suraTitle = dialogView.findViewById(R.id.suraTitleAyats);
         AutoCompleteTextView suraClassic = dialogView.findViewById(R.id.suraClassic);
         AutoCompleteTextView ayatClassic = dialogView.findViewById(R.id.ayatClassic);
+        MaterialButton back = dialogView.findViewById(R.id.backPage);
+        MaterialButton forward = dialogView.findViewById(R.id.forwardPage);
+
+
+
+        // OnClickListener для кнопки back
+        back.setOnClickListener(view -> {
+            if (pageNum.getText().toString().isEmpty()) {
+                // Поле pageNum пустое, получаем текущую страницу и вставляем ее в pageNum
+                int mcurrentPage = viewPager.getCurrentItem() + 1;
+                pageNum.setText(String.valueOf(mcurrentPage));
+            } else {
+                // Поле pageNum не пустое, уменьшаем номер страницы на 1
+                int page = Integer.parseInt(pageNum.getText().toString());
+                if (page > 1) {
+                    pageNum.setText(String.valueOf(page - 1));
+                }
+            }
+        });
+
+        // OnClickListener для кнопки forward
+        forward.setOnClickListener(view -> {
+            if (pageNum.getText().toString().isEmpty()) {
+                // Поле pageNum пустое, получаем текущую страницу и вставляем ее в pageNum
+                int mcurrentPage = viewPager.getCurrentItem() + 1;
+                pageNum.setText(String.valueOf(mcurrentPage));
+            } else {
+                // Поле pageNum не пустое, увеличиваем номер страницы на 1
+                int page = Integer.parseInt(pageNum.getText().toString());
+                if (page < 604) {  // Предположим, что 604 - максимальное количество страниц
+                    pageNum.setText(String.valueOf(page + 1));
+                }
+            }
+        });
 
         // Добавляем TextWatcher для обновления названия суры и аятов при вводе номера страницы
         pageNum.addTextChangedListener(new TextWatcher() {
@@ -462,9 +513,10 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
             public void afterTextChanged(Editable s) {
                 String suraInput = suraClassic.getText().toString().replaceAll("[\\.\\-,\\s]+", "");
                 String ayatInput = ayatClassic.getText().toString().replaceAll("[\\.\\-,\\s]+", "");
+                if (ayatClassic.getText().toString().isEmpty()) ayatInput = "1";
 
+                int sura, ayat, page;
                 if (!suraInput.isEmpty() && !ayatInput.isEmpty()) {
-                    int sura, ayat;
                     try {
                         sura = Integer.parseInt(suraInput);
                         ayat = Integer.parseInt(ayatInput);
@@ -472,16 +524,31 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                         pageNum.setText("");
                         return;
                     }
-                    int page = bookmarkAdapter.goToAyat(sura, ayat);
+                    page = bookmarkAdapter.goToAyat(sura, ayat);
                     if (page != -1) {
                         pageNum.setText(String.valueOf(page));
                         suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
-                    } else {
+                    } else if (!suraInput.isEmpty() && ayatInput.isEmpty()) {
+                        try {
+                            sura = Integer.parseInt(suraInput);
+                            ayat = 1;
+                        } catch (NumberFormatException e) {
+                            pageNum.setText("");
+                            return;
+                        }
+                        page = bookmarkAdapter.goToAyat(sura, ayat);
+                        if (page != -1) {
+                            pageNum.setText(String.valueOf(page));
+                            suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
+
+                        }
+                        } else {
                         pageNum.setText("");
                     }
                 } else {
                     pageNum.setText("");
                 }
+
             }
         };
 
@@ -809,7 +876,8 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     private String loadTextFromFile(String fileName) {
         StringBuilder text = new StringBuilder();
         try {
-            InputStream is = getAssets().open("tafsir_al_muntahab/" + fileName);
+            //InputStream is = getAssets().open("tafsir_al_muntahab/" + fileName);
+            InputStream is = getAssets().open("tafsir_abu_ali_al_ashary/" + fileName);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line;
             while ((line = br.readLine()) != null) {
@@ -822,6 +890,24 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         }
         return text.toString();
     }
+
+    private String loadTextFromFile(String directory, String fileName) {
+        StringBuilder text = new StringBuilder();
+        try {
+            InputStream is = getAssets().open(directory + "/" + fileName);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text.toString();
+    }
+
 
     @Override
     public void onSuccess(File file) {

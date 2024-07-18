@@ -186,11 +186,50 @@
                 android:scaleType="centerCrop">
             </ImageView>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/tafsirDictQuranRadioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/tafsirRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/segment_button_left"
+                        android:button="@android:color/transparent"
+                        android:padding="16dp"
+                        android:text="Тафсир"
+                        android:checked="true"
+                        android:textColor="@drawable/text_color_selector" />
+
+                    <RadioButton
+                        android:id="@+id/dictRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/segment_button_right"
+                        android:button="@android:color/transparent"
+                        android:padding="16dp"
+                        android:text="Словарь"
+                        android:textColor="@drawable/text_color_selector" />
+                </RadioGroup>
+
+            </LinearLayout>
+
             <ScrollView
                 android:id="@+id/scrollTafsir"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="80dp">
+                android:layout_marginTop="150dp">
 
                 <TextView
                     android:id="@+id/tafsirText"
@@ -208,6 +247,8 @@
 
 
         </FrameLayout>
+
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
