@@ -10,6 +10,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -79,7 +83,7 @@ import raf.tabiin.qurantajweed.ui.player.players.MusicPlayer;
 import raf.tabiin.qurantajweed.utils.OnSwipeTouchListener;
 import raf.tabiin.qurantajweed.ui.player.res_downloaders.QuranAudioZipDownloader;
 
-public class MainActivity extends AppCompatActivity implements AsyncHttpClient.DownloadListener {
+public class MainActivity extends AppCompatActivity implements AsyncHttpClient.DownloadListener, SensorEventListener {
 
     private static final String ZIP_FILE_NAME = "QuranPagesAudio.zip";
     private static final int TOTAL_FILES_COUNT = 604;
@@ -116,6 +120,11 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     private static final String KEY_SEEK_POSITION = "seek_position";
 
     private QuranAudioZipDownloader quranAudioZipDownloader;
+
+    private static final float SHAKE_THRESHOLD = 15.0f; // Пороговое значение ускорения
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private long lastUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +165,13 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         quranSevenHours.seekTo(savedPosition);
         b.seekBar.setProgress(savedPosition);
         handler = new Handler();
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager != null) {
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
+
+        lastUpdate = System.currentTimeMillis();
 
         imageAdapter.setOnPageChangedListener(new OnPageChangedListener() {
             @Override
@@ -1250,6 +1266,34 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         }
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        //TODO
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            long currentTime = System.currentTimeMillis();
+            if ((currentTime - lastUpdate) > 100) {
+                long diffTime = (currentTime - lastUpdate);
+                lastUpdate = currentTime;
+
+                float x = event.values[0];
+                float y = event.values[1];
+
+                if (x > SHAKE_THRESHOLD) {
+                    // Наклон направо-вниз, переворачиваем назад
+                    turnPageBackward();
+                } else if (x < -SHAKE_THRESHOLD) {
+                    // Наклон налево-вниз, переворачиваем вперед
+                    turnPageForward();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        //TODO
+    }
+
     // Интерфейс для обратного вызова завершения загрузки
     public interface DownloadCallback {
         void onDownloadComplete();
@@ -1312,7 +1356,19 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     }
 
 
+    private void turnPageForward() {
+        int nextPage = currentPosition + 1;
+        if (nextPage < viewPager.getAdapter().getItemCount()) {
+            viewPager.setCurrentItem(nextPage);
+        }
+    }
 
+    private void turnPageBackward() {
+        int previousPage = currentPosition - 1;
+        if (previousPage >= 0) {
+            viewPager.setCurrentItem(previousPage);
+        }
+    }
 
     public interface OnPageChangedListener {
         void onPageChanged(int position);
@@ -1322,6 +1378,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
     @Override
     protected void onPause() {
         super.onPause();
+        sensorManager.unregisterListener(this);
         if (quranSevenHours != null && quranSevenHours.isPlaying()) {
             quranSevenHours.pause();
             isPlaying = false;
@@ -1334,6 +1391,14 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         editor.putInt(KEY_SEEK_POSITION, currentPosition);
         editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (accelerometer != null) {
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
