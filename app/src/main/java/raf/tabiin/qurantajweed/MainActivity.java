@@ -390,45 +390,6 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         });
 
     }
-
-    /*private void goToPageAlert() {
-
-        MaterialAlertDialogBuilder alert =
-                new MaterialAlertDialogBuilder(this);
-
-        View dialogView = getLayoutInflater()
-                .inflate(R.layout.go_to_page_dialog, null);
-
-        alert.setTitle("Перейти на страницу");
-        alert.setMessage("введите страницу");
-        alert.setCancelable(true);
-
-        EditText pageNum = dialogView.findViewById(R.id.pageNum);
-
-        alert.setNegativeButton("Отмена", (dialogInterface, i) -> {
-
-        });
-
-
-        alert.setPositiveButton("Перейти", (dialogInterface, i) -> {
-            if (pageNum.getText().toString().length() == 0) {
-                Snackbar.make(b.getRoot(), "Ничего не введено. Введите текстведите номер страницы", Snackbar.LENGTH_SHORT).show();
-            } else {
-                int page = Integer.parseInt(pageNum.getText().toString()
-                        .replaceAll("[\\.\\-,\\s]+", ""));
-                if ((page < 1) || (page > 604) || (pageNum.getText().toString().isEmpty())) {
-                    Snackbar.make(b.getRoot(), "В Коране 604 страницы. Введите номер от 1 до 604", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    viewPager.setCurrentItem(page - 1, true);
-                }
-            }
-        });
-
-        alert.setView(dialogView);
-        alert.show();
-
-    }*/
-
     private void goToPageAlert() {
 
         MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(this);

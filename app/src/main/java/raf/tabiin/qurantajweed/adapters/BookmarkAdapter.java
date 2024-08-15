@@ -387,7 +387,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             case 109: return " аяты: 10-13";
             case 110: return " аяты: 14-17";
             case 111: return " аяты: 18-23";
-            case 112: return " аяты: 24-311";
+            case 112: return " аяты: 24-31";
             case 113: return " аяты: 32-36";
             case 114: return " аяты: 37-41";
             case 115: return " аяты: 42-45";
