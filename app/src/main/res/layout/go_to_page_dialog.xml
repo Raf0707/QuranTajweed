@@ -57,11 +57,22 @@
             <TextView
                 android:id="@+id/suraTitleAyats"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
                 android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/textPagesView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text=" \n Страницы"
+            android:gravity="center"
+            android:textSize="18sp" />
 
 
         <LinearLayout
@@ -71,7 +82,7 @@
 
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/forwardPage"
+                android:id="@+id/backPage"
                 style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,18 +91,21 @@
                 android:layout_weight="0.01"
                 app:icon="@drawable/play_l" />
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.IconButton.Filled"
+            <com.google.android.material.slider.Slider
+                android:id="@+id/pageSlider"
+                style="@style/Widget.Material3.Slider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:gravity="start"
+                android:valueFrom="1"
+                android:valueTo="604"
+                android:stepSize="1"
                 android:layout_weight="4"
-                android:visibility="invisible"
-                app:icon="@drawable/play_l" />
+                android:visibility="visible" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/backPage"
+                android:id="@+id/forwardPage"
                 style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

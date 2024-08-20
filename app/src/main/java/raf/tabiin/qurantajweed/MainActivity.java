@@ -1,10 +1,5 @@
 package raf.tabiin.qurantajweed;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import static java.security.AccessController.getContext;
-
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +13,6 @@ import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,21 +42,21 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -79,7 +73,6 @@ import raf.tabiin.qurantajweed.ui.player.players.SoulPlayer;
 import raf.tabiin.qurantajweed.utils.AsyncHttpClient;
 import raf.tabiin.qurantajweed.ui.player.res_downloaders.DownloadFilesTask;
 import raf.tabiin.qurantajweed.ui.player.res_downloaders.MailRuDownloader;
-import raf.tabiin.qurantajweed.ui.player.players.MusicPlayer;
 import raf.tabiin.qurantajweed.utils.OnSwipeTouchListener;
 import raf.tabiin.qurantajweed.ui.player.res_downloaders.QuranAudioZipDownloader;
 
@@ -406,49 +399,53 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         AutoCompleteTextView ayatClassic = dialogView.findViewById(R.id.ayatClassic);
         MaterialButton back = dialogView.findViewById(R.id.backPage);
         MaterialButton forward = dialogView.findViewById(R.id.forwardPage);
+        Slider pageSlider = dialogView.findViewById(R.id.pageSlider);
 
-
-
-        // OnClickListener для кнопки back
         back.setOnClickListener(view -> {
+            int mcurrentPage = viewPager.getCurrentItem() + 1;
             if (pageNum.getText().toString().isEmpty()) {
-                // Поле pageNum пустое, получаем текущую страницу и вставляем ее в pageNum
-                int mcurrentPage = viewPager.getCurrentItem() + 1;
                 pageNum.setText(String.valueOf(mcurrentPage));
+                pageSlider.setValue(mcurrentPage);
+                //suraClassic.setText(String.valueOf(bookmarkAdapter.getSuraNum(mcurrentPage))); // Исправление
+                //ayatClassic.setText("1");
             } else {
-                // Поле pageNum не пустое, уменьшаем номер страницы на 1
                 int page = Integer.parseInt(pageNum.getText().toString());
                 if (page > 1) {
                     pageNum.setText(String.valueOf(page - 1));
+                    pageSlider.setValue(page - 1);
+                    //suraClassic.setText(String.valueOf(bookmarkAdapter.getSuraNum(page - 1))); // Исправление
+                    //ayatClassic.setText("1");
                 }
             }
+            //pageSlider.setValue(mcurrentPage);
         });
 
-        // OnClickListener для кнопки forward
         forward.setOnClickListener(view -> {
+            int mcurrentPage = viewPager.getCurrentItem() + 1;
             if (pageNum.getText().toString().isEmpty()) {
-                // Поле pageNum пустое, получаем текущую страницу и вставляем ее в pageNum
-                int mcurrentPage = viewPager.getCurrentItem() + 1;
                 pageNum.setText(String.valueOf(mcurrentPage));
+                pageSlider.setValue(mcurrentPage);
+                //suraClassic.setText(String.valueOf(bookmarkAdapter.getSuraNum(mcurrentPage))); // Исправление
+                //ayatClassic.setText("1");
             } else {
-                // Поле pageNum не пустое, увеличиваем номер страницы на 1
                 int page = Integer.parseInt(pageNum.getText().toString());
-                if (page < 604) {  // Предположим, что 604 - максимальное количество страниц
+                if (page < 604) {
                     pageNum.setText(String.valueOf(page + 1));
+                    pageSlider.setValue(page + 1);
+                    //suraClassic.setText(String.valueOf(bookmarkAdapter.getSuraNum(page + 1))); // Исправление
+                    //ayatClassic.setText("1");
                 }
             }
+            //pageSlider.setValue(mcurrentPage);
         });
 
-        // Добавляем TextWatcher для обновления названия суры и аятов при вводе номера страницы
         pageNum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Не требуется реализация
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Не требуется реализация
             }
 
             @Override
@@ -463,8 +460,10 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                         return;
                     }
                     if (page >= 1 && page <= 604) {
-                        suraTitle.setText(bookmarkAdapter.getSuraTitle(page)+",\n"+bookmarkAdapter.getAyatsOnPage(page));
-
+                        suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
+                        //pageSlider.setValue(page);
+                        //suraClassic.setText(String.valueOf(bookmarkAdapter.getSuraNum(page))); // Исправление
+                        //ayatClassic.setText("1");
                     } else {
                         suraTitle.setText("");
                     }
@@ -474,16 +473,13 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
             }
         });
 
-        // Добавляем TextWatcher для обновления страницы при вводе суры и аята
         TextWatcher suraAyatWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Не требуется реализация
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Не требуется реализация
             }
 
             @Override
@@ -505,6 +501,8 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                     if (page != -1) {
                         pageNum.setText(String.valueOf(page));
                         suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
+                        pageSlider.setValue(page);
+
                     } else if (!suraInput.isEmpty() && ayatInput.isEmpty()) {
                         try {
                             sura = Integer.parseInt(suraInput);
@@ -517,20 +515,34 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                         if (page != -1) {
                             pageNum.setText(String.valueOf(page));
                             suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
-
                         }
-                        } else {
+                    } else {
                         pageNum.setText("");
                     }
                 } else {
                     pageNum.setText("");
                 }
-
             }
         };
 
         suraClassic.addTextChangedListener(suraAyatWatcher);
         ayatClassic.addTextChangedListener(suraAyatWatcher);
+
+        pageSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(Slider slider) {
+                // Начало взаимодействия, ничего не делаем
+            }
+
+            @Override
+            public void onStopTrackingTouch(Slider slider) {
+                int page = (int) slider.getValue();
+                pageNum.setText(String.valueOf(page));
+                suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
+                suraClassic.setText(String.valueOf(bookmarkAdapter.getSuraNum(page))); // Исправление
+                ayatClassic.setText("1");
+            }
+        });
 
         alert.setNegativeButton("Отмена", (dialogInterface, i) -> {
             // Ничего не делаем
@@ -552,6 +564,7 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
         alert.setView(dialogView);
         alert.show();
     }
+
 
 
     // Проверка на наличие интернет-подключения
