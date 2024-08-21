@@ -439,40 +439,6 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
             //pageSlider.setValue(mcurrentPage);
         });
 
-        pageNum.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String input = s.toString().replaceAll("[\\.\\-,\\s]+", "");
-                if (!input.isEmpty()) {
-                    int page;
-                    try {
-                        page = Integer.parseInt(input);
-                    } catch (NumberFormatException e) {
-                        suraTitle.setText("");
-                        return;
-                    }
-                    if (page >= 1 && page <= 604) {
-                        suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
-                        //pageSlider.setValue(page);
-                        //suraClassic.setText(String.valueOf(bookmarkAdapter.getSuraNum(page))); // Исправление
-                        //ayatClassic.setText("1");
-                    } else {
-                        suraTitle.setText("");
-                    }
-                } else {
-                    suraTitle.setText("");
-                }
-            }
-        });
-
         TextWatcher suraAyatWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -527,6 +493,50 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
         suraClassic.addTextChangedListener(suraAyatWatcher);
         ayatClassic.addTextChangedListener(suraAyatWatcher);
+
+        pageNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String input = s.toString().replaceAll("[\\.\\-,\\s]+", "");
+                if (!input.isEmpty()) {
+                    int page;
+                    try {
+                        page = Integer.parseInt(input);
+                    } catch (NumberFormatException e) {
+                        suraTitle.setText("");
+                        return;
+                    }
+                    if (page >= 1 && page <= 604) {
+                        suraTitle.setText(bookmarkAdapter.getSuraTitle(page) + ",\n" + bookmarkAdapter.getAyatsOnPage(page));
+                        pageSlider.setValue(page);
+                        // Удаляем TextWatcher перед изменением текста
+                        suraClassic.removeTextChangedListener(suraAyatWatcher);
+                        ayatClassic.removeTextChangedListener(suraAyatWatcher);
+
+                        suraClassic.setText(String.valueOf(bookmarkAdapter.getSuraNum(page))); // Исправление
+                        ayatClassic.setText("1");
+
+                        // Восстанавливаем TextWatcher после изменения текста
+                        suraClassic.addTextChangedListener(suraAyatWatcher);
+                        ayatClassic.addTextChangedListener(suraAyatWatcher);
+                    } else {
+                        suraTitle.setText("");
+                    }
+                } else {
+                    suraTitle.setText("");
+                }
+            }
+        });
+
+
 
         pageSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
             @Override
