@@ -186,42 +186,109 @@
                 android:scaleType="centerCrop">
             </ImageView>
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <RadioGroup
-                    android:id="@+id/tafsirDictQuranRadioGroup"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/tafsirRadioButton"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="70dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/forwardPageTafsir"
+                            style="@style/Widget.Material3.Button.IconButton.Filled"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_weight="0.01"
+                            android:gravity="center"
+                            app:icon="@drawable/play_l" />
+
+                        <RadioGroup
+                            android:id="@+id/tafsirDictQuranRadioGroup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/tafsirRadioButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/segment_button_left"
+                                android:button="@android:color/transparent"
+                                android:checked="true"
+                                android:padding="16dp"
+                                android:text="Тафсир"
+                                android:textColor="@drawable/text_color_selector" />
+
+                            <RadioButton
+                                android:id="@+id/dictRadioButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/segment_button_right"
+                                android:button="@android:color/transparent"
+                                android:padding="16dp"
+                                android:text="Словарь"
+                                android:textColor="@drawable/text_color_selector" />
+                        </RadioGroup>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/backPageTafsir"
+                            style="@style/Widget.Material3.Button.IconButton.Filled"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_weight="0.01"
+                            android:gravity="center"
+                            app:icon="@drawable/play" />
+
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/tafsirRadioGroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/segment_button_left"
-                        android:button="@android:color/transparent"
-                        android:padding="16dp"
-                        android:text="Тафсир"
-                        android:checked="true"
-                        android:textColor="@drawable/text_color_selector" />
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/dictRadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/segment_button_right"
-                        android:button="@android:color/transparent"
-                        android:padding="16dp"
-                        android:text="Словарь"
-                        android:textColor="@drawable/text_color_selector" />
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/abuAliAshary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Азан.ру"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/alMuntahab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Аль-Мунтахаб" />
+
+                        <RadioButton
+                            android:id="@+id/dumrf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ДУМ РФ" />
+                    </RadioGroup>
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -229,19 +296,19 @@
                 android:id="@+id/scrollTafsir"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="150dp">
+                android:layout_marginTop="200dp">
 
                 <TextView
                     android:id="@+id/tafsirText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Тут будет Тафсир (перевод) Корана"
                     android:gravity="left"
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
-                    android:textSize="21sp">
+                    android:textSize="19sp">
 
                 </TextView>
+
 
             </ScrollView>
 
