@@ -284,7 +284,9 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
                 // Не закрываем bottomSheet
             }*/
 
-            int position = currentPosition + 1;
+            int position;
+            if (currentPosition + 1 >= 604) return;
+            else position = currentPosition + 1;
             saveLastPage(position);
             try {
                 // Обновление иконки закладки для текущей страницы
@@ -352,7 +354,9 @@ public class MainActivity extends AppCompatActivity implements AsyncHttpClient.D
 
                 // Не закрываем bottomSheet
             }*/
-            int position = currentPosition - 1;
+            int position;
+            if (currentPosition - 1 < 1) return;
+            else position = currentPosition - 1;
             saveLastPage(position);
             try {
                 // Обновление иконки закладки для текущей страницы
